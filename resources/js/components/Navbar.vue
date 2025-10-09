@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-black shadow-md py-4">
+  <nav class=" shadow-md py-4">
     <div class="container mx-auto flex justify-between items-center px-6">
       <!-- logo + nav links grouped together -->
       <div class="flex items-center gap-6">
@@ -8,12 +8,12 @@
           <img src="/storage/images/icone.png" alt="اوا" class="h-10 w-10 object-contain" />
         </Link>
 
-        <ul class="hidden md:flex gap-6 text-white text-sm items-center">
-          <li><Link href="/" class="hover:text-[#ffa800]">صفحه اصلی</Link></li>
-          <li><Link href="/menu" class="hover:text-[#ffa800]">منو</Link></li>
-          <li><Link href="/packages" class="hover:text-[#ffa800]">پکیج‌ها</Link></li>
-          <li><Link href="/about" class="hover:text-[#ffa800]">درباره ما</Link></li>
-          <li><Link href="/contact" class="hover:text-[#ffa800]">تماس با ما</Link></li>
+        <ul class="hidden md:flex gap-6 text-black text-sm items-center">
+          <li><Link href="/" class="hover:text-blue-300"> خانه </Link></li>
+          <li><Link href="/menu" class="hover:text-blue-300">محصولات</Link></li>
+          <li><Link href="/packages" class="hover:text-blue-300">درباره ما</Link></li>
+          <li><Link href="/about" class="hover:text-blue-300"> وبلاگ </Link></li>
+          <li><Link href="/contact" class="hover:text-blue-300">تماس با ما</Link></li>
         </ul>
       </div>
 
@@ -22,7 +22,7 @@
         <template v-if="!user">
           <Link
             href="/login"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-[#ffa800] bg-white border border-[#ffd58a] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition transform"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-blue-600 bg-white border border-blue-600 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition transform"
             aria-label="ورود"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,7 +33,7 @@
 
           <Link
             href="/register"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#ffa800] shadow-md hover:bg-[#e08f00] transform hover:-translate-y-0.5 transition"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white bg-blue-600 shadow-md hover:bg-yellow-400 transform hover:-translate-y-0.5 hover:text-black transition"
             aria-label="ثبت نام"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

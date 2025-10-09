@@ -6,10 +6,15 @@
 @source '../../storage/framework/views/*.php';
 
 @font-face {
-  font-family: "Vazir";
-  src: url("/fonts/Vazir.woff2") format("woff2");
+  font-family: "Iranyekan";
+  src: url("/fonts/Iranyekan.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
-body { font-family: "Vazir", sans-serif; }
+
+/* apply globally */
+body { font-family: "Iranyekan", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
 
 @custom-variant dark (&:is(.dark *));
 
