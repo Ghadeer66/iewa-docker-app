@@ -11,9 +11,9 @@
         <ul class="hidden md:flex gap-6 text-black text-sm items-center">
           <li><Link href="/" class="hover:text-blue-300"> خانه </Link></li>
           <li><Link href="/menu" class="hover:text-blue-300">محصولات</Link></li>
-          <li><Link href="/packages" class="hover:text-blue-300">درباره ما</Link></li>
-          <li><Link href="/about" class="hover:text-blue-300"> وبلاگ </Link></li>
-          <li><Link href="/contact" class="hover:text-blue-300">تماس با ما</Link></li>
+          <li><Link href="#" class="hover:text-blue-300">درباره ما</Link></li>
+          <li><Link href="#" class="hover:text-blue-300"> وبلاگ </Link></li>
+          <li><Link href="#" class="hover:text-blue-300">تماس با ما</Link></li>
         </ul>
       </div>
 
