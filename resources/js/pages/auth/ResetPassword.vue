@@ -19,10 +19,10 @@ const inputEmail = ref(props.email);
 
 <template>
     <AuthLayout
-        title="Reset password"
-        description="Please enter your new password below"
+        title="بازنشانی رمز عبور"
+        description="لطفا رمز عبور جدید خود را در زیر وارد کنید"
     >
-        <Head title="Reset password" />
+        <Head title="بازنشانی رمز عبور" />
 
         <Form
             v-bind="NewPasswordController.store.form()"
@@ -32,7 +32,7 @@ const inputEmail = ref(props.email);
         >
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="email">Email</Label>
+                    <Label for="email">ایمیل</Label>
                     <Input
                         id="email"
                         type="email"
@@ -46,7 +46,7 @@ const inputEmail = ref(props.email);
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">Password</Label>
+                    <Label for="password">رمز عبور</Label>
                     <Input
                         id="password"
                         type="password"
@@ -61,7 +61,7 @@ const inputEmail = ref(props.email);
 
                 <div class="grid gap-2">
                     <Label for="password_confirmation">
-                        Confirm Password
+                        تأیید رمز عبور
                     </Label>
                     <Input
                         id="password_confirmation"
@@ -84,7 +84,7 @@ const inputEmail = ref(props.email);
                         v-if="processing"
                         class="h-4 w-4 animate-spin"
                     />
-                    Reset password
+                    بازنشانی رمز عبور
                 </Button>
             </div>
         </Form>

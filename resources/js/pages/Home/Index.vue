@@ -60,7 +60,9 @@ const categories = [
     { title: 'رژیمی', image: '/storage/images/food-categories/diet.png' },
     { title: 'انرژیک', image: '/storage/images/food-categories/energy.png' },
     { title: 'کافئین', image: '/storage/images/food-categories/caffien.png' },
-    { title: 'مدرسه', image: '/storage/images/food-categories/school.png' },
+    { title: 'اکونومی', image: '/storage/images/food-categories/eco.png' },
+    { title: 'مدرسه', image: '/storage/images/food-categories/school.png' }
+
 ]
 
 const categories2 = [

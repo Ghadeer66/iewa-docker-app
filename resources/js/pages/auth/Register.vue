@@ -1,116 +1,68 @@
-<script setup lang="ts">
-import RegisteredUserController from '@/actions/App/Http/Controllers/Auth/RegisteredUserController';
-import InputError from '@/components/InputError.vue';
-import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AuthBase from '@/layouts/AuthLayout.vue';
-import { login } from '@/routes';
-import { Form, Head } from '@inertiajs/vue3';
-import { LoaderCircle } from 'lucide-vue-next';
-</script>
-
 <template>
-    <AuthBase
-        title="ثبت نام در ایوا"
+  <AuthBase>
+    <div
+      class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 w-[400px] border border-white/20"
     >
-        <Head title="Register" />
+      <h1 class="text-2xl text-center text-lime-300 font-semibold mb-6">
+        ثبت‌نام در ایوا
+      </h1>
 
-        <!-- logo (replace Laravel logo) -->
-        <div class="flex justify-center mb-6">
-          <img src="/storage/images/icone.png" alt="ایوا" class="h-20 w-20 object-contain" />
+      <form @submit.prevent="register" class="space-y-5">
+        <div>
+          <label class="text-gray-300 text-sm mb-1 block">نام کامل</label>
+          <input
+            type="text"
+            v-model="name"
+            placeholder="مثلاً علی رضایی"
+            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          />
         </div>
 
-        <!-- apply brand color to text inside the form -->
-        <Form
-            v-bind="RegisteredUserController.store.form()"
-            :reset-on-success="['password', 'password_confirmation']"
-            v-slot="{ errors, processing }"
-            class="flex flex-col gap-6 text-black"
+        <div>
+          <label class="text-gray-300 text-sm mb-1 block">شماره همراه</label>
+          <input
+            type="text"
+            v-model="phone"
+            placeholder="09xxxxxxxxx"
+            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          />
+        </div>
+
+        <div>
+          <label class="text-gray-300 text-sm mb-1 block">رمز عبور</label>
+          <input
+            type="password"
+            v-model="password"
+            placeholder="رمز خود را انتخاب کنید"
+            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition"
         >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="name" class="text-black">نام و نام خانوادگی</Label>
-                    <Input
-                        id="name"
-                        type="text"
-                        required
-                        autofocus
-                        :tabindex="1"
-                        autocomplete="name"
-                        name="name"
-                        placeholder=""
-                    />
-                    <InputError :message="errors.name" />
-                </div>
+          ثبت‌نام
+        </button>
 
-                <div class="grid gap-2">
-                    <Label for="email" class="text-black">ایمیل</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        required
-                        :tabindex="2"
-                        autocomplete="email"
-                        name="email"
-                        placeholder=""
-                    />
-                    <InputError :message="errors.email" />
-                </div>
-
-                <div class="grid gap-2">
-                    <Label for="password" class="text-black">رمز عبور</Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        required
-                        :tabindex="3"
-                        autocomplete="new-password"
-                        name="password"
-                        placeholder=""
-                    />
-                    <InputError :message="errors.password" />
-                </div>
-
-                <div class="grid gap-2">
-                    <Label for="phone" class="text-black">شماره تلفن</Label>
-                    <Input
-                        id="phone"
-                        type="phone"
-                        required
-                        :tabindex="4"
-                        autocomplete="new-phone"
-                        name="phone"
-                        placeholder=""
-                    />
-                    <InputError :message="errors.phone" />
-                </div>
-
-                <Button
-                    type="submit"
-                    class="mt-2 w-full bg-black text-white"
-                    tabindex="5"
-                    :disabled="processing"
-                    data-test="register-user-button"
-                >
-                    <LoaderCircle
-                        v-if="processing"
-                        class="h-4 w-4 animate-spin"
-                    />
-                     ثبت‌نام
-                </Button>
-            </div>
-
-            <div class="text-center text-sm">
-               حساب کاربری دارید؟
-                <TextLink
-                    :href="login()"
-                    class="underline underline-offset-4 text-[#ffa800]"
-                    :tabindex="6"
-                    >ورود</TextLink
-                >
-            </div>
-        </Form>
-    </AuthBase>
+        <div class="text-center text-sm mt-3 text-gray-400">
+          قبلاً حساب دارید؟
+          <a href="/login" class="hover:text-lime-400">ورود</a>
+        </div>
+      </form>
+    </div>
+  </AuthBase>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import AuthBase from '@/layouts/AuthLayout.vue';
+
+const name = ref('')
+const phone = ref('')
+const password = ref('')
+
+function register() {
+  alert(`Welcome, ${name.value}!`)
+}
+</script>

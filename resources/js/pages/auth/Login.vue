@@ -1,109 +1,57 @@
-<script setup lang="ts">
-import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
-import InputError from '@/components/InputError.vue';
-import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AuthBase from '@/layouts/AuthLayout.vue';
-import { register } from '@/routes';
-import { request } from '@/routes/password';
-import { Form, Head } from '@inertiajs/vue3';
-import { LoaderCircle } from 'lucide-vue-next';
-
-defineProps<{
-    status?: string;
-    canResetPassword: boolean;
-}>();
-</script>
-
 <template>
-    <AuthBase
-        title="Log in to your account"
-        description="Enter your email and password below to log in"
+  <AuthBase>
+    <div
+      class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 w-[380px] border border-white/20"
     >
-        <Head title="Log in" />
+      <h1 class="text-2xl text-center text-lime-300 font-semibold mb-6">
+        ورود به حساب ایوا
+      </h1>
 
-        <div
-            v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
-        >
-            {{ status }}
+      <form @submit.prevent="login" class="space-y-5">
+        <div>
+          <label class="text-gray-300 text-sm mb-1 block">شماره همراه</label>
+          <input
+            type="text"
+            v-model="phone"
+            placeholder="09xxxxxxxxx"
+            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          />
         </div>
 
-        <Form
-            v-bind="AuthenticatedSessionController.store.form()"
-            :reset-on-success="['password']"
-            v-slot="{ errors, processing }"
-            class="flex flex-col gap-6"
+        <div>
+          <label class="text-gray-300 text-sm mb-1 block">رمز عبور</label>
+          <input
+            type="password"
+            v-model="password"
+            placeholder="رمز خود را وارد کنید"
+            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition"
         >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        name="email"
-                        required
-                        autofocus
-                        :tabindex="1"
-                        autocomplete="email"
-                        placeholder="email@example.com"
-                    />
-                    <InputError :message="errors.email" />
-                </div>
+          ورود
+        </button>
 
-                <div class="grid gap-2">
-                    <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
-                        <TextLink
-                            v-if="canResetPassword"
-                            :href="request()"
-                            class="text-sm"
-                            :tabindex="5"
-                        >
-                            Forgot password?
-                        </TextLink>
-                    </div>
-                    <Input
-                        id="password"
-                        type="password"
-                        name="password"
-                        required
-                        :tabindex="2"
-                        autocomplete="current-password"
-                        placeholder="Password"
-                    />
-                    <InputError :message="errors.password" />
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" name="remember" :tabindex="3" />
-                        <span>Remember me</span>
-                    </Label>
-                </div>
-
-                <Button
-                    type="submit"
-                    class="mt-4 w-full"
-                    :tabindex="4"
-                    :disabled="processing"
-                    data-test="login-button"
-                >
-                    <LoaderCircle
-                        v-if="processing"
-                        class="h-4 w-4 animate-spin"
-                    />
-                    Log in
-                </Button>
-            </div>
-
-            <div class="text-center text-sm text-muted-foreground">
-                Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
-            </div>
-        </Form>
-    </AuthBase>
+        <div class="flex justify-between text-sm mt-3 text-gray-400">
+          <a href="#" class="hover:text-lime-400">رمز عبور را فراموش کرده‌اید؟</a>
+          <a href="/register" class="hover:text-lime-400">ثبت‌نام کنید</a>
+        </div>
+      </form>
+    </div>
+  </AuthBase>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import AuthBase from '@/layouts/AuthLayout.vue';
+
+const phone = ref('')
+const password = ref('')
+
+function login() {
+  alert(`Logging in as ${phone.value}`)
+}
+</script>
