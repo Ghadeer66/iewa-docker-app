@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full overflow-hidden rounded-lg">
-    <div class="w-full h-64 md:h-96 bg-gray-100 flex items-center justify-center">
+    <div class="w-full h-64 md:h-120 bg-gray-100 flex items-center justify-center">
       <img
         v-if="currentItem"
         :src="resolveImage(currentItem)"

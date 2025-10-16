@@ -18,8 +18,11 @@ return new class extends Migration
     $table->text('description')->nullable();
     $table->integer('calories')->nullable();
     $table->decimal('price', 10, 2);
-    $table->string('image')->nullable();
     $table->boolean('is_vegan')->default(false);
+    $table->string('kcal')->nullable();
+    $table->json('nutritional_informations')->nullable();
+    $table->json('contraindications')->nullable();
+    $table->json('consumable_items')->nullable();
     $table->timestamps();
 });
     }

@@ -7,8 +7,7 @@
     >
       <div class="flex items-center gap-4 overflow-x-auto no-scrollbar py-2">
         <div v-if="cta" class="flex-shrink-0 rounded-lg p-4 w-44 h-36 flex flex-col items-center justify-center text-center ">
-          <div class="text-3xl mb-1">🤔</div>
-          <div class="text-sm font-medium text-gray-800">
+          <div class="text-l font-large text-gray-800">
             {{ cta }}
           </div>
         </div>
@@ -17,11 +16,11 @@
           :key="i"
           class="flex-shrink-0 bg-white rounded-lg p-4 w-58 h-36 flex flex-col items-center justify-center text-center shadow-sm"
         >
-          <div class="w-12 h-12 mb-2">
+          <!-- <div class="w-12 h-12 mb-2">
             <img v-if="item.image" :src="item.image" :alt="item.title" class="w-full h-full object-contain" />
             <div v-else class="text-2xl">❓</div>
-          </div>
-          <div class="text-sm font-medium text-gray-800 leading-tight">
+          </div> -->
+          <div class="text-xl font-medium text-gray-800 leading-tight">
             {{ item.title }}
           </div>
         </div>

@@ -1,23 +1,24 @@
 <template>
-  <section class="container mx-auto px-6 py-6 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200">
-    <div class="flex gap-6 flex-nowrap">
+  <section class="w-full overflow-hidden">
+    <div
+      class="flex justify-center"
+    >
       <div
-        v-for="cat in items"
-        :key="cat.title"
-        class="flex-1 min-w-0"
+        class="flex gap-0 overflow-x-auto scrollbar-hide px-10 py-10 max-w-full"
       >
         <div
-          class="w-full rounded-xl p-3 flex flex-col items-center text-center transition"
+          v-for="cat in items"
+          :key="cat.title"
+          class="flex-shrink-0 flex flex-col items-center text-center transition"
         >
-          <div
-            class="w-30 h-30 bg-white rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
-          >
+          <div class="w-30 h-30 flex items-center justify-center overflow-hidden">
             <img
               :src="cat.image"
               :alt="cat.title"
               class="w-20 h-20 object-contain transform transition-transform duration-300 ease-in-out hover:scale-110"
             />
           </div>
+          <p class="mt-2 text-sm font-medium">{{ cat.title }}</p>
         </div>
       </div>
     </div>
@@ -32,3 +33,14 @@ defineProps({
   }
 })
 </script>
+
+<style>
+/* Hide scrollbar but keep scrolling functionality */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* for Internet Explorer, Edge */
+  scrollbar-width: none;     /* for Firefox */
+}
+</style>

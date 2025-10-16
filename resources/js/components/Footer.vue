@@ -1,21 +1,15 @@
 <template>
-    <footer class="relative bg-gray-300 text-black">
-        <!-- Back to top arrow -->
-        <button @click="scrollToTop"
-            class="absolute -top-5 left-1/2 -translate-x-1/2 bg-black text-white rounded-full p-4 shadow-md hover:bg-gray-800 hover:-translate-y-1 transition cursor-pointer">
-            ▲
-        </button>
+    <footer class="bg-[#fff25c] text-gray-900 text-sm leading-relaxed relative">
 
-
+        <!-- Top Links Section -->
         <div class="container mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3">
-                <img src="/storage/images/icon.png" alt="اوا" class="h-15 w-15 object-contain" />
+            <div class="flex items-center gap-3"> <img src="/storage/images/icon_bw.png" alt="اوا"
+                    class="h-15 w-15 object-contain rounded-full border-2 border-black" />
                 <div>
                     <p class="text-mid text-gray-900">تغذیه سالم برای زندگی بهتر</p>
                 </div>
             </div>
-
-            <ul class="flex justify-center items-center gap-6 my-6 text-sm text-black text-center">
+            <ul class="flex items-center gap-6 my-6 text-sm text-black text-right">
                 <li>
                     <Link href="/" class="text-black hover:underline">خانه</Link>
                 </li>
@@ -26,23 +20,160 @@
                     <Link href="/packages" class="text-black hover:underline">درباره ما</Link>
                 </li>
                 <li>
-                    <Link href="/about" class="text-black hover:underline">وبلاگ</Link>
+                    <Link href="/about" class="text-black hover:underline">بلاگ</Link>
                 </li>
                 <li>
                     <Link href="/contact" class="text-black hover:underline">تماس با ما</Link>
                 </li>
+                <li>
+                    <Link href="/contact" class="text-black hover:underline"> مشاوره </Link>
+                </li>
             </ul>
-
-
-            <div class="text-sm text-black text-center">
-                <p>تماس: <a href="tel:+98XXXXXXXXXX" class="hover:underline">+98XXXXXXXXXX</a></p>
-                <p class="mt-1">آدرس: اصفهان، ایران</p>
+            <div class="text-sm text-black text-right mr-6">
+                <p>تماس: <a href="tel:+989027383170" class="hover:underline">989027383170+</a></p>
+                <p class="mt-1">آدرس : ایران، اصفهان، خیابان کهندژ، کوچه ۱۱۹، بلاک ۱۴</p>
             </div>
         </div>
 
-        <div class="border-t border-white/10 text-center py-4 text-sm text-white bg-black">
-            © <span>{{ year }}</span> . تمامی حقوق محفوظ است.
+        <hr class="border-gray-300 my-4" />
+
+        <!-- Middle Contact Section -->
+        <div class="container mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-semibold">پشتیبانی و امور مشتریان</p>
+                <p>تماس تلفنی: <a href="tel:03136517007" class="hover:underline">03136517007</a></p>
+                <p><a href="https://wa.me/989027383170" class="hover:underline">چت آنلاین در واتس اپ </a></p>
+            </div>
+
+            <div class=" items-center gap-6 my-2 text-sm text-black text-right ml-6 mb-2">
+                <p class="font-semibold">مشاور تغذیه</p>
+                <p>تماس تلفنی: <a href="tel:03136517007" class="hover:underline">03136517007</a></p>
+                <p><a href="https://wa.me/989027383170" class="hover:underline">چت آنلاین در واتس اپ</a></p>
+            </div>
+
+            <div class=" items-center gap-6 my-3 text-sm text-black text-right ml-6 mb-2">
+                <p class="font-semibold"> ایمیل </p>
+                <p><a href="mailto:info@iewato.co" class="hover:underline">info@iewato.co</a></p>
+            </div>
+
+            <div class="flex flex-col items-top space-y-1">
+                <p>آدرس ما در فضای مجازی</p>
+                <div class="flex justify-center md:justify-end gap-4 mt-2">
+                    <!-- Instagram (gradient-style not fully supported in simple SVG, so use brand purple) -->
+                    <a href="#" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                            width="40" height="40" viewBox="0 0 256 256" xml:space="preserve">
+                            <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
+                                transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+                                <linearGradient id="SVGID_3" gradientUnits="userSpaceOnUse"
+                                    gradientTransform="matrix(1 0 0 -1 0 92)" x1="7.5528" y1="9.5531" x2="82.4473"
+                                    y2="84.4475">
+                                    <stop offset="0%" style="stop-color:rgb(255,214,0);stop-opacity: 1" />
+                                    <stop offset="50%" style="stop-color:rgb(255,1,0);stop-opacity: 1" />
+                                    <stop offset="100%" style="stop-color:rgb(216,0,185);stop-opacity: 1" />
+                                </linearGradient>
+                                <path
+                                    d="M 89.729 26.447 c -0.219 -4.79 -0.98 -8.061 -2.092 -10.923 c -1.13 -3.003 -2.901 -5.723 -5.19 -7.971 c -2.247 -2.289 -4.968 -4.062 -7.971 -5.192 C 71.614 1.25 68.343 0.49 63.553 0.272 C 58.754 0.053 57.221 0 45 0 S 31.246 0.053 26.447 0.271 c -4.79 0.219 -8.061 0.98 -10.923 2.092 c -3.003 1.13 -5.723 2.901 -7.971 5.19 c -2.289 2.247 -4.062 4.967 -5.192 7.97 C 1.25 18.386 0.49 21.657 0.272 26.446 C 0.052 31.246 0 32.779 0 45 c 0 12.222 0.052 13.755 0.272 18.554 c 0.218 4.789 0.979 8.061 2.092 10.923 c 1.13 3.002 2.901 5.723 5.19 7.97 c 2.247 2.289 4.968 4.061 7.971 5.19 c 2.862 1.113 6.133 1.873 10.923 2.092 C 31.247 89.948 32.78 90 45.001 90 s 13.754 -0.051 18.553 -0.271 c 4.79 -0.219 8.061 -0.979 10.923 -2.092 c 6.045 -2.337 10.823 -7.116 13.16 -13.16 c 1.113 -2.863 1.873 -6.134 2.092 -10.923 C 89.948 58.754 90 57.221 90 45 C 90 32.779 89.948 31.246 89.729 26.447 z M 81.629 63.185 c -0.2 4.388 -0.933 6.77 -1.549 8.356 c -1.514 3.925 -4.616 7.026 -8.54 8.54 c -1.585 0.616 -3.968 1.349 -8.356 1.549 C 58.44 81.847 57.016 81.892 45 81.892 c -12.017 0 -13.44 -0.045 -18.184 -0.262 c -4.387 -0.2 -6.77 -0.933 -8.356 -1.549 c -1.954 -0.722 -3.722 -1.872 -5.174 -3.367 c -1.495 -1.452 -2.645 -3.219 -3.367 -5.174 c -0.616 -1.585 -1.349 -3.968 -1.549 -8.356 c -0.216 -4.745 -0.262 -6.168 -0.262 -18.184 c 0 -12.016 0.046 -13.439 0.262 -18.184 c 0.201 -4.388 0.933 -6.77 1.549 -8.356 c 0.722 -1.955 1.872 -3.723 3.367 -5.175 c 1.452 -1.495 3.22 -2.645 5.175 -3.366 c 1.585 -0.617 3.968 -1.349 8.356 -1.55 C 31.561 8.154 32.984 8.108 45 8.108 h -0.001 c 12.016 0 13.439 0.046 18.184 0.263 c 4.388 0.2 6.77 0.933 8.356 1.549 c 1.954 0.722 3.722 1.872 5.174 3.366 c 1.495 1.452 2.645 3.22 3.366 5.175 c 0.617 1.585 1.35 3.968 1.55 8.356 c 0.216 4.745 0.262 6.168 0.262 18.184 C 81.891 57.017 81.846 58.439 81.629 63.185 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_3); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <linearGradient id="SVGID_4" gradientUnits="userSpaceOnUse"
+                                    gradientTransform="matrix(1 0 0 -1 0 92)" x1="28.6598" y1="30.66" x2="61.3394"
+                                    y2="63.3397">
+                                    <stop offset="0%" style="stop-color:rgb(255,100,0);stop-opacity: 1" />
+                                    <stop offset="50%" style="stop-color:rgb(255,1,0);stop-opacity: 1" />
+                                    <stop offset="100%" style="stop-color:rgb(253,0,86);stop-opacity: 1" />
+                                </linearGradient>
+                                <path
+                                    d="M 44.999 21.892 c -12.762 0 -23.108 10.346 -23.108 23.108 s 10.346 23.108 23.108 23.108 c 12.763 0 23.108 -10.346 23.108 -23.108 S 57.762 21.892 44.999 21.892 z M 44.999 60 C 36.716 59.999 30 53.284 30 45 c 0 -8.284 6.715 -15 15 -15 c 8.284 0.001 15 6.716 15 15 C 60 53.284 53.284 60 44.999 60 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_4); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <linearGradient id="SVGID_5" gradientUnits="userSpaceOnUse"
+                                    gradientTransform="matrix(1 0 0 -1 0 92)" x1="65.2021" y1="67.2024" x2="72.8391"
+                                    y2="74.8394">
+                                    <stop offset="0%" style="stop-color:rgb(243,0,114);stop-opacity: 1" />
+                                    <stop offset="100%" style="stop-color:rgb(229,0,151);stop-opacity: 1" />
+                                </linearGradient>
+                                <path
+                                    d="M 74.421 20.979 c 0 2.982 -2.418 5.4 -5.4 5.4 c -2.983 0 -5.4 -2.418 -5.4 -5.4 c 0 -2.983 2.418 -5.4 5.4 -5.4 C 72.003 15.579 74.421 17.997 74.421 20.979 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_5); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            </g>
+                        </svg>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/989027383170" aria-label="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                            width="40" height="40" viewBox="0 0 256 256" xml:space="preserve">
+                            <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
+                                transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+                                <circle cx="45" cy="45" r="45"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(42,181,64); fill-rule: nonzero; opacity: 1;"
+                                    transform="  matrix(1 0 0 1 0 0) " />
+                                <path
+                                    d="M 16.138 44.738 c -0.002 5.106 1.332 10.091 3.869 14.485 l -4.112 15.013 l 15.365 -4.029 c 4.233 2.309 8.999 3.525 13.85 3.527 h 0.012 c 15.973 0 28.976 -12.999 28.983 -28.974 c 0.003 -7.742 -3.01 -15.022 -8.481 -20.498 c -5.472 -5.476 -12.749 -8.494 -20.502 -8.497 C 29.146 15.765 16.145 28.762 16.138 44.738 M 25.288 58.466 l -0.574 -0.911 c -2.412 -3.834 -3.685 -8.266 -3.683 -12.816 c 0.005 -13.278 10.811 -24.081 24.099 -24.081 c 6.435 0.003 12.482 2.511 17.031 7.062 c 4.548 4.552 7.051 10.603 7.05 17.037 C 69.205 58.036 58.399 68.84 45.121 68.84 h -0.009 c -4.323 -0.003 -8.563 -1.163 -12.261 -3.357 l -0.88 -0.522 l -9.118 2.391 L 25.288 58.466 z M 45.122 73.734 L 45.122 73.734 L 45.122 73.734 C 45.122 73.734 45.121 73.734 45.122 73.734"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path
+                                    d="M 37.878 32.624 c -0.543 -1.206 -1.113 -1.23 -1.63 -1.251 c -0.422 -0.018 -0.905 -0.017 -1.388 -0.017 c -0.483 0 -1.268 0.181 -1.931 0.906 c -0.664 0.725 -2.535 2.477 -2.535 6.039 c 0 3.563 2.595 7.006 2.957 7.49 c 0.362 0.483 5.01 8.028 12.37 10.931 c 6.118 2.412 7.362 1.933 8.69 1.812 c 1.328 -0.121 4.285 -1.751 4.888 -3.442 c 0.604 -1.691 0.604 -3.14 0.423 -3.443 c -0.181 -0.302 -0.664 -0.483 -1.388 -0.845 c -0.724 -0.362 -4.285 -2.114 -4.948 -2.356 c -0.664 -0.241 -1.147 -0.362 -1.63 0.363 c -0.483 0.724 -1.87 2.355 -2.292 2.838 c -0.422 0.484 -0.845 0.544 -1.569 0.182 c -0.724 -0.363 -3.057 -1.127 -5.824 -3.594 c -2.153 -1.92 -3.606 -4.29 -4.029 -5.015 c -0.422 -0.724 -0.045 -1.116 0.318 -1.477 c 0.325 -0.324 0.724 -0.846 1.087 -1.268 c 0.361 -0.423 0.482 -0.725 0.723 -1.208 c 0.242 -0.483 0.121 -0.906 -0.06 -1.269 C 39.929 37.637 38.522 34.056 37.878 32.624"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            </g>
+                        </svg>
+                    </a>
+                    <!-- Telegram -->
+                    <a href="#" aria-label="Telegram">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                            width="40" height="40" viewBox="0 0 256 256" xml:space="preserve">
+                            <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
+                                transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+                                <path
+                                    d="M 45 0 C 28.967 0 14.902 8.392 6.932 21.015 c 2.729 1.97 6.069 3.145 9.693 3.145 h 32.399 c 17.08 0 32.123 8.704 40.948 21.915 C 89.981 45.716 90 45.36 90 45 C 90 20.147 69.853 0 45 0 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(31,155,218); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path
+                                    d="M 90 45 c 0 -1.207 -0.062 -2.399 -0.155 -3.583 C 81.002 27.735 66.02 20.885 49.024 20.885 H 16.625 c -3.159 0 -6.101 -0.494 -8.614 -1.504 C 3.387 26.046 0.51 34.014 0.063 42.629 c 9.023 11.127 22.794 18.247 38.236 18.247 h 0.744 c 9.038 0 13.101 3.942 13.329 12.925 c 0.004 -0.143 0.022 -0.282 0.022 -0.426 c 0 8.417 -3.516 15.355 -11.172 16.456 C 42.469 89.934 43.726 90 45 90 C 69.853 90 90 69.853 90 45 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(29,144,203); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path
+                                    d="M 41.27 89.834 c 7.988 -1.072 14.169 -7.802 14.378 -16.034 c -0.228 -8.983 -7.566 -16.2 -16.604 -16.2 h -0.744 c -15.296 0 -28.947 -6.992 -37.973 -17.938 C 0.119 41.414 0 43.193 0 45 C 0 68.595 18.164 87.936 41.27 89.834 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(27,134,188); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path
+                                    d="M 36.371 52.976 l 19.271 14.237 c 2.2 1.214 3.786 0.586 4.334 -2.041 l 7.844 -36.964 c 0.803 -3.22 -1.227 -4.681 -3.331 -3.726 L 18.428 42.242 c -3.144 1.261 -3.125 3.016 -0.573 3.797 l 11.821 3.689 L 57.04 32.464 c 1.292 -0.783 2.478 -0.362 1.505 0.502 L 36.371 52.976 z"
+                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(252,253,255); fill-rule: nonzero; opacity: 1;"
+                                    transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+
+            </div>
         </div>
+
+        <hr class="border-gray-300 my-4" />
+
+        <!-- Map Section -->
+        <div class="flex justify-center mb-10">
+            <div class="w-420 h-80 rounded-lg overflow-hidden shadow-lg">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d209.89423530844766!2d51.601605714878474!3d32.6778606181484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1760458930088!5m2!1sen!2s"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+
+
+        <!-- Footer Bottom -->
+        <div class="text-center py-3 text-xs bg-black text-gray-300">
+            © {{ year }} ایوا - تمامی حقوق محفوظ است.
+        </div>
+
+        <!-- Back to top arrow -->
+        <button @click="scrollToTop"
+            class="absolute -top-5 left-1/2 -translate-x-1/2 bg-black text-white rounded-full p-3 shadow-md hover:bg-gray-800 hover:-translate-y-1 transition cursor-pointer">
+            ▲
+        </button>
     </footer>
 </template>
 
@@ -62,6 +193,11 @@ function scrollToTop() {
 
 <style scoped>
 a {
-    color: black;
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 </style>

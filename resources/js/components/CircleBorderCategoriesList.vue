@@ -20,7 +20,7 @@
             />
           </div>
 
-          <div class="text-sm font-semibold text-gray-800 mt-4 leading-tight truncate">
+          <div class="text-m font-bold text-gray-800 mt-4 leading-tight truncate">
             {{ cat.title }}
           </div>
         </div>
