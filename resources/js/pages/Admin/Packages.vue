@@ -32,30 +32,7 @@
                             <th class="p-2">عملیات</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="package in packages" :key="package.id" class="border-b border-gray-700 text-white">
-                            <td class="p-2">{{ package.name }}</td>
-                            <td class="p-2">{{ package.price.toLocaleString() }} تومان</td>
-                            <td class="p-2">{{ package.duration_days }} روز</td>
-                            <td class="p-2">
-                                <span :class="package.is_active ? 'text-green-400' : 'text-red-400'">
-                                    {{ package.is_active ? 'فعال' : 'غیرفعال' }}
-                                </span>
-                            </td>
-                            <td class="p-2 flex space-x-2">
-                                <button @click="editPackage(package)" class="text-blue-400 hover:text-blue-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6 6H6v-6l3-3z" />
-                                    </svg>
-                                </button>
-                                <button @click="deletePackage(package.id)" class="text-red-400 hover:text-red-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4a2 2 0 012 2v0H8V5a2 2 0 012-2z" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
+                   
                 </table>
             </div>
         </div>
