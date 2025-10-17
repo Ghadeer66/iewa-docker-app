@@ -1,0 +1,46 @@
+/* Basic RTL overrides for Nova */
+body {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+.mr-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+.ml-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+.pl-4 { padding-left: 0 !important; padding-right: 1rem !important; }
+.pr-4 { padding-right: 0 !important; padding-left: 1rem !important; }
+
+/* Flip chevrons/arrows if needed */
+[dir-icon="chevron-right"] { transform: rotate(180deg); }
+
+/* Move Nova sidebar to the right and shift content */
+/* Common sidebar containers */
+aside[aria-label="Sidebar"],
+nav[aria-label="Sidebar"],
+[class*="sidebar"],
+[data-testid="sidebar"] {
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* Swap paddings/margins applied by Tailwind utility classes */
+[class*="md\\:pl-64"] { padding-left: 0 !important; padding-right: 16rem !important; }
+[class*="lg\\:pl-64"] { padding-left: 0 !important; padding-right: 16rem !important; }
+[class*="xl\\:pl-64"] { padding-left: 0 !important; padding-right: 16rem !important; }
+
+[class*="pl-64"] { padding-left: 0 !important; padding-right: 16rem !important; }
+[class*="ml-64"] { margin-left: 0 !important; margin-right: 16rem !important; }
+
+/* Generic left/right utilities swap for common sizes */
+.pl-0 { padding-left: 0 !important; }
+.pr-0 { padding-right: 0 !important; }
+.pl-4 { padding-left: 0 !important; padding-right: 1rem !important; }
+.pr-4 { padding-right: 0 !important; padding-left: 1rem !important; }
+.pl-6 { padding-left: 0 !important; padding-right: 1.5rem !important; }
+.pr-6 { padding-right: 0 !important; padding-left: 1.5rem !important; }
+.ml-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+.mr-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+

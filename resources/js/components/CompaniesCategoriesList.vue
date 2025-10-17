@@ -18,7 +18,6 @@
               class="w-20 h-20 object-contain transform transition-transform duration-300 ease-in-out hover:scale-110"
             />
           </div>
-          <p class="mt-2 text-sm font-medium">{{ cat.title }}</p>
         </div>
       </div>
     </div>

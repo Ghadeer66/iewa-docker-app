@@ -2,43 +2,38 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     /**
+     * Guard name used by Spatie Permission.
      */
+    protected $guard_name = 'web';
+
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'personal_code',
+        'position',
         'password',
+        'business_name',
+        'business_type',
+        'business_phone',
+        'business_address'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,8 +42,21 @@ class User extends Authenticatable
         ];
     }
 
-    public function orders()
+    // Check if user is a business
+    public function isBusiness()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasRole('business');
+    }
+
+    // Check if user is an admin
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    // Check if user is a client
+    public function isClient()
+    {
+        return $this->hasRole('client');
     }
 }

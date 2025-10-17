@@ -20,8 +20,15 @@
         <!-- Meal Cards -->
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <MealCard v-for="meal in meals.data" :key="meal.id" :meal="meal" @add-to-cart="addToCart"
-                    @open-calendar="calendarOpen = true" @view-details="viewDetails" />
+                <!-- Use openCalendar handler to capture emitted payload -->
+                <MealCard
+                  v-for="meal in meals.data"
+                  :key="meal.id"
+                  :meal="meal"
+                  @add-to-cart="addToCart"
+                  @open-calendar="openCalendar"
+                  @view-details="viewDetails"
+                />
             </div>
 
             <!-- Pagination -->
@@ -38,19 +45,27 @@
         </div>
     </AppLayout>
 
-    <RulesButton />
-    <Calender v-model:open="calendarOpen" />
+    <template v-if="user">
+        <RulesButton />
+        <!-- Pass the selectedBasePrice into Calender -->
+        <Calender v-model:open="calendarOpen" :basePrice="selectedBasePrice" />
+    </template>
 
 </template>
 
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue'
 import MealCard from '@/components/MealCard.vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import RulesButton from '@/components/RulesButton.vue'
 import Calender from '@/components/Calender.vue'
-import { ref } from 'vue' 
+import { ref } from 'vue'
+
 const calendarOpen = ref(false)
+const selectedBasePrice = ref(0) // <- store the emitted base price here
+
+const page = usePage()
+const user = page.props.auth?.user || null
 
 const props = defineProps({ meals: Object })
 const meals = props.meals
@@ -79,6 +94,18 @@ const viewDetails = (meal) => {
 
 const fetchPage = (url) => {
     router.get(url, {}, { preserveState: true, replace: true })
+}
+
+// Handler to accept the emitted payload from MealCard
+function openCalendar(payload) {
+    // payload is expected to be { basePrice: number } as emitted from MealCard
+    // defensive: support either payload.basePrice or payload itself being a number
+    const base = (payload && typeof payload === 'object' && 'basePrice' in payload)
+        ? Number(payload.basePrice)
+        : Number(payload)
+
+    selectedBasePrice.value = isNaN(base) ? 0 : base
+    calendarOpen.value = true
 }
 </script>
 

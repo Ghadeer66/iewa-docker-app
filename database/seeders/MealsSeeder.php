@@ -6,6 +6,10 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Meal;
+use App\Models\Image;
+use App\Models\MealImage;
 
 class MealsSeeder extends Seeder
 {
@@ -19,7 +23,7 @@ class MealsSeeder extends Seeder
         $meals = [
             [
                 'title' => 'سالاد سبز ویژه',
-                'slug' => Str::slug('1سالاد سبز ویژه'),
+                'slug' => 'salad',
                 'description' => 'سالاد تازه با سبزیجات متنوع و سس مخصوص.',
                 'price' => 85000,
                 'kcal' => 220,
@@ -28,7 +32,7 @@ class MealsSeeder extends Seeder
             ],
             [
                 'title' => 'مرغ گریل رژیمی',
-                'slug' => Str::slug('1مرغ گریل رژیمی'),
+                'slug' => 'grilled_chicken',
                 'description' => 'سینه مرغ گریل شده همراه با سبزیجات بخارپز.',
                 'price' => 115000,
                 'kcal' => 350,
@@ -37,7 +41,7 @@ class MealsSeeder extends Seeder
             ],
             [
                 'title' => 'پاستای سبزیجات',
-                'slug' => Str::slug('1پاستای سبزیجات'),
+                'slug' => 'veg_pasta',
                 'description' => 'پاستا با سس سبک و سبزیجات تازه.',
                 'price' => 95000,
                 'kcal' => 410,
@@ -46,7 +50,7 @@ class MealsSeeder extends Seeder
             ],
             [
                 'title' => 'خوراک ماهی سالمون',
-                'slug' => Str::slug('1خوراک ماهی سالمون'),
+                'slug' => 'salmon',
                 'description' => 'ماهی سالمون پخته شده با چاشنی لیمو و سبزیجات.',
                 'price' => 175000,
                 'kcal' => 420,
@@ -55,7 +59,7 @@ class MealsSeeder extends Seeder
             ],
             [
                 'title' => 'پکیج رژیمی روزانه',
-                'slug' => Str::slug('پکیج رژیمی روزانه1'),
+                'slug' => 'diet_package',
                 'description' => 'ترکیبی از صبحانه، ناهار و عصرانه با کالری کنترل‌شده.',
                 'price' => 250000,
                 'kcal' => 1200,
@@ -64,7 +68,39 @@ class MealsSeeder extends Seeder
             ],
         ];
 
-        // Adjust table title if different (e.g. 'meals' -> 'foods')
+        // Insert meals and link images by slug
         DB::table('meals')->insert($meals);
+
+        foreach ($meals as $meal) {
+            $slug = $meal['slug'];
+            $publicPath = public_path("meals/{$slug}.jpg");
+            $storageRelative = "meals/{$slug}.jpg"; // in storage/app/public
+            $storageFull = storage_path("app/public/{$storageRelative}");
+
+            // Ensure directory exists
+            Storage::disk('public')->makeDirectory('meals');
+
+            // Copy from public if exists (fallbacks possible if needed)
+            if (file_exists($publicPath)) {
+                copy($publicPath, $storageFull);
+            }
+
+            // Create image record pointing to storage path
+            $image = Image::firstOrCreate([
+                'url' => "storage/{$storageRelative}",
+            ], [
+                'alt' => $meal['title'],
+                'extra' => null,
+            ]);
+
+            // Link meal to image
+            $mealModel = Meal::where('slug', $slug)->first();
+            if ($mealModel && $image) {
+                MealImage::firstOrCreate([
+                    'meal_id' => $mealModel->id,
+                    'image_id' => $image->id,
+                ]);
+            }
+        }
     }
 }

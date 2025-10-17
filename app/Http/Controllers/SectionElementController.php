@@ -9,8 +9,8 @@ class SectionElementController extends Controller
 {
      public function index()
     {
-        // Eager load the related image
-        $elements = SectionElement::with('sectionElementImage')->get();
+        // Eager load the related image and type
+        $elements = SectionElement::with(['sectionElementImage', 'sectionType'])->get();
 
 
         // Map to desired format for frontend
@@ -20,6 +20,7 @@ class SectionElementController extends Controller
                 'image' => $el->sectionElementImage?->url ?? '', // fallback if no image
                 'alt' => $el->title, // or generate alt text differently
                 'extra' => "Extra info for {$el->title}",
+                'type' => $el->sectionType?->title,
             ];
         });
 

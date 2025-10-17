@@ -14,11 +14,10 @@
         <!-- Content -->
         <div class="p-4 flex flex-col flex-grow">
             <div
-  class="container w-auto gap-5 flex flex-nowrap justify-between items-center rounded-2xl bg-orange-100 py-2 px-3 mx-auto sm:scale-100 scale-90"
->
-  <h3 class="font-bold text-gray-800 text-md text-right">{{ meal.title }}</h3>
-  <h3 class="font-bold text-orange-500 text-md text-left">{{ meal.kcal }} کالری</h3>
-</div>
+                class="container w-auto gap-5 flex flex-nowrap justify-between items-center rounded-2xl bg-orange-100 py-2 px-3 mx-auto sm:scale-100 scale-90">
+                <h3 class="font-bold text-gray-800 text-md text-right">{{ meal.title }}</h3>
+                <h3 class="font-bold text-orange-500 text-md text-left">{{ meal.kcal }} کالری</h3>
+            </div>
 
 
 
@@ -55,7 +54,7 @@
                         جزئیات بیشتر
                     </button>
 
-                    <button @click="$emit('open-calendar')"
+                    <button @click="emitOpenCalendar"
                         class="px-4 py-1 rounded-md text-sm transition bg-green-500 text-white hover:bg-green-600 cursor-pointer">
                         انتخاب روز
                     </button>
@@ -136,13 +135,13 @@
                         <div class="flex justify-center items-center gap-2 text-center">
                             <span class="text-sm text-gray-400">قیمت:</span>
                             <span class="font-bold text-green-600 text-xl">{{ (meal.price * quantity).toLocaleString()
-                                }} تومان</span>
+                            }} تومان</span>
                         </div>
 
                         <!-- Actions -->
                         <div class="flex justify-center">
-                            <button @click="$emit('add-to-cart', { ...meal, quantity }); closeModal()"
-                                :disabled="Authenticated"
+                            <button @click="emitOpenCalendar"
+                                :disabled="isAuthenticated"
                                 class="w-full bg-green-500 text-white py-3 rounded-md text-sm font-medium hover:bg-green-600 transition cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed">
                                 انتخاب روز
                                 <!-- اتمام موجودی -->
@@ -247,4 +246,12 @@ const decreaseQuantity = () => {
         quantity.value--
     }
 }
+
+
+const emit = defineEmits(['open-calendar'])
+const emitOpenCalendar = () => {
+    const base = (props.meal?.price || 0) * quantity.value
+    emit('open-calendar', { basePrice: base })
+}
+
 </script>

@@ -8,6 +8,7 @@ class MealImage extends Model
 {
 
     protected $table = 'meals_images';
+    protected $fillable = ['meal_id', 'image_id'];
 
     public function meal()
     {

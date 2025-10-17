@@ -13,6 +13,11 @@ class Meal extends Model
         return $this->hasOne(MealImage::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
+    }
+
     public function getImageUrlAttribute()
     {
         if ($this->mealImage && $this->mealImage->image) {

@@ -1,19 +1,16 @@
 <template>
     <div dir="rtl" class="relative">
         <!-- Floating Button -->
-        <button
-  @click="open = true"
-  :class="[
-    'fixed top-3/5 transform -translate-y-1/2 transition-all duration-700 z-50 cursor-pointer shadow-lg flex items-center justify-center font-bold text-white left-0',
-    isAtTop
-      ? 'px-6 py-3 rounded-r-xl text-base bg-[#4e3356]'
-      : 'px-4 py-2 rounded-r-xl text-sm opacity-70 bg-[#4e3356] hover:px-6 hover:py-3 hover:rounded-r-xl hover:text-center hover:text-base hover:opacity-100'
-  ]"
->
-  <span>
-    {{ isAtTop ? 'انتخاب روز در تقویم' : 'تقویم من' }}
-  </span>
-</button>
+        <button @click="open = true" :class="[
+            'fixed top-3/5 transform -translate-y-1/2 transition-all duration-700 z-50 cursor-pointer shadow-lg flex items-center justify-center font-bold text-white left-0',
+            isAtTop
+                ? 'px-6 py-3 rounded-r-xl text-base bg-[#4e3356]'
+                : 'px-4 py-2 rounded-r-xl text-sm opacity-70 bg-[#4e3356] hover:px-6 hover:py-3 hover:rounded-r-xl hover:text-center hover:text-base hover:opacity-100'
+        ]">
+            <span>
+                {{ isAtTop ? 'انتخاب روز در تقویم' : 'تقویم من' }}
+            </span>
+        </button>
 
         <!-- Modal -->
         <div v-if="open" class="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-white/30 z-50">
@@ -51,20 +48,27 @@
                     </div>
                 </div>
 
-                <!-- Right: Summary Box -->
-                <div class="w-64 h-[340px] rounded-xl p-4 text-white flex flex-col items-center justify-center text-center transition-all duration-500"
-                    :class="planColorClass">
-                    <div>
-                        <div class="text-sm opacity-90">نوع خرید</div>
-                        <div class="font-bold text-lg mt-1">{{ planTitle }}</div>
-                        <div class="mt-4 text-xs leading-relaxed">
-                            <div>قیمت پایه (هر روز): {{ numberFormat(basePrice) }} تومان</div>
-                            <div v-if="plan !== 'daily'">تخفیف: {{ discountPercentText }}</div>
-                            <div v-if="subsidyApplied">سوبسید شرکت اعمال شد</div>
-                            <div class="mt-3 text-xl font-black">{{ numberFormat(perDayPrice) }} تومان / روز</div>
-                            <div class="mt-3 text-lg">مجموع: {{ numberFormat(totalPrice) }} تومان</div>
+                <!-- Right: Summary Column -->
+                <div class="w-64 flex flex-col items-stretch">
+                    <div class="h-[340px] rounded-xl p-4 text-white flex flex-col items-center justify-center text-center transition-all duration-500"
+                        :class="planColorClass">
+                        <div>
+                            <div class="text-sm opacity-90">نوع خرید</div>
+                            <div class="font-bold text-lg mt-1">{{ planTitle }}</div>
+                            <div class="mt-4 text-xs leading-relaxed">
+                                <div>قیمت پایه (هر روز): {{ numberFormat(props.basePrice) }} تومان</div>
+                                <div v-if="plan !== 'daily'">تخفیف: {{ discountPercentText }}</div>
+                                <div v-if="subsidyApplied">سوبسید شرکت اعمال شد</div>
+                                <div class="mt-3 text-xl font-black">{{ numberFormat(perDayPrice) }} تومان / روز</div>
+                                <div class="mt-3 text-lg">مجموع: {{ numberFormat(totalPrice) }} تومان</div>
+                            </div>
                         </div>
                     </div>
+                    <button
+                        class="mt-3 h-12 bg-gray-200 text-black rounded-lg font-bold hover:bg-orange-300 transition-colors cursor-pointer"
+                        @click="$emit('continue')">
+                        ادامه خرید
+                    </button>
                 </div>
             </div>
         </div>
@@ -72,17 +76,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { toJalaali } from 'jalaali-js';
 
 const props = defineProps({
-  open: Boolean
+    open: Boolean,
+    basePrice: {
+        type: Number,
+        default: 200000
+    }
 })
-const emit = defineEmits(['update:open'])
+
+watch(() => props.basePrice, (newPrice) => {
+  if (props.open) {
+    totalPrice.value = newPrice
+  }
+})
+const emit = defineEmits(['update:open', 'continue'])
 
 const open = computed({
-  get: () => props.open,
-  set: (val) => emit('update:open', val)
+    get: () => props.open,
+    set: (val) => emit('update:open', val)
 })
 // const open = ref(false);
 const isAtTop = ref(true);
@@ -92,7 +106,6 @@ const selectedDates = ref([]);
 const monthDays = ref([]);
 
 // Pricing setup
-const basePrice = 200000;
 const shippingDaily = 50000;
 const shippingShared = 5000;
 const subsidyPercent = 0.3;
@@ -101,7 +114,7 @@ const plan = ref('daily');
 const planTitle = ref('---');
 const discountPercentText = ref('');
 const subsidyApplied = ref(false);
-const perDayPrice = ref(basePrice);
+const perDayPrice = ref(props.basePrice);
 const totalPrice = ref(0);
 
 const numberFormat = (n) => n.toLocaleString('fa-IR');
@@ -146,7 +159,7 @@ function generateDaysFromToday(count = 30) {
 
 function handleDayClick(day) {
     // Disable Thu (2) and Fri (3)
-    if (day.weekdaySatIndex === 2 || day.weekdaySatIndex === 3) return;
+    if (day.weekdaySatIndex === 4 || day.weekdaySatIndex === 5) return;
 
     const iso = day.fullDate;
     const idx = selectedDates.value.indexOf(iso);
@@ -161,9 +174,8 @@ function handleDayClick(day) {
 }
 
 function evaluatePlanAndPricing() {
-    plan.value = 'custom';
-    planTitle.value = 'طرح سفارشی';
-    perDayPrice.value = basePrice;
+    // Determine plan based on current selection, but persist weekly if achieved
+    perDayPrice.value = props.basePrice;
     totalPrice.value = 0;
     discountPercentText.value = '';
     subsidyApplied.value = false;
@@ -189,27 +201,44 @@ function evaluatePlanAndPricing() {
     const weekKeys = Object.keys(byWeek).sort();
     const weekCounts = weekKeys.map((k) => byWeek[k].length);
 
-    if (selectedDates.value.length <= 2 && weekKeys.length === 1) {
-        plan.value = 'daily';
-        planTitle.value = 'خرید روزانه';
-        discountPercentText.value = 'بدون تخفیف';
-    } else if (weekKeys.length >= 1 && weekKeys.length <= 3 && weekCounts.every((c) => c >= 3)) {
-        plan.value = 'weekly';
-        planTitle.value = 'خرید هفتگی';
-        discountPercentText.value = '۲۰٪';
-        subsidyApplied.value = true;
-    } else if (weekKeys.length >= 4 && weekCounts.every((c) => c >= 2)) {
+    // Conditions
+    const meetsDaily = selectedDates.value.length <= 2 && weekKeys.length === 1;
+    const meetsWeekly = weekKeys.length >= 1 && weekKeys.length <= 3 && weekCounts.every((c) => c >= 3);
+    const meetsMonthly = weekKeys.length >= 4 && weekCounts.every((c) => c >= 2);
+
+    // Persist monthly once achieved
+    if (plan.value === 'monthly' || meetsMonthly) {
         plan.value = 'monthly';
         planTitle.value = 'خرید ماهانه';
         discountPercentText.value = '۴۰٪';
         subsidyApplied.value = true;
+    } else if ((meetsWeekly || plan.value === 'weekly') && !meetsMonthly) {
+        // Stay weekly once achieved unless user drops below weekly to daily
+        if (meetsDaily) {
+            plan.value = 'daily';
+            planTitle.value = 'خرید روزانه';
+            discountPercentText.value = 'بدون تخفیف';
+            subsidyApplied.value = false;
+            return;
+        }
+        plan.value = 'weekly';
+        planTitle.value = 'خرید هفتگی';
+        discountPercentText.value = '۲۰٪';
+        subsidyApplied.value = true;
+    } else if (meetsDaily) {
+        plan.value = 'daily';
+        planTitle.value = 'خرید روزانه';
+        discountPercentText.value = 'بدون تخفیف';
+    } else {
+        plan.value = 'custom';
+        planTitle.value = 'طرح سفارشی';
     }
 
     let discount = 0;
     if (plan.value === 'weekly') discount = 0.2;
     if (plan.value === 'monthly') discount = 0.4;
 
-    let priceAfterDiscount = basePrice * (1 - discount);
+    let priceAfterDiscount = props.basePrice * (1 - discount);
     if (subsidyApplied.value) priceAfterDiscount *= (1 - subsidyPercent);
 
     perDayPrice.value = Math.round(priceAfterDiscount);
@@ -219,7 +248,7 @@ function evaluatePlanAndPricing() {
 
 // Cell styles (including Thu/Fri disable)
 function cellClass(day) {
-    const disabled = day.weekdaySatIndex === 2 || day.weekdaySatIndex === 3;
+    const disabled = day.weekdaySatIndex === 4 || day.weekdaySatIndex === 5;
     if (disabled) return 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
     if (day.isSelected) {
         switch (plan.value) {

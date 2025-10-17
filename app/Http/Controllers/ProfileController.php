@@ -2,32 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
+    // Remove the constructor entirely
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
     public function index()
     {
-        // $user = User::first();
-        $user = User::first();
+        $user = Auth::user();
+
         return Inertia::render('Profile/Index', [
-            'user' => $user,
+            'user' => $user
         ]);
     }
 
     public function orders()
     {
-        $user = User::first();
-        $orders = $user->orders()->latest()->get();
+        $user = Auth::user();
+        $orders = $user->orders()->withCount('items')->latest()->get();
 
         return Inertia::render('Profile/Orders', [
             'user' => $user,
             'orders' => $orders->map(function ($order) {
                 return [
                     'id' => $order->id,
-                    'total_amount' => $order->total_amount,
+                    'total_amount' => $order->total_amount ?? 0,
                     'status' => $order->status,
                     'status_text' => $this->getStatusText($order->status),
                     'created_at' => $order->created_at->format('Y/m/d H:i'),
@@ -35,6 +41,71 @@ class ProfileController extends Controller
                 ];
             })
         ]);
+    }
+
+    public function addresses()
+    {
+        $user = Auth::user();
+
+        return Inertia::render('Profile/Addresses', [
+            'user' => $user,
+        ]);
+    }
+
+    public function transactions()
+    {
+        $user = Auth::user();
+
+        return Inertia::render('Profile/Transactions', [
+            'user' => $user,
+        ]);
+    }
+
+    public function wallet()
+    {
+        $user = Auth::user();
+
+        return Inertia::render('Profile/Wallet', [
+            'user' => $this->getUserData($user, true),
+        ]);
+    }
+
+    public function comments()
+    {
+        $user = Auth::user();
+
+        return Inertia::render('Profile/Comments', [
+            'user' => $user,
+            'comments' => [] // Add your comments logic here
+        ]);
+    }
+
+    public function settings()
+    {
+        $user = Auth::user();
+
+        return Inertia::render('Profile/Settings', [
+            'user' => $user,
+        ]);
+    }
+
+    private function getUserData($user, $includeWallet = false)
+    {
+        $data = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'personal_code' => $user->personal_code,
+            'position' => $user->position,
+            'avatar' => $user->avatar,
+        ];
+
+        if ($includeWallet) {
+            $data['wallet_balance'] = $user->wallet_balance ?? 0;
+        }
+
+        return $data;
     }
 
     private function getStatusText($status)
@@ -48,68 +119,5 @@ class ProfileController extends Controller
         ];
 
         return $statuses[$status] ?? 'نامشخص';
-    }
-
-    public function addresses()
-    {
-        $user = User::first();
-
-        return Inertia::render('Profile/Addresses', [
-            'user' => $this->getUserData($user),
-        ]);
-    }
-
-    public function transactions()
-    {
-        $user = User::first();
-
-        return Inertia::render('Profile/Transactions', [
-            'user' => $this->getUserData($user),
-        ]);
-    }
-
-    public function wallet()
-    {
-        $user = User::first();
-
-        return Inertia::render('Profile/Wallet', [
-            'user' => $this->getUserData($user, true),
-        ]);
-    }
-
-    public function settings()
-    {
-        $user = User::first();
-
-        return Inertia::render('Profile/Settings', [
-            'user' => $this->getUserData($user),
-        ]);
-    }
-
-    public function comments()
-    {
-        $user = User::first();
-
-        return Inertia::render('Profile/Comments', [
-            'user' => $this->getUserData($user),
-            'comments' => [] // You can populate this with actual comments data
-        ]);
-    }
-
-    private function getUserData($user, $includeWallet = false)
-    {
-        $data = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone,
-            'avatar' => $user->avatar,
-        ];
-
-        if ($includeWallet) {
-            $data['wallet_balance'] = $user->wallet_balance ?? 0;
-        }
-
-        return $data;
     }
 }

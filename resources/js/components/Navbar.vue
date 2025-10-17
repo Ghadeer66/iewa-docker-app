@@ -37,37 +37,40 @@
                     <Link href="/login"
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-[#3e4095] bg-white border border-[#3e4095] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition transform"
                         aria-label="ورود">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.25 3h1.5l2.25 12.75a1.5 1.5 0 001.5 1.25h9a1.5 1.5 0 001.5-1.25L21.75 6H5.25" />
-                        <circle cx="9" cy="20" r="1" />
-                        <circle cx="18" cy="20" r="1" />
-                    </svg>
-
-
-
+                    ورود
                     </Link>
 
-                    <Link href="/profile"
+                    <Link href="/register"
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#3e4095] shadow-md hover:bg-yellow-400 transform hover:-translate-y-0.5 hover:text-black transition"
                         aria-label="ثبت نام">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM4 20c0-2.21 3.58-4 8-4s8 1.79 8 4" />
-                    </svg>
-
-                    ایوا من </Link>
+                    ثبت نام
+                    </Link>
                 </template>
 
                 <!-- User panel when authenticated -->
                 <template v-else>
                     <div class="flex items-center gap-3">
-                        <Link href="/dashboard" class="text-sm text-black hover:underline">سلام، <span
-                            class="font-medium text-[#ffa800]">{{ user.name }}</span></Link>
+                        <Link href="/cart"
+                            class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-[#3e4095] bg-purple border border-purple-500 shadow-sm hover:bg-purple-500 hover:text-white hover:shadow-md hover:-translate-y-0.5 transition"
+                            aria-label="سبد خرید">
+                        <!-- License: MIT. Made by phosphor: https://github.com/phosphor-icons/phosphor-icons -->
+                        <svg fill="purple" width="20px" height="20px" viewBox="0 0 256 256" id="Flat"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M215.64941,133.00879l12.15723-66.86231A12.00043,12.00043,0,0,0,216,52H58.01514L53.72852,28.42285A19.99033,19.99033,0,0,0,34.05078,12H16a12,12,0,0,0,0,24H30.71289l26.4707,145.59229A31.98171,31.98171,0,1,0,110.9873,196h42.0254A32.00193,32.00193,0,1,0,184,172H79.833l-2.90918-16H188.10156A27.98561,27.98561,0,0,0,215.64941,133.00879ZM88,204a8,8,0,1,1-8-8A8.00917,8.00917,0,0,1,88,204Zm96,8a8,8,0,1,1,8-8A8.00917,8.00917,0,0,1,184,212ZM62.37891,76H201.62109l-9.585,52.71631A3.99708,3.99708,0,0,1,188.10156,132H72.56055Z" />
+                        </svg>
+                        </Link>
+                        <Link href="/profile"
+                            class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-[#3e4095] bg-white border border-[#3e4095] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition hover:bg-[#3e4095] hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12a5 5 0 100-10 5 5 0 000 10z" />
+                            <path d="M2 20a10 10 0 1120 0H2z" />
+                        </svg>
+                        ایوا من
+                        </Link>
+
                         <button @click.prevent="logout"
-                            class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-white bg-black shadow hover:bg-[#222] transform hover:-translate-y-0.5 transition">
+                            class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-white bg-black text-center shadow hover:bg-[#222] transform hover:-translate-y-0.5 transition cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -88,8 +91,7 @@ import { Link, usePage, router } from '@inertiajs/vue3'
 
 // guard against undefined props during initial render / SSR
 const page = usePage()
-const user = computed(() => page.props?.value?.auth?.user ?? null)
-
+const user = computed(() => page.props.auth?.user ?? null)
 const logout = () => {
     router.post('/logout')
 }
