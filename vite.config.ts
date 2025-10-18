@@ -24,4 +24,9 @@ export default defineConfig({
             },
         }),
     ],
+     build: {
+        manifest: true,  // this ensures manifest.json is created
+        outDir: 'public/build',
+        emptyOutDir: true,
+    },
 });
