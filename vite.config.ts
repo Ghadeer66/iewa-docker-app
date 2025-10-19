@@ -27,8 +27,8 @@ export default defineConfig({
     ],
     build: {
         manifest: true,
-        outDir: 'public/build', // final output
+        outDir: 'public/build', // output folder for assets
         emptyOutDir: true,
-        assetsDir: '', // prevent subfolder like .vite
+        assetsDir: '', // IMPORTANT: prevents subfolder like .vite
     },
 });
