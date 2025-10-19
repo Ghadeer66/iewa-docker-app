@@ -1,51 +1,70 @@
 version: '3.8'
 
 services:
-  # PHP Service
+  # PHP-FPM Service (Laravel backend)
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ava-app
+    container_name: iewa-app
     restart: unless-stopped
     working_dir: /var/www
     volumes:
       - ./:/var/www
     networks:
-      - ava-network
+      - iewa-network
 
-  # Nginx Service
+  # Nginx Service (web server)
   nginx:
     image: nginx:alpine
-    container_name: ava-nginx
+    container_name: iewa-nginx
     restart: unless-stopped
     ports:
-      - '8000:80'
+      - '8080:80'  # Laravel app at http://localhost:8080
     volumes:
       - ./:/var/www
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
     networks:
-      - ava-network
+      - iewa-network
 
-  # MySQL Service
+  # MySQL Service (database)
   db:
     image: mysql:8.0
-    container_name: ava-db
+    container_name: iewa-db
     restart: unless-stopped
     environment:
-        MYSQL_DATABASE: ${DB_DATABASE}
-        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-        SERVICE_TAGS: dev
-        SERVICE_NAME: mysql
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
     ports:
       - '3306:3306'
     volumes:
       - dbdata:/var/lib/mysql
     networks:
-      - ava-network
+      - iewa-network
+
+  # phpMyAdmin (database UI)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: iewa-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_PASSWORD}
+      PMA_ARBITRARY: 1
+    ports:
+      - '8088:80' # phpMyAdmin at http://localhost:8088
+    depends_on:
+      - db
+    networks:
+      - iewa-network
 
 networks:
-  ava-network:
+  iewa-network:
     driver: bridge
 
 volumes:
