@@ -64,6 +64,9 @@ Route::prefix('business')->group(function () {
         Route::post('/employees/upload', [EmployeeController::class, 'uploadCsv'])->name('business.employees.upload');
         Route::post('/employees/{user}/subsidy', [EmployeeController::class, 'setSubsidy'])->name('business.employees.subsidy');
         Route::post('/employees/subsidy-by-code', [EmployeeController::class, 'setSubsidyByCode'])->name('business.employees.subsidyByCode');
+    // Client management (edit/delete) handled from dashboard
+    Route::put('/employees/{user}', [BusinessDashboardController::class, 'updateClient'])->name('business.employees.update');
+    Route::delete('/employees/{user}', [BusinessDashboardController::class, 'destroyClient'])->name('business.employees.destroy');
     });
 });
 

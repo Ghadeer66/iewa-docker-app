@@ -93,6 +93,7 @@ class EmployeeController extends Controller
 						'phone' => $phone,
 						'personal_code' => $personalCode,
 						'position' => $user->position ?: 'employee',
+						'belongs_to' => Auth::id(),
 					]);
 					$user->save();
 					$updated++;
@@ -114,6 +115,7 @@ class EmployeeController extends Controller
 						'phone' => $phone,
 						'password' => Hash::make(str()->random(12)),
 						'position' => 'employee',
+						'belongs_to' => Auth::id(),
 					]);
 					$created++;
 				}

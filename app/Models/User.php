@@ -26,7 +26,8 @@ class User extends Authenticatable
         'business_name',
         'business_type',
         'business_phone',
-        'business_address'
+        'business_address',
+        'belongs_to'
     ];
 
     protected $hidden = [
@@ -58,5 +59,22 @@ class User extends Authenticatable
     public function isClient()
     {
         return $this->hasRole('client');
+    }
+
+    /**
+     * If this user belongs to a business (i.e. is a client),
+     * return the parent business user.
+     */
+    public function parentBusiness()
+    {
+        return $this->belongsTo(self::class, 'belongs_to');
+    }
+
+    /**
+     * If this user is a business, return its client users.
+     */
+    public function clients()
+    {
+        return $this->hasMany(self::class, 'belongs_to');
     }
 }

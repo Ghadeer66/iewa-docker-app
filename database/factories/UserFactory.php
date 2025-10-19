@@ -29,9 +29,13 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'personal_code' => fake()->unique()->numerify('PC####'),
+            'phone' => fake()->phoneNumber(),
+            'position' => fake()->jobTitle(),
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),
+            'belongs_to' => null,
         ];
     }
 
@@ -54,6 +58,18 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
+        ]);
+    }
+
+    /**
+     * Set this user as a client of a given business user id or model.
+     */
+    public function forBusiness($business): static
+    {
+        $businessId = $business instanceof \App\Models\User ? $business->id : $business;
+
+        return $this->state(fn (array $attributes) => [
+            'belongs_to' => $businessId,
         ]);
     }
 }
