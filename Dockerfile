@@ -27,7 +27,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 # -----------------------------
 # 4. Install Redis extension
 # -----------------------------
-RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
 # -----------------------------
 # 5. Install Composer
@@ -59,7 +60,7 @@ COPY . .
 # -----------------------------
 # 10. Run post-install scripts and build assets
 # -----------------------------
-RUN php artisan package:discover
+RUN php artisan package:discover --ansi
 RUN npm run build
 
 # -----------------------------
@@ -76,5 +77,4 @@ EXPOSE 8080
 # -----------------------------
 # 13. Start PHP built-in server on Railway $PORT
 # -----------------------------
-#    If $PORT is not set, default to 8080
 CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
