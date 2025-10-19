@@ -1,6 +1,9 @@
+# Base PHP-FPM image
 FROM php:8.2-fpm
 
-# Install system dependencies
+# -----------------------------
+# 1. Install system dependencies
+# -----------------------------
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,40 +13,66 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
+# -----------------------------
+# 2. Install PHP extensions
+# -----------------------------
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Get latest Composer
+# -----------------------------
+# 3. Install Composer
+# -----------------------------
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# -----------------------------
+# 4. Set working directory
+# -----------------------------
 WORKDIR /var/www
 
-# Copy existing application directory contents
-COPY . /var/www
+# -----------------------------
+# 5. Copy project files (first copy only composer.json and package.json)
+#    to leverage Docker cache for dependencies
+# -----------------------------
+COPY composer.json composer.lock ./
+COPY package.json package-lock.json ./
 
-# Install Composer dependencies
-RUN composer install
+# -----------------------------
+# 6. Install Composer and NPM dependencies
+# -----------------------------
+RUN composer install --no-dev --optimize-autoloader --prefer-dist
+RUN npm ci
 
-# Install NPM dependencies
-RUN npm install
+# -----------------------------
+# 7. Copy the rest of the app
+# -----------------------------
+COPY . .
 
-# Build assets
+# -----------------------------
+# 8. Build assets (Vite)
+# -----------------------------
 RUN npm run build
 
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www
+# -----------------------------
+# 9. Set proper permissions
+# -----------------------------
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
-# Change current user to www-data
+# -----------------------------
+# 10. Switch to www-data user
+# -----------------------------
 USER www-data
 
-# Expose port 9000
+# -----------------------------
+# 11. Expose PHP-FPM port
+# -----------------------------
 EXPOSE 9000
 
-# Start PHP-FPM
+# -----------------------------
+# 12. Start PHP-FPM
+# -----------------------------
 CMD ["php-fpm"]
+
