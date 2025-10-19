@@ -57,7 +57,7 @@ COPY . .
 # -----------------------------
 RUN php artisan package:discover
 RUN npm run build \
-    && cp public/build/.vite/manifest.json public/build/manifest.json  # <- Option 1 fix
+    && cp public/build/.vite/manifest.json public/build/manifest.json || true
 
 # -----------------------------
 # 10. Set permissions for Laravel
@@ -73,5 +73,5 @@ EXPOSE 8080
 # -----------------------------
 # 12. Start PHP built-in server on Railway $PORT
 # -----------------------------
-#    If $PORT is not set, default to 8080
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
+#    Also create storage symlink at runtime if missing
+CMD ["sh", "-c", "php artisan storage:link || true && php -S 0.0.0.0:${PORT:-8080} -t public"]
