@@ -56,7 +56,8 @@ COPY . .
 # 9. Run post-install scripts and build assets
 # -----------------------------
 RUN php artisan package:discover
-RUN npm run build
+RUN npm run build \
+    && cp public/build/.vite/manifest.json public/build/manifest.json  # <- Option 1 fix
 
 # -----------------------------
 # 10. Set permissions for Laravel

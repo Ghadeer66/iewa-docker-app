@@ -10,6 +10,7 @@ export default defineConfig({
             input: ['resources/js/app.ts'],
             ssr: 'resources/js/ssr.ts',
             refresh: true,
+            buildDirectory: 'public/build/.vite', // match the current output
         }),
         tailwindcss(),
         wayfinder({
@@ -24,9 +25,10 @@ export default defineConfig({
             },
         }),
     ],
-     build: {
-        manifest: true,  // this ensures manifest.json is created
-        outDir: 'public/build',
+    build: {
+        manifest: true,
+        outDir: 'public/build', // output folder for assets
         emptyOutDir: true,
+        assetsDir: '', // IMPORTANT: prevents subfolder like .vite
     },
 });
