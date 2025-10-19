@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Generate application key if not exists
-php artisan key:generate --force
-
 # Cache configuration
 php artisan config:cache
 php artisan route:cache
