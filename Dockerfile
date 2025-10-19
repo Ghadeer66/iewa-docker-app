@@ -83,7 +83,6 @@ COPY docker/nginx.conf /etc/nginx/sites-available/default
 # -----------------------------
 # 13. Generate application key and cache config
 # -----------------------------
-RUN php artisan key:generate --force
 RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
