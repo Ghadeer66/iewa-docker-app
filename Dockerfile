@@ -16,14 +16,13 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nodejs \
     npm \
+    libzip-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------
-# 3. Install PHP extensions including Redis
+# 3. Install PHP extensions
 # -----------------------------
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
-    && pecl install redis \
-    && docker-php-ext-enable redis
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # -----------------------------
 # 4. Install Composer
@@ -42,10 +41,10 @@ COPY composer.json composer.lock ./
 COPY package.json package-lock.json ./
 
 # -----------------------------
-# 7. Install dependencies without running post-autoload scripts yet
+# 7. Install PHP and Node dependencies
 # -----------------------------
 RUN composer install --no-dev --optimize-autoloader --no-scripts
-RUN npm ci
+RUN npm install
 
 # -----------------------------
 # 8. Copy full application
@@ -65,12 +64,11 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # -----------------------------
-# 11. Expose Railway port
+# 11. Expose port (Railway sets $PORT automatically)
 # -----------------------------
 EXPOSE 8080
 
 # -----------------------------
 # 12. Start PHP built-in server on Railway $PORT
 # -----------------------------
-#    If $PORT is not set, default to 8080
 CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
