@@ -1,11 +1,27 @@
 # -----------------------------
-# 1. Base image
+# 1. Frontend build stage
+# -----------------------------
+FROM node:20-bullseye AS frontend
+
+WORKDIR /var/www/html
+
+# Copy only files needed for dependency installation
+COPY package*.json ./
+
+# Install frontend dependencies
+RUN npm ci
+
+# Copy the rest of the code and build
+COPY . .
+RUN npm run build
+
+
+# -----------------------------
+# 2. PHP application stage
 # -----------------------------
 FROM php:8.2-fpm
 
-# -----------------------------
-# 2. Install system dependencies
-# -----------------------------
+# Install PHP and system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,76 +30,39 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# -----------------------------
-# 3. Install PHP extensions including Redis
-# -----------------------------
+# Install PHP extensions + Redis
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
     && pecl install redis \
     && docker-php-ext-enable redis
 
-# -----------------------------
-# 4. Install Composer
-# -----------------------------
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# -----------------------------
-# 5. Set working directory
-# -----------------------------
 WORKDIR /var/www
 
-# -----------------------------
-# 6. Copy dependency files for caching
-# -----------------------------
+# Copy Composer files and install dependencies
 COPY composer.json composer.lock ./
-COPY package.json package-lock.json ./
-
-# -----------------------------
-# 7. Install dependencies without running post-autoload scripts yet
-# -----------------------------
 RUN composer install --no-dev --optimize-autoloader --no-scripts
-RUN npm ci
 
-# -----------------------------
-# 8. Copy full application
-# -----------------------------
+# Copy app source
 COPY . .
 
-# -----------------------------
-# 9. Set environment to production
-# -----------------------------
-ENV NODE_ENV=production
-ENV APP_ENV=production
+# Copy built frontend from the Node stage
+COPY --from=frontend /var/www/html/public /var/www/public
+COPY --from=frontend /var/www/html/node_modules /var/www/node_modules
 
-# -----------------------------
-# 10. Run post-install scripts and build assets
-# -----------------------------
+ENV APP_ENV=production
+ENV NODE_ENV=production
+
 RUN php artisan package:discover
 
-# Build Vite assets for production
-RUN npm run build
-
-# -----------------------------
-# 11. Set permissions for Laravel
-# -----------------------------
+# Fix permissions
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache && chown www-data:www-data -R public/build/ && chmod g+w -R public/build/
+    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache \
+    && mkdir -p public/build && chown -R www-data:www-data public/build
 
-# -----------------------------
-# 12. Generate the Vite manifest (fallback)
-# -----------------------------
-# This ensures the manifest exists even if build fails
-RUN php artisan vite:build 2>/dev/null || echo "Vite build completed"
-
-# -----------------------------
-# 13. Expose Railway port
-# -----------------------------
 EXPOSE 8080
 
-# -----------------------------
-# 14. Start PHP built-in server on Railway $PORT
-# -----------------------------
 CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
