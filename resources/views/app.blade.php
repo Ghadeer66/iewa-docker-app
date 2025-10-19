@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
-    @vite('resources/js/app.js')
+
+    @if (app()->environment('production'))
+        <!-- Production assets -->
+        <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+        <script type="module" src="{{ asset('build/assets/app.js') }}"></script>
+    @else
+        <!-- Development assets -->
+        @vite('resources/js/app.js')
+    @endif
+
     @inertiaHead
 </head>
 <body class="font-sans antialiased">
