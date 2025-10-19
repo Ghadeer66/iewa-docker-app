@@ -4,8 +4,8 @@
             <!-- logo + nav links grouped together -->
             <div class="flex items-center gap-6">
                 <!-- logo image instead of text; uses storage path -->
-                <Link href="/" class="inline-flex items-center gap-3">
-                <img src="" alt="اوا" class="h-10 w-10 object-contain" />
+                <Link href="" class="inline-flex items-center gap-3">
+                <img src="icon.png" alt="اوا" class="h-10 w-10 object-contain" />
                 </Link>
 
                 <ul class="hidden md:flex gap-6 text-black text-sm items-center">

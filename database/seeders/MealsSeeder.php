@@ -87,7 +87,7 @@ class MealsSeeder extends Seeder
 
             // Create image record pointing to storage path
             $image = Image::firstOrCreate([
-                'url' => "storage/{$storageRelative}",
+                'url' => "{$storageRelative}",
             ], [
                 'alt' => $meal['title'],
                 'extra' => null,

@@ -14,11 +14,11 @@ class ImagesSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'storage/images/food-categories/light.png',
-            'storage/images/food-categories/diet.png',
-            'storage/images/food-categories/energy.png',
-            'storage/images/food-categories/caffien.png',
-            'storage/images/food-categories/school.png',
+            'images/food-categories/light.png',
+            'images/food-categories/diet.png',
+            'images/food-categories/energy.png',
+            'images/food-categories/caffien.png',
+            'images/food-categories/school.png',
         ];
 
         foreach ($categories as $url) {
