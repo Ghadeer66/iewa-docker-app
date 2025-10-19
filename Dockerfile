@@ -1,27 +1,11 @@
 # -----------------------------
-# 1. Frontend build stage
-# -----------------------------
-FROM node:20-bullseye AS frontend
-
-WORKDIR /var/www/html
-
-# Copy only files needed for dependency installation
-COPY package*.json ./
-
-# Install frontend dependencies
-RUN npm ci
-
-# Copy the rest of the code and build
-COPY . .
-RUN npm run build
-
-
-# -----------------------------
-# 2. PHP application stage
+# 1. Base image
 # -----------------------------
 FROM php:8.2-fpm
 
-# Install PHP and system dependencies
+# -----------------------------
+# 2. Install system dependencies
+# -----------------------------
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -32,37 +16,81 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions + Redis
+# -----------------------------
+# 3. Install Node.js (official NodeSource version)
+#    This ensures correct binaries for ARM64 / x86_64
+# -----------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
+
+# -----------------------------
+# 4. Install PHP extensions including Redis
+# -----------------------------
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
     && pecl install redis \
     && docker-php-ext-enable redis
 
-# Install Composer
+# -----------------------------
+# 5. Install Composer
+# -----------------------------
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
+# -----------------------------
+# 6. Set working directory
+# -----------------------------
+WORKDIR /var/www/html
 
-# Copy Composer files and install dependencies
-COPY composer.json composer.lock ./
+# -----------------------------
+# 7. Copy dependency files for caching
+# -----------------------------
+COPY composer.json composer.lock package.json package-lock.json ./
+
+# -----------------------------
+# 8. Install backend + frontend dependencies
+# -----------------------------
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# Copy app source
+# Clean node_modules (avoid host architecture leftovers)
+RUN rm -rf node_modules
+
+# Install node dependencies fresh (for correct arch)
+RUN npm ci
+
+# -----------------------------
+# 9. Copy full application
+# -----------------------------
 COPY . .
 
-# Copy built frontend from the Node stage
-COPY --from=frontend /var/www/html/public /var/www/public
-COPY --from=frontend /var/www/html/node_modules /var/www/node_modules
-
-ENV APP_ENV=production
+# -----------------------------
+# 10. Environment setup
+# -----------------------------
 ENV NODE_ENV=production
+ENV APP_ENV=production
 
+# -----------------------------
+# 11. Laravel setup and Vite build
+# -----------------------------
 RUN php artisan package:discover
 
-# Fix permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache \
-    && mkdir -p public/build && chown -R www-data:www-data public/build
+# Run Vite build for production
+RUN npm run build
 
+# -----------------------------
+# 12. Set permissions for Laravel
+# -----------------------------
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/public/build \
+    && chown -R www-data:www-data /var/www/html/public/build \
+    && chmod -R g+w /var/www/html/public/build
+
+# -----------------------------
+# 13. Expose port
+# -----------------------------
 EXPOSE 8080
 
+# -----------------------------
+# 14. Run Laravel app
+# -----------------------------
 CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
