@@ -40,7 +40,7 @@ COPY composer.json composer.lock ./
 COPY package.json package-lock.json ./
 
 # -----------------------------
-# 7. Install dependencies without running scripts yet
+# 7. Install dependencies without running post-autoload scripts yet
 # -----------------------------
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 RUN npm ci
@@ -63,16 +63,12 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # -----------------------------
-# 11. Switch to www-data user
+# 11. Expose Railway port
 # -----------------------------
-USER www-data
+EXPOSE 8080
 
 # -----------------------------
-# 12. Expose PHP-FPM port
+# 12. Start PHP built-in server on Railway $PORT
 # -----------------------------
-EXPOSE 9000
-
-# -----------------------------
-# 13. Start PHP-FPM
-# -----------------------------
-CMD ["php-fpm"]
+#    If $PORT is not set, default to 8080
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
