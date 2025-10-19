@@ -14,83 +14,83 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
-    nginx \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------
-# 3. Install PHP extensions including Redis
+# 3. Install Node.js (official NodeSource version)
+#    This ensures correct binaries for ARM64 / x86_64
+# -----------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
+
+# -----------------------------
+# 4. Install PHP extensions including Redis
 # -----------------------------
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
     && pecl install redis \
     && docker-php-ext-enable redis
 
 # -----------------------------
-# 4. Install Composer
+# 5. Install Composer
 # -----------------------------
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # -----------------------------
-# 5. Set working directory
+# 6. Set working directory
 # -----------------------------
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 # -----------------------------
-# 6. Copy dependency files for caching
+# 7. Copy dependency files for caching
 # -----------------------------
-COPY composer.json composer.lock ./
-COPY package.json package-lock.json ./
+COPY composer.json composer.lock package.json package-lock.json ./
 
 # -----------------------------
-# 7. Install dependencies without running post-autoload scripts yet
+# 8. Install backend + frontend dependencies
 # -----------------------------
 RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Clean node_modules (avoid host architecture leftovers)
+RUN rm -rf node_modules
+
+# Install node dependencies fresh (for correct arch)
 RUN npm ci
 
 # -----------------------------
-# 8. Copy full application
+# 9. Copy full application
 # -----------------------------
 COPY . .
 
 # -----------------------------
-# 9. Set environment to production
+# 10. Environment setup
 # -----------------------------
 ENV NODE_ENV=production
 ENV APP_ENV=production
 
 # -----------------------------
-# 10. Run post-install scripts and build assets
+# 11. Laravel setup and Vite build
 # -----------------------------
 RUN php artisan package:discover
 
-# Build Vite assets for production
+# Run Vite build for production
 RUN npm run build
 
 # -----------------------------
-# 11. Set permissions for Laravel (fixed syntax)
+# 12. Set permissions for Laravel
 # -----------------------------
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/public/build \
-    && chmod -R 775 /var/www/public/build
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/public/build \
+    && chown -R www-data:www-data /var/www/html/public/build \
+    && chmod -R g+w /var/www/html/public/build
 
 # -----------------------------
-# 12. Copy Nginx configuration
-# -----------------------------
-COPY docker/nginx.conf /etc/nginx/sites-available/default
-
-# -----------------------------
-# 13. Generate application key and cache config
-# -----------------------------
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-
-# -----------------------------
-# 14. Expose port
+# 13. Expose port
 # -----------------------------
 EXPOSE 8080
 
 # -----------------------------
-
+# 14. Run Laravel app
+# -----------------------------
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]

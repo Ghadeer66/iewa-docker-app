@@ -13,9 +13,6 @@ services:
       - ./:/var/www
     networks:
       - ava-network
-    depends_on:
-      - db
-      - redis
 
   # Nginx Service
   nginx:
@@ -29,8 +26,6 @@ services:
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
     networks:
       - ava-network
-    depends_on:
-      - app
 
   # MySQL Service
   db:
@@ -38,42 +33,14 @@ services:
     container_name: ava-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        SERVICE_TAGS: dev
+        SERVICE_NAME: mysql
     ports:
       - '3306:3306'
     volumes:
       - dbdata:/var/lib/mysql
-    networks:
-      - ava-network
-
-  # Redis Service
-  redis:
-    image: redis:alpine
-    container_name: ava-redis
-    restart: unless-stopped
-    ports:
-        - '6380:6379'   # host:container
-    networks:
-        - ava-network
-
-  # phpMyAdmin Service
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: ava-phpmyadmin
-    restart: unless-stopped
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: ${DB_PASSWORD}
-      UPLOAD_LIMIT: 64M
-    ports:
-      - '8080:80'
-    depends_on:
-      - db
     networks:
       - ava-network
 
