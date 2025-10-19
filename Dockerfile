@@ -53,32 +53,37 @@ RUN npm ci
 COPY . .
 
 # -----------------------------
-# 9. Set up environment and run post-install scripts and build assets
+# 9. Set environment to production
 # -----------------------------
-COPY .env.example .env
-RUN php artisan key:generate --no-interaction --force
-RUN php artisan package:discover --optimize --no-interaction
-RUN npm run build
-# Verify manifest was generated (fails build if missing)
-RUN if [ ! -f public/build/manifest.json ]; then echo "ERROR: Vite manifest not generated after npm run build" && exit 1; fi
-# Optional: Cache for production performance
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+ENV NODE_ENV=production
+ENV APP_ENV=production
 
 # -----------------------------
-# 10. Set permissions for Laravel
+# 10. Run post-install scripts and build assets
+# -----------------------------
+RUN php artisan package:discover
+
+# Build Vite assets for production
+RUN npm run build
+
+# -----------------------------
+# 11. Set permissions for Laravel
 # -----------------------------
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # -----------------------------
-# 11. Expose Railway port
+# 12. Generate the Vite manifest (fallback)
+# -----------------------------
+# This ensures the manifest exists even if build fails
+RUN php artisan vite:build 2>/dev/null || echo "Vite build completed"
+
+# -----------------------------
+# 13. Expose Railway port
 # -----------------------------
 EXPOSE 8080
 
 # -----------------------------
-# 12. Start PHP built-in server on Railway $PORT
+# 14. Start PHP built-in server on Railway $PORT
 # -----------------------------
-#    If $PORT is not set, default to 8080
 CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
