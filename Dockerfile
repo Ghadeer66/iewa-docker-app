@@ -53,14 +53,14 @@ RUN npm ci
 COPY . .
 
 # -----------------------------
-# 9. Run post-install scripts and build assets
+# 9. Build assets and fix Vite manifest
 # -----------------------------
-RUN php artisan package:discover
 RUN npm run build \
-    && cp public/build/.vite/manifest.json public/build/manifest.json || true
+    && mkdir -p public/build \
+    && cp -n public/build/.vite/manifest.json public/build/manifest.json || true
 
 # -----------------------------
-# 10. Set permissions for Laravel
+# 10. Set Laravel permissions
 # -----------------------------
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
@@ -71,7 +71,6 @@ RUN chown -R www-data:www-data /var/www \
 EXPOSE 8080
 
 # -----------------------------
-# 12. Start PHP built-in server on Railway $PORT
+# 12. Start PHP server and ensure storage link exists
 # -----------------------------
-#    Also create storage symlink at runtime if missing
 CMD ["sh", "-c", "php artisan storage:link || true && php -S 0.0.0.0:${PORT:-8080} -t public"]
