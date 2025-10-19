@@ -5,7 +5,7 @@
             <!-- Sidebar Menu -->
             <aside class="w-full md:w-1/4 bg-white shadow rounded-xl p-4">
                 <div class="flex items-center gap-3 mb-6">
-                    <img :src="user.avatar ?? '/storage/images/default-avatar.png'" alt="avatar"
+                    <img :src="user.avatar ?? '/images/default-avatar.png'" alt="avatar"
                         class="w-12 h-12 rounded-full object-cover" />
                     <div>
                         <h3 class="font-bold text-gray-800">{{ user.name }}</h3>
@@ -102,7 +102,7 @@
                 <!-- BMI Section -->
                 <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                     <div class="w-full">
-                        
+
                         <div class="flex justify-between mt-2 text-sm text-gray-600">
                             <span>کم وزن</span>
                             <span>اضافه وزن</span>

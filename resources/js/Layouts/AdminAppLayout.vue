@@ -29,7 +29,7 @@
       <!-- User Info -->
       <div class="px-4 py-4 border-b border-gray-700 text-center">
         <div class="flex justify-center mb-2">
-          <img src="/storage/images/admin-avatar.jpg" :class="['rounded-full border-2 border-yellow-400', sidebarOpen ? 'w-20 h-20' : 'w-10 h-10']" alt="Admin" />
+          <img src="/images/admin-avatar.jpg" :class="['rounded-full border-2 border-yellow-400', sidebarOpen ? 'w-20 h-20' : 'w-10 h-10']" alt="Admin" />
         </div>
         <span v-if="sidebarOpen" class="block text-sm text-gray-300 truncate">
           {{ $page.props.auth.user.admin_name }}

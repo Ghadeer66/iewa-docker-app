@@ -227,7 +227,7 @@
                 <div class="container mx-auto flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <img
-                            :src="$page.props.auth.user.avatar || '/storage/images/default-avatar.png'"
+                            :src="$page.props.auth.user.avatar || '/images/default-avatar.png'"
                             alt="avatar"
                             class="w-8 h-8 rounded-full object-cover"
                         />

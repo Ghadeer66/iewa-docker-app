@@ -5,7 +5,7 @@
       <!-- Sidebar Menu -->
       <aside class="w-full md:w-1/4 bg-white shadow rounded-xl p-4">
         <div class="flex items-center gap-3 mb-6">
-          <img :src="user.avatar ?? '/storage/images/default-avatar.png'" alt="avatar" class="w-12 h-12 rounded-full object-cover" />
+          <img :src="user.avatar ?? '/images/default-avatar.png'" alt="avatar" class="w-12 h-12 rounded-full object-cover" />
           <div>
             <h3 class="font-bold text-gray-800">{{ user.name }}</h3>
             <p class="text-sm text-gray-500">{{ user.phone ?? 'شماره تلفن ثبت نشده' }}</p>
