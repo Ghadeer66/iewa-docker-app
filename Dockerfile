@@ -53,34 +53,25 @@ RUN npm ci
 COPY . .
 
 # -----------------------------
-# 9. Copy storage images explicitly
-# -----------------------------
-COPY storage/app/public/images /var/www/storage/app/public/images
-COPY storage/app/public/images/food-types /var/www/storage/app/public/images/food-types
-COPY storage/app/public/images/food-categories /var/www/storage/app/public/images/food-categories
-COPY storage/app/public/meals /var/www/storage/app/public/meals
-
-# -----------------------------
-# 10. Run post-install scripts, build assets, create storage symlink
+# 9. Run post-install scripts and build assets
 # -----------------------------
 RUN php artisan package:discover
 RUN npm run build \
-    && cp public/build/.vite/manifest.json public/build/manifest.json
-RUN php artisan storage:link || true
+    && cp public/build/.vite/manifest.json public/build/manifest.json || true
 
 # -----------------------------
-# 11. Set permissions for Laravel
+# 10. Set permissions for Laravel
 # -----------------------------
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # -----------------------------
-# 12. Expose Railway port
+# 11. Expose Railway port
 # -----------------------------
 EXPOSE 8080
 
 # -----------------------------
-# 13. Start PHP built-in server on Railway $PORT
+# 12. Start PHP built-in server on Railway $PORT
 # -----------------------------
-#    If $PORT is not set, default to 8080
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
+#    Also create storage symlink at runtime if missing
+CMD ["sh", "-c", "php artisan storage:link || true && php -S 0.0.0.0:${PORT:-8080} -t public"]
