@@ -93,8 +93,4 @@ RUN php artisan view:cache
 EXPOSE 8080
 
 # -----------------------------
-# 15. Start script that handles Railway's PORT
-# -----------------------------
-COPY docker/start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-CMD ["/usr/local/bin/start.sh"]
+
