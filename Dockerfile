@@ -70,7 +70,7 @@ RUN npm run build
 # 11. Set permissions for Laravel
 # -----------------------------
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache && chown www-data:www-data -R public/build/  chmod g+w -R public/build/
+    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # -----------------------------
 # 12. Generate the Vite manifest (fallback)
