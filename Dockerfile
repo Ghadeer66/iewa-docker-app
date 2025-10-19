@@ -1,5 +1,8 @@
 ### Stage 1: Node build stage (build frontend assets with Vite)
-FROM node:18-alpine AS node-builder
+# Use Node 20 (Debian slim) so Vite's Node requirement is satisfied and
+# native optional dependencies (like lightningcss linux-x64-gnu) can be
+# installed successfully.
+FROM node:20-bullseye-slim AS node-builder
 WORKDIR /app
 
 # Copy only package files to leverage Docker cache
@@ -11,6 +14,9 @@ RUN npm ci --silent
 # dependencies while ensuring optional files (like postcss.config.js) don't
 # break the build step during image creation.
 COPY . ./
+ 
+# Ensure build tools are available for native deps (lightningcss, etc.)
+RUN apt-get update && apt-get install -y build-essential python3 make gcc g++ && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 
