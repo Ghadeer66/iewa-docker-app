@@ -5,7 +5,7 @@
             <div class="flex items-center gap-6">
                 <!-- logo image instead of text; uses storage path -->
                 <Link href="/" class="inline-flex items-center gap-3">
-                <img :src="iconUrl" alt="اوا" class="h-10 w-10 object-contain" />
+                <img src="" alt="اوا" class="h-10 w-10 object-contain" />
                 </Link>
 
                 <ul class="hidden md:flex gap-6 text-black text-sm items-center">
@@ -95,6 +95,5 @@ const user = computed(() => page.props.auth?.user ?? null)
 const logout = () => {
     router.post('/logout')
 }
-import iconUrl from '/icon.png'; // Vite will handle the path correctly
 
 </script>
