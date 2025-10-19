@@ -6,12 +6,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --silent
 
-# Copy the rest of the assets needed for build (only what's necessary)
-COPY resources ./resources
-COPY vite.config.ts ./vite.config.ts
-COPY tsconfig.json ./tsconfig.json
-COPY tailwind.config.js ./tailwind.config.js
-COPY postcss.config.js ./postcss.config.js
+# Copy the rest of the repository so the build has everything it needs
+# We copy the project root (excluding .dockerignore) to leverage cache for
+# dependencies while ensuring optional files (like postcss.config.js) don't
+# break the build step during image creation.
+COPY . ./
 
 ENV NODE_ENV=production
 
