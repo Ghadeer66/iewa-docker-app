@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
-    @vite('resources/js/app.js')
+    @vite('resources/js/app.ts')
     @inertiaHead
 </head>
 <body class="font-sans antialiased">
