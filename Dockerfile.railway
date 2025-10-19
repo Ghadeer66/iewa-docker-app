@@ -66,11 +66,12 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # -----------------------------
-# 11. Configure and start PHP-FPM
+# 11. Expose Railway port
 # -----------------------------
-# PHP-FPM configuration
-COPY docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
-COPY docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
+EXPOSE 8080
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# -----------------------------
+# 12. Start PHP built-in server on Railway $PORT
+# -----------------------------
+#    If $PORT is not set, default to 8080
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
