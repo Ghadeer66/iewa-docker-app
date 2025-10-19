@@ -14,6 +14,6 @@ defineProps<Props>();
 
 <template>
     <div class="flex justify-center mb-6">
-        <img src="/storage/images/icon.png" alt="ایوا" class="h-20 w-20 object-contain" />
+        <img src="{{ asset('icon.png') }}" alt="ایوا" class="h-20 w-20 object-contain" />
     </div>
 </template>

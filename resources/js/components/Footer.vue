@@ -3,7 +3,7 @@
 
         <!-- Top Links Section -->
         <div class="container mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3"> <img src="/storage/images/icon_bw.png" alt="اوا"
+            <div class="flex items-center gap-3"> <img src="{{ asset('icon_bw.png') }}" alt="اوا"
                     class="h-15 w-15 object-contain rounded-full border-2 border-black" />
                 <div>
                     <p class="text-mid text-gray-900">تغذیه سالم برای زندگی بهتر</p>

@@ -132,7 +132,7 @@
         <h1 class="text-xl font-bold text-gray-800">پنل ادمین</h1>
         <div class="flex items-center gap-3">
           <span class="text-gray-600">{{ $page.props.auth.user.admin_name }}</span>
-          <img src="/storage/images/icon.png" class="w-8 h-8 rounded-full border" alt="avatar" />
+          <img src="{{ asset('icon.png') }}" class="w-8 h-8 rounded-full border" alt="avatar" />
         </div>
       </header>
 
