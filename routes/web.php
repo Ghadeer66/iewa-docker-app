@@ -97,7 +97,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
         Route::post('/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
-        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
+        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy'); 
 
 
         // Admin Clients
