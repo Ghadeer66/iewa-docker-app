@@ -5,21 +5,19 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    css: {
-        lightningcss: false, // disable lightningcss to avoid native binary dependency
-    },
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],
             ssr: 'resources/js/ssr.ts',
             refresh: true,
-            // buildDirectory: 'public/build/.vite', // match the current output
         }),
 
         tailwindcss(),
+
         wayfinder({
             formVariants: true,
         }),
+
         vue({
             template: {
                 transformAssetUrls: {
@@ -31,8 +29,8 @@ export default defineConfig({
     ],
     build: {
         manifest: true,
-        outDir: 'public/build', // output folder for assets
+        outDir: 'public/build', // main build directory
         emptyOutDir: true,
-        assetsDir: '', // IMPORTANT: prevents subfolder like .vite
+        assetsDir: '', // avoids nested /assets folder
     },
 });
