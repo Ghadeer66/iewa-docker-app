@@ -4,22 +4,31 @@
         class="fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-lg z-50">
 
         <!-- Registration Form -->
-        <div v-if="!showLoginForm" class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 w-[400px] border border-white/20">
-            <h1 class="text-2xl text-center text-lime-300 font-semibold mb-6">
+        <div v-if="!showLoginForm" class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-4 w-[400px] border border-white/20">
+            <h1 class="text-2xl text-center text-lime-300 font-semibold mb-3">
                 فرم ثبت‌نام پرسنل انتخاب<br>در ایوا
             </h1>
 
-            <form @submit.prevent="register" class="space-y-5">
+            <form @submit.prevent="register" class="space-y-3">
                 <div>
                     <label class="text-gray-300 text-sm mb-1 block">نام کامل</label>
-                    <input
-                        type="text"
-                        v-model="form.name"
-                        placeholder="مثلاً علی رضایی"
-                        class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
-                        :class="{ 'border-red-500': errors.name }"
-                    />
-                    <p v-if="errors.name" class="text-red-400 text-xs mt-1">{{ errors.name[0] }}</p>
+                    <div class="relative">
+                        <input
+                            type="text"
+                            v-model="form.name"
+                            placeholder="مثلاً علی رضایی"
+                            pattern="^[\u0600-\u06FF\s]+$"
+                            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+                            :class="{ 'border-red-500': errors.name || (form.name && !isValidName(form.name)) }"
+                        />
+                        <div class="text-xs mt-1">
+                            <p class="text-gray-400">فقط حروف فارسی مجاز است</p>
+                            <p v-if="form.name && !isValidName(form.name)" class="text-red-400">
+                                لطفاً فقط از حروف فارسی استفاده کنید (بدون اعداد و حروف انگلیسی)
+                            </p>
+                            <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -36,14 +45,24 @@
 
                 <div>
                     <label class="text-gray-300 text-sm mb-1 block">شماره تماس</label>
-                    <input
-                        type="text"
-                        v-model="form.phone"
-                        placeholder="09xxxxxxxxx"
-                        class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
-                        :class="{ 'border-red-500': errors.phone }"
-                    />
-                    <p v-if="errors.phone" class="text-red-400 text-xs mt-1">{{ errors.phone[0] }}</p>
+                    <div class="relative">
+                        <input
+                            type="tel"
+                            v-model="form.phone"
+                            placeholder="09123456789"
+                            pattern="09[0-9]{9}"
+                            maxlength="11"
+                            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+                            :class="{ 'border-red-500': errors.phone || (form.phone && !isValidPhone(form.phone)) }"
+                        />
+                        <div class="text-xs mt-1">
+                            <p class="text-gray-400">شماره تلفن باید ۱۱ رقم و با ۰۹ شروع شود</p>
+                            <p v-if="form.phone && !isValidPhone(form.phone)" class="text-red-400">
+                                لطفاً یک شماره معتبر وارد کنید (مثال: 09123456789)
+                            </p>
+                            <p v-if="errors.phone" class="text-red-400">{{ errors.phone[0] }}</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -62,7 +81,7 @@
                     <p v-if="errors.position" class="text-red-400 text-xs mt-1">{{ errors.position[0] }}</p>
                 </div>
 
-                <!-- Email Field (Optional) -->
+                <!-- Email Field (Optional)
                 <div>
                     <label class="text-gray-300 text-sm mb-1 block">ایمیل (اختیاری)</label>
                     <input
@@ -73,19 +92,33 @@
                         :class="{ 'border-red-500': errors.email }"
                     />
                     <p v-if="errors.email" class="text-red-400 text-xs mt-1">{{ errors.email[0] }}</p>
-                </div>
+                </div> -->
 
                 <!-- Password Field -->
                 <div>
                     <label class="text-gray-300 text-sm mb-1 block">رمز عبور</label>
-                    <input
-                        type="password"
-                        v-model="form.password"
-                        placeholder="رمز عبور خود را وارد کنید"
-                        class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
-                        :class="{ 'border-red-500': errors.password }"
-                    />
-                    <p v-if="errors.password" class="text-red-400 text-xs mt-1">{{ errors.password[0] }}</p>
+                    <div class="relative">
+                        <input
+                            type="password"
+                            v-model="form.password"
+                            placeholder="رمز عبور خود را وارد کنید"
+                            class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+                            :class="{ 'border-red-500': errors.password || (form.password && !isValidPassword(form.password)) }"
+                        />
+                        <div class="text-xs mt-1">
+                            <p class="text-gray-400">رمز عبور باید شامل موارد زیر باشد:</p>
+                            <ul class="text-gray-400 mr-4 space-y-1">
+                                <li :class="{ 'text-lime-400': form.password && hasLetter(form.password) }">• حداقل یک حرف انگلیسی</li>
+                                <li :class="{ 'text-lime-400': form.password && hasNumber(form.password) }">• حداقل یک عدد</li>
+                                <li :class="{ 'text-lime-400': form.password && hasSpecialChar(form.password) }">• حداقل یک کاراکتر خاص (!@#$%^&*)</li>
+                                <li :class="{ 'text-lime-400': form.password && form.password.length >= 8 }">• حداقل ۸ کاراکتر</li>
+                            </ul>
+                            <p v-if="form.password && !isValidPassword(form.password)" class="text-red-400 mt-1">
+                                لطفاً یک رمز عبور معتبر وارد کنید
+                            </p>
+                            <p v-if="errors.password" class="text-red-400 mt-1">{{ errors.password[0] }}</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Password Confirmation Field -->
@@ -124,13 +157,13 @@
                 <button
                     type="submit"
                     :disabled="loading"
-                    class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="w-full py-2 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <span v-if="loading">در حال ثبت‌نام...</span>
                     <span v-else>ثبت‌نام</span>
                 </button>
 
-                <div class="text-center text-sm mt-3 text-gray-400">
+                <div class="text-center text-sm mt-2 text-gray-400">
                     قبلاً حساب دارید؟
                     <a href="#" @click.prevent="showLoginForm = true" class="hover:text-lime-400 transition">ورود</a>
                 </div>
@@ -241,8 +274,33 @@ const loginForm = reactive({
     remember: false
 })
 
+// Name validation function
+const isValidName = (name) => {
+    // This regex allows only Persian/Arabic characters and spaces
+    const nameRegex = /^[\u0600-\u06FF\s]+$/
+    return nameRegex.test(name) && name.trim().length > 0
+}
+
+// Phone validation function
+const isValidPhone = (phone) => {
+    const phoneRegex = /^09\d{9}$/
+    return phoneRegex.test(phone)
+}
+
 // Register function
 const register = async () => {
+    // Validate name
+    if (form.name && !isValidName(form.name)) {
+        errors.value = { name: ['لطفاً نام را به صورت صحیح و فقط با حروف فارسی وارد کنید'] }
+        return
+    }
+
+    // Validate phone
+    if (form.phone && !isValidPhone(form.phone)) {
+        errors.value = { phone: ['لطفاً یک شماره تلفن معتبر وارد کنید'] }
+        return
+    }
+
     loading.value = true
     error.value = ''
     errors.value = {}

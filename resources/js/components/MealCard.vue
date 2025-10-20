@@ -128,7 +128,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-right py-1 pr-2">چربی</td>
+                                        <td class="text-right py-1 pr-2">meal.</td>
                                     </tr>
                                 </tbody>
                             </table>

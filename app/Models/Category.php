@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Type extends Model
+class Category extends Model
 {
     use HasFactory;
 
@@ -17,6 +17,6 @@ class Type extends Model
      */
     public function meals(): BelongsToMany
     {
-        return $this->belongsToMany(Meal::class, 'meal_type');
+        return $this->belongsToMany(Meal::class, 'meal_categories');
     }
 }
