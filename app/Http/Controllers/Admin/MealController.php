@@ -11,7 +11,7 @@ class MealController extends Controller
 {
     public function index()
     {
-        $meals = Meal::with(['type'])
+        $meals = Meal::with(['types'])
             ->latest()
             ->get();
 

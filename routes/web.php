@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ImageController;
+use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\MealImageController;
 use App\Http\Controllers\Admin\OrderController;
@@ -94,7 +95,11 @@ Route::prefix('admin')->group(function () {
         Route::delete('/users/admins/{user}', [AdminUserController::class, 'destroy'])->name('admin.admins.destroy');
 
         Route::get('/users/companies', fn() => Inertia::render('Admin/Companies'));
+
+        // Admin Clients
         Route::get('/users/clients', fn() => Inertia::render('Admin/Clients'));
+        Route::post('/users/clients', [ClientController::class, 'store'])->name('admin.clients.store');
+        Route::put('/users/clients/{user}', [ClientController::class, 'update'])->name('admin.clients.update');
 
         // Site Components
         Route::get('/meals', fn() => Inertia::render('Admin/Meals'));
@@ -105,6 +110,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/types', fn() => Inertia::render('Admin/Types'));
         Route::get('/section-types', fn() => Inertia::render('Admin/SectionTypes'));
         Route::get('/section-elements', fn() => Inertia::render('Admin/SectionElements'));
+        Route::resource('ingredients', IngredientController::class)->only(['index', 'store', 'destroy']);
+
 
         // Users - Companies
         Route::get('/users/companies', [CompanyController::class, 'index'])->name('admin.companies.index');

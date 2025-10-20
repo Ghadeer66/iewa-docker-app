@@ -10,6 +10,7 @@
                     <input v-model="form.email" placeholder="ایمیل" class="p-2 bg-gray-700 rounded text-white" />
                     <input v-model="form.password" type="password" placeholder="رمز عبور"
                         class="p-2 bg-gray-700 rounded text-white" />
+                    <input v-model="form.phone" type="number" placeholder="شماره تلفن"  class="p-2 bg-gray-700 rounded text-white" />
                 </div>
                 <button class="mt-4 bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold">افزودن ادمین</button>
             </form>
@@ -67,11 +68,11 @@ const props = defineProps({
     admins: Array,
 })
 
-const form = ref({ name: '', email: '', password: '' })
+const form = ref({ name: '', email: '', password: '', phone: '' })
 
 function createAdmin() {
-    router.post(route('admin.admins.store'), form.value)
-    form.value = { name: '', email: '', password: '' }
+    router.post('/admin/users/admins', form.value)
+    form.value = { name: '', email: '', password: '', phone: '' }
 }
 
 function deleteAdmin(id) {
