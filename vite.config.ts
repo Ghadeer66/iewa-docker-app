@@ -5,6 +5,9 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    css: {
+        lightningcss: false, // disable lightningcss to avoid native binary dependency
+    },
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],
@@ -12,6 +15,7 @@ export default defineConfig({
             refresh: true,
             // buildDirectory: 'public/build/.vite', // match the current output
         }),
+
         tailwindcss(),
         wayfinder({
             formVariants: true,
