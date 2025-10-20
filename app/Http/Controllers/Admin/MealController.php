@@ -11,14 +11,13 @@ class MealController extends Controller
 {
     public function index()
     {
-        $meals = Meal::with(['types'])
-            ->latest()
-            ->get();
+        $meals = Meal::with(['types', 'ingredients', 'images'])->latest()->get();
 
         return Inertia::render('Admin/Meals', [
             'meals' => $meals
         ]);
     }
+
 
     public function store(Request $request)
     {

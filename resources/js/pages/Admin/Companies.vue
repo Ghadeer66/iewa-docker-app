@@ -4,13 +4,21 @@
 
         <!-- Add New Company Form -->
         <form @submit.prevent="createCompany" class="bg-gray-800 p-4 rounded mb-6">
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 gap-4">
                 <input v-model="form.business_name" placeholder="نام شرکت" class="p-2 bg-gray-700 rounded text-white" />
                 <input v-model="form.name" placeholder="نام مسئول" class="p-2 bg-gray-700 rounded text-white" />
                 <input v-model="form.email" placeholder="ایمیل" class="p-2 bg-gray-700 rounded text-white" />
                 <input v-model="form.phone" placeholder="تلفن" class="p-2 bg-gray-700 rounded text-white" />
                 <input v-model="form.address" placeholder="آدرس" class="p-2 bg-gray-700 rounded text-white" />
                 <input v-model="form.website" placeholder="وبسایت" class="p-2 bg-gray-700 rounded text-white" />
+
+                <!-- Admin Dropdown -->
+                <select v-model="form.admin_id" class="p-2 bg-gray-700 rounded text-white">
+                    <option value="" disabled>انتخاب ادمین</option>
+                    <option v-for="admin in admins" :key="admin.id" :value="admin.id">
+                        {{ admin.name }}
+                    </option>
+                </select>
             </div>
             <button class="mt-4 bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold">
                 افزودن شرکت
@@ -25,6 +33,7 @@
                         <th class="p-2">نام شرکت</th>
                         <th class="p-2">نام مسئول</th>
                         <th class="p-2">ایمیل</th>
+                        <th class="p-2">ادمین</th>
                         <th class="p-2">تاریخ ثبت</th>
                         <th class="p-2">عملیات</th>
                     </tr>
@@ -34,6 +43,7 @@
                         <td class="p-2">{{ company.business_name || '---' }}</td>
                         <td class="p-2">{{ company.name }}</td>
                         <td class="p-2">{{ company.email }}</td>
+                        <td class="p-2">{{ company.admin?.name || '---' }}</td>
                         <td class="p-2">{{ new Date(company.created_at).toLocaleDateString('fa-IR') }}</td>
                         <td class="p-2 flex space-x-2">
                             <button @click="viewCompany(company)" class="text-blue-400 hover:text-blue-600">
@@ -62,6 +72,7 @@ import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     companies: Array,
+    admins: Array, // List of available admins
 })
 
 const form = ref({
@@ -71,6 +82,7 @@ const form = ref({
     phone: '',
     address: '',
     website: '',
+    admin_id: '', // new admin field
 })
 
 function createCompany() {
@@ -81,12 +93,12 @@ function createCompany() {
         email: '',
         phone: '',
         address: '',
-        website: ''
+        website: '',
+        admin_id: ''
     }
 }
 
 function viewCompany(company) {
-    // Implement view company details
     alert('جزئیات شرکت: ' + company.name);
 }
 

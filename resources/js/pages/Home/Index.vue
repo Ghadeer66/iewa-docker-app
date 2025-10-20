@@ -21,38 +21,26 @@
 
             <!-- Rest of your authenticated content -->
             <section class="container mx-auto px-6 py-5">
-                <SlideShow :items="meals" image-key="image_url" title-key="title" />
+                <SlideShow :items="slideshowItems" image-key="image_url" title-key="title" />
             </section>
 
             <!-- Categories -->
             <section class="container mx-auto px- py-10">
                 <div>
-                    <StaticCategoriesList
-                        :items="packagesCategories"
-                        @category-click="handleCategoryClick"
-                    />
+                    <StaticCategoriesList :items="packagesCategories" @category-click="handleCategoryClick" />
                 </div>
             </section>
 
             <section class="container mx-auto px-6 py-10">
                 <h2 class="text-3xl font-bold text-right mb-6">منوی ایوا</h2>
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
-                    <CategoriesList
-                        :items="menuCategories"
-                        @category-click="handleCategoryClick"
-                        @type-click="handleTypeClick"
-                    />
+                    <CategoriesList :items="menuCategories" @category-click="handleCategoryClick"
+                        @type-click="handleTypeClick" />
                 </div>
             </section>
 
-            <QuestionCategory
-                :items="problemsCategories"
-                cta="به دنبال رفع کدام مشکل؟"
-                gradient-from="#e9f1ff"
-                gradient-to="#f6f8e9"
-                @category-click="handleCategoryClick"
-                @type-click="handleTypeClick"
-            />
+            <QuestionCategory :items="problemsCategories" cta="به دنبال رفع کدام مشکل؟" gradient-from="#e9f1ff"
+                gradient-to="#f6f8e9" @category-click="handleCategoryClick" @type-click="handleTypeClick" />
 
             <div class="flex justify-center my-8">
                 <BaseButton @click="handleClick">درخواست مشاوره رایگان</BaseButton>
@@ -61,10 +49,8 @@
             <section class="container mx-auto px-6 py-10 text-right">
                 <h2 class="text-3xl font-bold mb-6">چرا ایوا؟</h2>
                 <div class="mt-8">
-                    <CircleBorderCategoriesList
-                        :items="specificationsCategories"
-                        @category-click="handleCategoryClick"
-                    />
+                    <CircleBorderCategoriesList :items="specificationsCategories"
+                        @category-click="handleCategoryClick" />
                 </div>
 
                 <!-- ... your existing content ... -->
@@ -241,4 +227,11 @@ onMounted(async () => {
         console.error('Error fetching section elements:', error)
     }
 })
+
+const slideshowItems = ref([
+    { image_url: '/images/slide-show/01.png', title: 'عنوان ۱' },
+    { image_url: '/images/slide-show/02.png', title: 'عنوان ۲' },
+    { image_url: '/images/slide-show/03.png', title: 'عنوان ۳' },
+    { image_url: '/images/slide-show/04.png', title: 'عنوان ۴' },
+])
 </script>

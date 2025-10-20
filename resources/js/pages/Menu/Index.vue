@@ -62,9 +62,9 @@
                     @view-details="viewDetails"
                 />
             </div>
-
+<div class="mb-12"></div>
             <!-- Pagination -->
-            <div v-if="meals.data.length > 0 && pagination.last_page > 1" class="mt-10 flex justify-center items-center gap-2 flex-wrap mb-12">
+            <div v-if="meals.data.length > 0 && pagination.last_page > 1" class="mt-10 flex justify-center items-center gap-2 flex-wrap mb-8">
                 <!-- Previous Button -->
                 <button
                     v-if="pagination.current_page > 1"

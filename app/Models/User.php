@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
-     /**
+    /**
      * Guard name used by Spatie Permission.
      */
     protected $guard_name = 'web';
@@ -76,5 +76,15 @@ class User extends Authenticatable
     public function clients()
     {
         return $this->hasMany(self::class, 'belongs_to');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

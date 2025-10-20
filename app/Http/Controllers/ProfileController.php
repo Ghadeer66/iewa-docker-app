@@ -26,7 +26,7 @@ class ProfileController extends Controller
     public function orders()
     {
         $user = Auth::user();
-        $orders = $user->orders()->withCount('items')->latest()->get();
+        $orders = $user->orders()->latest()->get();
 
         return Inertia::render('Profile/Orders', [
             'user' => $user,

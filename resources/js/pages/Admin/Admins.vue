@@ -5,7 +5,7 @@
 
             <!-- Add New Admin Form -->
             <form @submit.prevent="createAdmin" class="bg-gray-800 p-4 rounded mb-6">
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-2 gap-4">
                     <input v-model="form.name" placeholder="نام" class="p-2 bg-gray-700 rounded text-white" />
                     <input v-model="form.email" placeholder="ایمیل" class="p-2 bg-gray-700 rounded text-white" />
                     <input v-model="form.password" type="password" placeholder="رمز عبور"
