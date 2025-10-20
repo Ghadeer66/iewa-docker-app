@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('img_id')->nullable();
-            $table->foreignId('section_type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('section_type_id')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('site_sections');
+        Schema::table('section_elements', function (Blueprint $table) {
+        $table->dropForeign(['section_type_id']); // drop FK first
+    });
+        Schema::dropIfExists('section_elements');
     }
 };

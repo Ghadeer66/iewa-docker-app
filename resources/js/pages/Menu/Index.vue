@@ -4,26 +4,33 @@
         <h1 class="text-3xl font-bold text-center text-gray-800 my-10">محصولات ایوا</h1>
 
         <!-- Filter Bar -->
-        <div class="container mx-auto px-6 mb-8">
-            <div class="flex justify-center">
-                <div class="flex gap-3 overflow-x-auto no-scrollbar py-2 justify-center">
-                    <button
-                        v-for="filter in filters"
-                        :key="filter.title"
-                        @click="applyFilter(filter)"
-                        :class="[
-                            'flex items-center gap-2 flex-shrink-0 px-4 py-2 rounded-full border text-sm transition cursor-pointer',
-                            activeFilter === filter.title
-                                ? 'bg-blue-500 text-white border-blue-500'
-                                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
-                        ]"
-                    >
-                        <img class="w-5 h-5 object-contain" :src="filter.image" :alt="filter.title" />
-                        <span>{{ filter.title }}</span>
-                    </button>
-                </div>
-            </div>
+       <div class="container mx-auto px-6 mb-8">
+    <div class="overflow-x-auto py-2 no-scrollbar">
+        <div class="flex gap-3 w-max">
+            <button
+                v-for="filter in filters"
+                :key="filter.title"
+                @click="applyFilter(filter)"
+                :class="[
+                    'flex items-center gap-2 flex-shrink-0 px-4 py-2 rounded-full border text-sm transition cursor-pointer',
+                    activeFilter === filter.title
+                        ? 'bg-blue-500 text-white border-blue-500'
+                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+                ]"
+            >
+                <!-- Only show image if it exists -->
+                <img
+                    v-if="filter.image"
+                    class="w-5 h-5 object-contain"
+                    :src="filter.image"
+                    :alt="filter.title"
+                />
+                <span>{{ filter.title }}</span>
+            </button>
         </div>
+    </div>
+</div>
+
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-8">
@@ -154,7 +161,7 @@ const props = defineProps({
 activeFilter.value = props.filters?.category || 'همه'
 
 const filters = [
-    { title: 'همه', image: '/images/food-categories/all.png', type: 'category' },
+    { title: 'همه', type: 'category' },
     { title: 'لاین غذای اقتصادی', image: '/images/food-categories/eco.png', type: 'category' },
     { title: 'پک میانوعده', image: '/images/food-types/package.png', type: 'category' },
     { title: 'سالاد', image: '/images/food-types/salad.png', type: 'category' },
