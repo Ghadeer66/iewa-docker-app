@@ -78,13 +78,14 @@ class User extends Authenticatable
         return $this->hasMany(self::class, 'belongs_to');
     }
 
-    public function admin()
-    {
-        return $this->belongsTo(User::class, 'admin_id');
-    }
-
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
+
+    public function parent_business()
+{
+    // assuming 'belongs_to' stores the business user ID
+    return $this->belongsTo(User::class, 'belongs_to');
+}
 }

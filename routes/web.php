@@ -65,9 +65,9 @@ Route::prefix('business')->group(function () {
         Route::post('/employees/upload', [EmployeeController::class, 'uploadCsv'])->name('business.employees.upload');
         Route::post('/employees/{user}/subsidy', [EmployeeController::class, 'setSubsidy'])->name('business.employees.subsidy');
         Route::post('/employees/subsidy-by-code', [EmployeeController::class, 'setSubsidyByCode'])->name('business.employees.subsidyByCode');
-    // Client management (edit/delete) handled from dashboard
-    Route::put('/employees/{user}', [BusinessDashboardController::class, 'updateClient'])->name('business.employees.update');
-    Route::delete('/employees/{user}', [BusinessDashboardController::class, 'destroyClient'])->name('business.employees.destroy');
+        // Client management (edit/delete) handled from dashboard
+        Route::put('/employees/{user}', [BusinessDashboardController::class, 'updateClient'])->name('business.employees.update');
+        Route::delete('/employees/{user}', [BusinessDashboardController::class, 'destroyClient'])->name('business.employees.destroy');
     });
 });
 
@@ -94,7 +94,11 @@ Route::prefix('admin')->group(function () {
         Route::put('/users/admins/{user}', [AdminUserController::class, 'update'])->name('admin.admins.update');
         Route::delete('/users/admins/{user}', [AdminUserController::class, 'destroy'])->name('admin.admins.destroy');
 
-        Route::get('/users/companies', fn() => Inertia::render('Admin/Companies'));
+
+        Route::get('/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
+        Route::post('/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
+        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
+
 
         // Admin Clients
         Route::get('/users/clients', fn() => Inertia::render('Admin/Clients'));

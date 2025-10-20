@@ -10,19 +10,30 @@ use Spatie\Permission\Models\Role;
 
 class ClientController extends Controller
 {
-    public function index()
-    {
-        // Get all users with "Client" role, eager-loading their parent business
-        $clients = User::role('Client')->with('parentBusiness')->get();
+    public function index(Request $request)
+{
+    $query = User::role('client')->with('parent_business:id,name');
 
-        // Get all users with "Business" role to list in the dropdown
-        $companies = User::role('Business')->get();
-
-        return Inertia::render('Admin/Clients', [
-            'clients' => $clients,
-            'companies' => $companies,
-        ]);
+    if ($search = $request->get('search')) {
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%")
+              ->orWhere('phone', 'like', "%{$search}%");
+        });
     }
+
+    $clients = $query->latest()->get();
+
+    $companies = User::role('business')
+        ->select('id','name')
+        ->get();
+
+    return Inertia::render('Admin/Clients', [
+        'clients' => $clients,
+        'companies' => $companies
+    ]);
+}
+
 
     public function store(Request $request)
     {

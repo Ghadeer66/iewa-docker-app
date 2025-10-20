@@ -11,17 +11,30 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserController extends Controller
 {
     // Show all admins
-    public function index()
-    {
-        $admins = \App\Models\User::role('admin')
-            ->select('id', 'name', 'email', 'created_at')
-            ->latest()
-            ->get();
+    public function index(Request $request)
+{
+    // Use Spatie role method instead of whereHas
+    $query = User::role('admin');
 
-        return \Inertia\Inertia::render('Admin/Admins', [
-            'admins' => $admins
-        ]);
+    // Apply search filter if provided
+    if ($search = $request->get('search')) {
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%")
+              ->orWhere('phone', 'like', "%{$search}%"); // added phone search
+        });
     }
+
+    // Paginate results
+    $admins = $query->paginate(10);
+
+    return inertia('Admin/Admins', [
+        'admins'  => $admins,
+        'filters' => $request->only('search'),
+    ]);
+}
+
+
 
     // Store new admin
     public function store(Request $request)

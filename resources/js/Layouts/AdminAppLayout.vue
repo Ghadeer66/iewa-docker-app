@@ -148,7 +148,7 @@
                 <h1 class="text-xl font-bold text-gray-800">پنل ادمین</h1>
                 <div class="flex items-center gap-3">
                     <span class="text-gray-600">{{ $page.props.auth.user.admin_name }}</span>
-                    <img src="{{ asset('icon.png') }}" class="w-8 h-8 rounded-full border" alt="avatar" />
+                    <img src="/icon.png" class="w-8 h-8 rounded-full border" alt="avatar" />
                 </div>
             </header>
 
@@ -162,6 +162,7 @@
 <script setup>
 import { ref } from 'vue'
 import { router, Link } from '@inertiajs/vue3'
+
 
 const sidebarOpen = ref(true)
 const expanded = ref({

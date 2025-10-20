@@ -9,23 +9,27 @@ use Inertia\Inertia;
 
 class CompanyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Get all companies (users with business role) with their admin
-        $companies = User::role('business')
-            ->with('admin')
-            ->select('id', 'name', 'email', 'business_name', 'belongs_to', 'created_at')
-            ->latest()
-            ->get();
+        $query = User::role('business')->select('id','name','email','business_name','belongs_to','created_at');
 
-        // Get all users with admin role for the dropdown
-        $admins = User::role('admin')
-            ->select('id', 'name')
-            ->get();
+        // Apply search if exists
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('business_name', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $companies = $query->latest()->paginate(10)->withQueryString();
+
+        $admins = User::role('admin')->select('id','name')->get();
 
         return Inertia::render('Admin/Companies', [
             'companies' => $companies,
-            'admins' => $admins
+            'admins' => $admins,
+            'filters' => $request->only('search')
         ]);
     }
 

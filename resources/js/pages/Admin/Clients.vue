@@ -1,7 +1,85 @@
+<script setup>
+import AdminAppLayout from '@/Layouts/AdminAppLayout.vue'
+import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
+
+const props = defineProps({
+    clients: Array,
+    companies: Array,
+})
+
+const clients = ref([...props.clients])
+const companies = ref([...props.companies])
+
+const form = ref({
+    name: '',
+    email: '',
+    phone: '',
+    belongs_to: '',
+    personal_code: '',
+    position: ''
+})
+
+// Search filters
+const filters = ref({ search: '' })
+
+function createClient() {
+    router.post('/admin/users/clients', form.value, {
+        onSuccess: (page) => {
+            clients.value = page.props.clients
+            form.value = { name: '', email: '', phone: '', belongs_to: '', personal_code: '', position: '' }
+        }
+    })
+}
+
+function viewClient(client) {
+    alert('جزئیات مشتری: ' + client.name)
+}
+
+function deleteClient(id) {
+    if (confirm('آیا از حذف این مشتری مطمئن هستید؟')) {
+        router.delete(`/admin/users/clients/${id}`, {
+            onSuccess: (page) => {
+                clients.value = page.props.clients
+            }
+        })
+    }
+}
+
+// --- Real-time search ---
+function searchClients() {
+    router.get('/admin/users/clients', { search: filters.value.search }, {
+        preserveState: true,
+        replace: true,
+        onSuccess: (page) => {
+            clients.value = page.props.clients
+        }
+    })
+}
+
+function clearSearch() {
+    filters.value.search = ''
+    searchClients()
+}
+</script>
+
 <template>
     <AdminAppLayout>
         <div>
             <h2 class="text-xl font-bold mb-6 text-yellow-600">مدیریت مشتریان</h2>
+
+            <!-- 🔍 Search Section -->
+            <div class="bg-gray-800 p-4 rounded mb-6 flex items-center space-x-2">
+                <input v-model="filters.search" type="text" placeholder="جستجو بر اساس نام، ایمیل یا تلفن..."
+                    class="flex-1 p-2 bg-gray-700 rounded text-white" />
+                <button @click="searchClients" class="bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold">
+                    جستجو
+                </button>
+                <button v-if="filters.search" @click="clearSearch"
+                    class="bg-gray-600 text-white px-4 py-2 rounded font-bold">
+                    پاک کردن
+                </button>
+            </div>
 
             <!-- Add New Client Form -->
             <form @submit.prevent="createClient" class="bg-gray-800 p-4 rounded mb-6">
@@ -11,8 +89,8 @@
                     <input v-model="form.phone" placeholder="تلفن" class="p-2 bg-gray-700 rounded text-white" />
                     <input v-model="form.personal_code" placeholder="کد پرسنلی"
                         class="p-2 bg-gray-700 rounded text-white" />
-                    <input v-model="form.position" placeholder="پوزیشن سازمان
-" class="p-2 bg-gray-700 rounded text-white" />
+                    <input v-model="form.position" placeholder="پوزیشن سازمان"
+                        class="p-2 bg-gray-700 rounded text-white" />
 
                     <select v-model="form.belongs_to" class="p-2 bg-gray-700 rounded text-white">
                         <option value="">انتخاب شرکت</option>
@@ -21,9 +99,7 @@
                         </option>
                     </select>
                 </div>
-                <button class="mt-4 bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold">
-                    افزودن مشتری
-                </button>
+                <button class="mt-4 bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold">افزودن مشتری</button>
             </form>
 
             <!-- Clients List -->
@@ -47,23 +123,14 @@
                             <td class="p-2">{{ client.parent_business?.name || '---' }}</td>
                             <td class="p-2">{{ new Date(client.created_at).toLocaleDateString('fa-IR') }}</td>
                             <td class="p-2 flex space-x-2">
-                                <button @click="viewClient(client)" class="text-blue-400 hover:text-blue-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                </button>
-                                <button @click="deleteClient(client.id)" class="text-red-400 hover:text-red-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4a2 2 0 012 2v0H8V5a2 2 0 012-2z" />
-                                    </svg>
-                                </button>
+                                <button @click="viewClient(client)"
+                                    class="text-blue-400 hover:text-blue-600">👁️</button>
+                                <button @click="deleteClient(client.id)"
+                                    class="text-red-400 hover:text-red-600">🗑️</button>
                             </td>
+                        </tr>
+                        <tr v-if="clients.length === 0">
+                            <td colspan="6" class="text-center text-gray-400 p-4">مشتری‌ای یافت نشد</td>
                         </tr>
                     </tbody>
                 </table>
@@ -71,36 +138,3 @@
         </div>
     </AdminAppLayout>
 </template>
-
-<script setup>
-import AdminAppLayout from '@/Layouts/AdminAppLayout.vue'
-import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
-
-const props = defineProps({
-    clients: Array,
-    companies: Array,
-})
-
-const form = ref({
-    name: '',
-    email: '',
-    phone: '',
-    belongs_to: '',
-})
-
-function createClient() {
-    router.post('/admin/users/clients', form.value)
-    form.value = { name: '', email: '', phone: '', belongs_to: '', personal_code: '', position: '',  }
-}
-
-function viewClient(client) {
-    alert('جزئیات مشتری: ' + client.name)
-}
-
-function deleteClient(id) {
-    if (confirm('آیا از حذف این مشتری مطمئن هستید؟')) {
-        router.delete(route('admin.clients.destroy', id))
-    }
-}
-</script>
