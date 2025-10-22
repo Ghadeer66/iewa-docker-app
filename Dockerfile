@@ -55,7 +55,7 @@ COPY . .
 # -----------------------------
 # 9. Run post-install scripts and build assets
 # -----------------------------
-RUN php artisan package:discover
+# RUN php artisan package:discover
 RUN npm run build \
     && cp public/build/.vite/manifest.json public/build/manifest.json  # <- Option 1 fix
 
@@ -74,4 +74,4 @@ EXPOSE 8080
 # 12. Start PHP built-in server on Railway $PORT
 # -----------------------------
 #    If $PORT is not set, default to 8080
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
+CMD ["sh", "-c", "npm run build && cp public/build/.vite/manifest.json public/build/manifest.json && php -S 0.0.0.0:${PORT:-8080} -t public"]
