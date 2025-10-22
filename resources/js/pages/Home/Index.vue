@@ -236,9 +236,9 @@ const slideshowItems = ref([
 ])
 
 const clientsCategories = ref([
-    { image_url: '/images/customers/entikhab.png', title: 'عنوان ۱' },
-    { image_url: '/images/customers/irisa.jpg', title: 'عنوان ۲' },
-    { image_url: '/images/customers/saderat.png', title: 'عنوان ۳' },
-    { image_url: '/images/customers/sepah.png', title: 'عنوان ۴' },
+    { image: '/images/customers/entikhab.png', title: 'عنوان ۱' },
+    { image: '/images/customers/irisa.jpg', title: 'عنوان ۲' },
+    { image: '/images/customers/saderat.png', title: 'عنوان ۳' },
+    { image: '/images/customers/sepah.png', title: 'عنوان ۴' },
 ])
 </script>
