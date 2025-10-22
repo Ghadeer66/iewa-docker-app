@@ -188,7 +188,7 @@ const packagesCategories = ref([])
 const menuCategories = ref([])
 const problemsCategories = ref([])
 const specificationsCategories = ref([])
-const clientsCategories = ref([])
+// const clientsCategories = ref([])
 
 // Data fetching for categories
 import { onMounted } from 'vue'
@@ -219,10 +219,10 @@ onMounted(async () => {
         menuCategories.value = byType.menu || []
         problemsCategories.value = byType.problem || []
         specificationsCategories.value = byType.specification || []
-        clientsCategories.value = (byType.client || []).map(it => ({
-            image: it.image,
-            title: it.title
-        }))
+        // clientsCategories.value = (byType.client || []).map(it => ({
+        //     image: it.image,
+        //     title: it.title
+        // }))
     } catch (error) {
         console.error('Error fetching section elements:', error)
     }
@@ -233,5 +233,12 @@ const slideshowItems = ref([
     { image_url: '/images/slide-show/02.png', title: 'عنوان ۲' },
     { image_url: '/images/slide-show/03.png', title: 'عنوان ۳' },
     { image_url: '/images/slide-show/04.png', title: 'عنوان ۴' },
+])
+
+const clientsCategories = ref([
+    { image_url: '/images/customers/entikhab.png', title: 'عنوان ۱' },
+    { image_url: '/images/customers/irisa.jpg', title: 'عنوان ۲' },
+    { image_url: '/images/customers/saderat.png', title: 'عنوان ۳' },
+    { image_url: '/images/customers/sepah.png', title: 'عنوان ۴' },
 ])
 </script>
