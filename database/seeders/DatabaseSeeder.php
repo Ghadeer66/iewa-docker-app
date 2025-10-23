@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             MealTypeSeeder::class,
             MealIngredientsSeeder::class,
             MealsImagesSeeder::class,
+            ComprehensiveMealSeeder::class,
         ]);
     }
 }

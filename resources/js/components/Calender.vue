@@ -83,7 +83,7 @@
                 :class="cellClass(day)"
                 class="w-14 h-14 rounded-sm relative transition-colors select-none cursor-pointer group"
               >
-                <!-- Top-right filled cart icon on the corner line -->
+                <!-- Top-right icon -->
                 <div class="absolute -top-3 -right-2 flex flex-col items-center">
                   <span
                     class="text-center text-red-500 text-[12px] font-bold rounded-full leading-none"
@@ -148,9 +148,6 @@
                   تخفیف: {{ discountPercentText }}
                 </div>
                 <div class="mt-4" v-if="plan === 'daily'">تخفیف: ۰٪</div>
-                <div class="mt-4 text-xl font-black">
-                  {{ numberFormat(perDayPrice) }} تومان در روز
-                </div>
                 <div class="mt-4 text-lg">
                   مجموع: {{ numberFormat(totalPrice) }} تومان
                 </div>
@@ -196,6 +193,7 @@ const weekdayLabels = ['ش', 'ی', 'د', 'س', 'چ']; // Saturday–Wednesday
 
 const selectedDates = ref([]);
 const monthDays = ref([]);
+const afterTomorrowMode = ref(false);
 
 const shippingDaily = 50000;
 const shippingShared = 5000;
@@ -230,7 +228,7 @@ function generateDaysFromToday(count = 30) {
 
   for (let i = 0; i < count; i++) {
     const weekdaySatIndex = (cur.getDay() + 1) % 7; // 0=Sat
-    if (weekdaySatIndex < 5) { // Only Sat–Wed
+    if (weekdaySatIndex < 5) {
       const j = toJalaali(cur.getFullYear(), cur.getMonth() + 1, cur.getDate());
       days.push({
         gDate: new Date(cur),
@@ -266,30 +264,32 @@ function getDayType(day) {
   return 'other';
 }
 
-// Handle day click with mutual exclusion
+// Handle day click with new logic
 function handleDayClick(day) {
   const iso = day.fullDate;
   const dayType = getDayType(day);
 
   if (dayType === 'afterTomorrow') {
-    // deselect today/tomorrow
-    selectedDates.value = selectedDates.value.filter(d => {
-      const t = monthDays.value.flat().find(md => md.fullDate === d);
-      const type = getDayType(t);
-      return type !== 'today' && type !== 'tomorrow';
-    });
-  } else if (dayType === 'today' || dayType === 'tomorrow') {
-    // cannot select if afterTomorrow selected
-    const afterTomorrowSelected = selectedDates.value.some(d => {
-      const t = monthDays.value.flat().find(md => md.fullDate === d);
-      return getDayType(t) === 'afterTomorrow';
-    });
-    if (afterTomorrowSelected) return;
+    const idx = selectedDates.value.indexOf(iso);
+    if (idx === -1) {
+      selectedDates.value = selectedDates.value.filter(d => {
+        const t = monthDays.value.flat().find(md => md.fullDate === d);
+        const type = getDayType(t);
+        return type !== 'today' && type !== 'tomorrow';
+      });
+      selectedDates.value.push(iso);
+      afterTomorrowMode.value = true;
+    } else {
+      selectedDates.value.splice(idx, 1);
+      afterTomorrowMode.value = false;
+    }
+  } else if ((dayType === 'today' || dayType === 'tomorrow') && afterTomorrowMode.value) {
+    return; // locked
+  } else {
+    const idx = selectedDates.value.indexOf(iso);
+    if (idx === -1) selectedDates.value.push(iso);
+    else selectedDates.value.splice(idx, 1);
   }
-
-  const idx = selectedDates.value.indexOf(iso);
-  if (idx === -1) selectedDates.value.push(iso);
-  else selectedDates.value.splice(idx, 1);
 
   monthDays.value.forEach((week) =>
     week.forEach((d) => (d.isSelected = selectedDates.value.includes(d.fullDate)))
@@ -313,7 +313,14 @@ function evaluatePlanAndPricing() {
 
   const count = selectedDates.value.length;
 
-  if (count >= 8) {
+  // Determine how many weeks have 2+ selected days
+  const weeksWithTwo = new Set();
+  monthDays.value.forEach((week, wi) => {
+    const selInWeek = week.filter(d => selectedDates.value.includes(d.fullDate));
+    if (selInWeek.length >= 2) weeksWithTwo.add(wi);
+  });
+
+  if (weeksWithTwo.size >= 4) {
     plan.value = 'monthly';
     planTitle.value = 'خرید ماهانه';
     discountPercentText.value = '۴۰٪';
@@ -342,8 +349,14 @@ function evaluatePlanAndPricing() {
   totalPrice.value = perDayPrice.value * count + shipping;
 }
 
-// Cell class for highlighting
+// Cell class for highlighting and lock style
 function cellClass(day) {
+  const dayType = getDayType(day);
+
+  if (afterTomorrowMode.value && (dayType === 'today' || dayType === 'tomorrow')) {
+    return 'bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed';
+  }
+
   if (day.isSelected) {
     switch (plan.value) {
       case 'daily':

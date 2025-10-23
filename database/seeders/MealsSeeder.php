@@ -112,7 +112,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'pro-chicken-salad',
                 'description' => 'سالاد پروتئینی با سینه مرغ گریل و پنیر',
                 'calories' => 330,
-                'price' => 65.00,
+                'price' => 650.000,
                 'is_vegan' => false,
                 'kcal' => '330 کیلو کالری',
                 'nutritional_informations' => json_encode([
@@ -135,7 +135,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'caesar-eva-salad',
                 'description' => 'سالاد سزار ویژه با مرغ و پنیر پارمسان',
                 'calories' => 263,
-                'price' => 58.00,
+                'price' => 580.000,
                 'is_vegan' => false,
                 'kcal' => '263 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -157,7 +157,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'italiano-salad',
                 'description' => 'سالاد ایتالیایی با پنیر فتا و کینوا',
                 'calories' => 350,
-                'price' => 62.00,
+                'price' => 620.000,
                 'is_vegan' => false,
                 'kcal' => '350 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -174,7 +174,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'farma-salad',
                 'description' => 'سالاد رژیمی با سبزیجات تازه',
                 'calories' => 200,
-                'price' => 45.00,
+                'price' => 450.000,
                 'is_vegan' => true,
                 'kcal' => '200 کیلو کالری',
                 'nutritional_informations' => json_encode([
@@ -196,7 +196,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'mushroom-pro-salad',
                 'description' => 'سالاد قارچ و مرغ گریل',
                 'calories' => 265,
-                'price' => 55.00,
+                'price' => 550.000,
                 'is_vegan' => false,
                 'kcal' => '265 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -219,7 +219,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'vitafruit-salad',
                 'description' => 'سالاد میوه های فصل',
                 'calories' => 175,
-                'price' => 35.00,
+                'price' => 350.000,
                 'is_vegan' => true,
                 'kcal' => '175 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -241,7 +241,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'pasta-salad',
                 'description' => 'سالاد پاستا با مرغ گریل',
                 'calories' => 360,
-                'price' => 68.00,
+                'price' => 680.000,
                 'is_vegan' => false,
                 'kcal' => '360 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -265,7 +265,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'chicken-pesto-sandwich',
                 'description' => 'ساندویچ مرغ با سس پستو',
                 'calories' => 340,
-                'price' => 42.00,
+                'price' => 420.000,
                 'is_vegan' => false,
                 'kcal' => '340 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -287,7 +287,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'green-sandwich',
                 'description' => 'ساندویچ سبز با فیله مرغ',
                 'calories' => 410,
-                'price' => 48.00,
+                'price' => 480.000,
                 'is_vegan' => false,
                 'kcal' => '410 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -309,7 +309,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'cheese-toast',
                 'description' => 'تست پنیر و بادام زمینی',
                 'calories' => 295,
-                'price' => 32.00,
+                'price' => 320.000,
                 'is_vegan' => false,
                 'kcal' => '295 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -333,7 +333,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'cheese-sandwich',
                 'description' => 'ساندویچ پنیر و مرغ',
                 'calories' => 430,
-                'price' => 45.00,
+                'price' => 450.000,
                 'is_vegan' => false,
                 'kcal' => '430 کیلوکالری',
                 'nutritional_informations' => json_encode([
@@ -357,7 +357,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'french-toast',
                 'description' => 'تست فرانسوی با تخم مرغ و عسل',
                 'calories' => 465,
-                'price' => 38.00,
+                'price' => 380.000,
                 'is_vegan' => false,
                 'kcal' => '465 کیلو کالری',
                 'nutritional_informations' => json_encode([
@@ -382,7 +382,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'peanut-toast',
                 'description' => 'تست کره بادام زمینی با دانه چیا',
                 'calories' => 460,
-                'price' => 36.00,
+                'price' => 360.000,
                 'is_vegan' => false,
                 'kcal' => '460 کیلو کالری',
                 'nutritional_informations' => json_encode([
@@ -408,7 +408,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'cheese-date-toast',
                 'description' => 'تست پنیر فتا با خرما',
                 'calories' => 330,
-                'price' => 34.00,
+                'price' => 340.000,
                 'is_vegan' => false,
                 'kcal' => '330 کیلو کالری',
                 'nutritional_informations' => json_encode([
@@ -432,7 +432,7 @@ class MealsSeeder extends Seeder
                 'slug' => 'cheese-tahini-toast',
                 'description' => 'تست پنیر با ارده و موز',
                 'calories' => 420,
-                'price' => 40.00,
+                'price' => 400.000,
                 'is_vegan' => false,
                 'kcal' => '420 کیلوکالری',
                 'nutritional_informations' => json_encode([
