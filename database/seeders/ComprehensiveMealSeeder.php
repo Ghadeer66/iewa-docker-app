@@ -29,7 +29,7 @@ class ComprehensiveMealSeeder extends Seeder
         $categoryImageMapping = [
             'salad' => 'images/default-meals-images/salad.jpg',
             'drinks' => 'images/default-meals-images/drinks.jpg',
-            'package' => 'images/default-meals-images/package.jpg',
+            'economic' => 'images/default-meals-images/economic.jpg',
             'sandwich' => 'images/default-meals-images/sandwich.jpg',
             'breakfast' => 'images/default-meals-images/breakfast.jpg',
             'cake' => 'images/default-meals-images/cake.jpg',
@@ -62,7 +62,7 @@ class ComprehensiveMealSeeder extends Seeder
                         ]
                     ],
                     [
-                        "category" => "package",
+                        "category" => "economic",
                         "meals" => [
                             ["title" => "چیکنوا"],
                             ["title" => "چیکن رول"],
@@ -116,7 +116,7 @@ class ComprehensiveMealSeeder extends Seeder
                         ]
                     ],
                     [
-                        "category" => "package",
+                        "category" => "economic",
                         "meals" => [
                             ["title" => "چیکن ماسان"],
                             ["title" => "میت اسپاگیتو"],
@@ -167,7 +167,7 @@ class ComprehensiveMealSeeder extends Seeder
                         ]
                     ],
                     [
-                        "category" => "package",
+                        "category" => "economic",
                         "meals" => [
                             ["title" => "چیکی یاتوری"],
                             ["title" => "چیکن وجتبل"]
@@ -178,7 +178,6 @@ class ComprehensiveMealSeeder extends Seeder
                         "meals" => [
                             ["title" => "رد فروت میکس"],
                             ["title" => "اسموتی نعنازنحبیل"],
-                            ["title" => "بری درینک"]
                         ]
                     ],
                     [
@@ -211,8 +210,9 @@ class ComprehensiveMealSeeder extends Seeder
                 "type" => "caffeine",
                 "categories" => [
                     [
-                        "category" => "drinks",
+                        "category" => "coffee",
                         "meals" => [
+                            ["title" => "بری درینک"],
                             ["title" => "شیر قهوه"],
                             ["title" => "کول لته"],
                             ["title" => "آمریکانو"],
