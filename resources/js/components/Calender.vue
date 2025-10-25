@@ -247,10 +247,11 @@ function handleDayClick(day) {
     if (dayType === 'afterTomorrow') {
         const idx = selectedDates.value.indexOf(iso);
         if (idx === -1) {
+            // Remove all afterTomorrow dates first
             selectedDates.value = selectedDates.value.filter(d => {
                 const t = monthDays.value.flat().find(md => md.fullDate === d);
                 const type = getDayType(t);
-                return type !== 'today' && type !== 'tomorrow';
+                return type !== 'afterTomorrow';
             });
             selectedDates.value.push(iso);
             afterTomorrowMode.value = true;
@@ -258,9 +259,12 @@ function handleDayClick(day) {
             selectedDates.value.splice(idx, 1);
             afterTomorrowMode.value = false;
         }
-    } else if ((dayType === 'today' || dayType === 'tomorrow') && afterTomorrowMode.value) {
-        return; // locked
-    } else {
+    }
+    // Only block selection of TODAY if afterTomorrowMode is active
+    else if (dayType === 'today' && afterTomorrowMode.value) {
+        return; // today is locked
+    }
+    else {
         const idx = selectedDates.value.indexOf(iso);
         if (idx === -1) selectedDates.value.push(iso);
         else selectedDates.value.splice(idx, 1);
@@ -273,7 +277,7 @@ function handleDayClick(day) {
     evaluatePlanAndPricing();
 }
 
-// Evaluate plan and pricing
+
 function evaluatePlanAndPricing() {
     perDayPrice.value = props.basePrice;
     totalPrice.value = 0;
@@ -288,30 +292,36 @@ function evaluatePlanAndPricing() {
 
     const count = selectedDates.value.length;
 
-    // Determine how many weeks have 2+ selected days
-    const weeksWithTwo = new Set();
+    // Determine how many weeks have at least 1 selected day
+    const weeksWithAtLeastOne = new Set();
     monthDays.value.forEach((week, wi) => {
         const selInWeek = week.filter(d => selectedDates.value.includes(d.fullDate));
-        if (selInWeek.length >= 2) weeksWithTwo.add(wi);
+        if (selInWeek.length >= 1) weeksWithAtLeastOne.add(wi);
     });
 
-    if (weeksWithTwo.size >= 4) {
+    // Monthly plan: at least 8 days AND at least 1 day in each week
+    if (count >= 8 && weeksWithAtLeastOne.size === monthDays.value.length) {
         plan.value = 'monthly';
         planTitle.value = 'خرید ماهانه';
         discountPercentText.value = '۴۰٪';
         subsidyApplied.value = true;
-    } else if (count >= 3) {
+    }
+    // Weekly plan: at least 3 days
+    else if (count >= 3) {
         plan.value = 'weekly';
         planTitle.value = 'خرید هفتگی';
         discountPercentText.value = '۲۰٪';
         subsidyApplied.value = true;
-    } else {
+    }
+    // Daily plan
+    else {
         plan.value = 'daily';
         planTitle.value = 'خرید روزانه';
         discountPercentText.value = 'بدون تخفیف';
         subsidyApplied.value = false;
     }
 
+    // Pricing
     let discount = 0;
     if (plan.value === 'weekly') discount = 0.2;
     if (plan.value === 'monthly') discount = 0.4;
@@ -324,11 +334,13 @@ function evaluatePlanAndPricing() {
     totalPrice.value = perDayPrice.value * count + shipping;
 }
 
+
 // Cell class for highlighting and lock style
 function cellClass(day) {
     const dayType = getDayType(day);
 
-    if (afterTomorrowMode.value && (dayType === 'today' || dayType === 'tomorrow')) {
+    // Only lock TODAY when afterTomorrowMode is active
+    if (afterTomorrowMode.value && dayType === 'today') {
         return 'bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed';
     }
 
@@ -347,6 +359,7 @@ function cellClass(day) {
     if (day.isToday) return 'border-2 border-blue-500 bg-blue-50 text-gray-800';
     return 'bg-white text-gray-800 cursor-pointer border border-gray-300 hover:bg-blue-100';
 }
+
 
 const handleScroll = () => (isAtTop.value = window.scrollY < 50);
 

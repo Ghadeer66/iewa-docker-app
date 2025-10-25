@@ -35,6 +35,8 @@ class ComprehensiveMealSeeder extends Seeder
             'cake' => 'images/default-meals-images/cake.jpg',
             'dessert' => 'images/default-meals-images/dessert.jpg',
             'ott-meal' => 'images/default-meals-images/ott-meal.jpg',
+            'coffee' => 'images/default-meals-images/coffee.jpg',
+
         ];
 
         // Create or get image records for each category
@@ -84,7 +86,7 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "breakfast",
                         "meals" => [
-                            ["title" => "چیا تست"]
+                            ["title" => "چیا تُست"]
                         ]
                     ],
                     [
@@ -134,9 +136,9 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "breakfast",
                         "meals" => [
-                            ["title" => "تست فرانسوی"],
-                            ["title" => "پینات تست"],
-                            ["title" => "چیز تست ارده ای"]
+                            ["title" => "تُست فرانسوی"],
+                            ["title" => "پینات تُست"],
+                            ["title" => "چیز تُست ارده ای"]
                         ]
                     ],
                     [
@@ -178,12 +180,21 @@ class ComprehensiveMealSeeder extends Seeder
                         "meals" => [
                             ["title" => "رد فروت میکس"],
                             ["title" => "اسموتی نعنازنحبیل"],
+                            ["title" => "نوشیدنی بیدمشک"],
+                            ["title" => "نوشیدنی بهار نارنج"],
+
+                        ]
+                    ],
+                    [
+                        "category" => "coffee",
+                        "meals" => [
+                            ["title" => "بری درینک"]
                         ]
                     ],
                     [
                         "category" => "breakfast",
                         "meals" => [
-                            ["title" => "اگه تست مدیترانه ای"]
+                            ["title" => "اگ تُست مدیترانه ای"]
                         ]
                     ],
                     [
@@ -201,7 +212,7 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "ott-meal",
                         "meals" => [
-                            ["title" => "اوتمیل میوه ای"]
+                            ["title" => "اوتمیل چیا"]
                         ]
                     ]
                 ]
@@ -212,7 +223,6 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "coffee",
                         "meals" => [
-                            ["title" => "بری درینک"],
                             ["title" => "شیر قهوه"],
                             ["title" => "کول لته"],
                             ["title" => "آمریکانو"],
@@ -228,7 +238,13 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "dessert",
                         "meals" => [
-                            ["title" => "نوشیدنی قهوه"]
+                            ["title" => "دسر قهوه"]
+                        ]
+                        ],
+                        [
+                        "category" => "ott-meal",
+                        "meals" => [
+                            ["title" => "اوتمیل قهوه"]
                         ]
                     ]
                 ]

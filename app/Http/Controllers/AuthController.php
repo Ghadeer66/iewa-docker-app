@@ -92,7 +92,7 @@ class AuthController extends Controller
         Auth::login($user, $request->remember);
         $request->session()->regenerate();
 
-        return redirect()->intended('/profile')->with('message', 'ورود موفقیت آمیز بود');
+        return redirect()->intended('/')->with('message', 'ورود موفقیت آمیز بود');
     }
 
     public function showRegistrationForm()
