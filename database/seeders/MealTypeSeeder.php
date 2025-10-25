@@ -20,7 +20,7 @@ class MealTypeSeeder extends Seeder
             ['meal_id' => 3, 'type_id' => 3], // سالاد ایتالیانو - energy
             ['meal_id' => 4, 'type_id' => 2], // فارماسالاد - diet
             ['meal_id' => 5, 'type_id' => 3], // ماشروم پروسالاد - energy
-            ['meal_id' => 6, 'type_id' => 3], // ویتافروت سالاد - energy
+            ['meal_id' => 6, 'type_id' => 2], // ویتافروت سالاد - energy
             ['meal_id' => 7, 'type_id' => 3], // پاستا سالاد - energy
 
             // SANDWICHES

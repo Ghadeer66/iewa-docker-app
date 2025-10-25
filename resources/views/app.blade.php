@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title inertia>{{ config('app.name', 'iewa') }}</title>
+    <title inertia>{{ config('app.title', 'iewa') }}</title>
     @vite('resources/js/app.ts')
     @inertiaHead
 </head>

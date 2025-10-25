@@ -175,8 +175,15 @@ const applyFilter = (filter) => {
     // Always reset to page 1 when changing filters
     const params = new URLSearchParams()
 
-    if (filter.title !== 'همه') {
-        params.append('category', filter.title)
+    if (filter.type === 'category') {
+        if (filter.title !== 'همه') {
+            params.append('category', filter.title)
+        }
+        // Clear type filter when changing category
+    } else if (filter.type === 'type') {
+        if (filter.title) {
+            params.append('type', filter.title)
+        }
     }
 
     // Remove page parameter to go to first page
@@ -206,9 +213,14 @@ const goToPage = (pageNumber) => {
 
     const params = new URLSearchParams()
 
-    // Preserve current filters when paginating
-    if (activeFilter.value !== 'همه') {
-        params.append('category', activeFilter.value)
+    // Preserve ALL current filters when paginating
+    if (props.filters?.category && props.filters.category !== 'همه') {
+        params.append('category', props.filters.category)
+    }
+
+    // Add type filter if it exists
+    if (props.filters?.type) {
+        params.append('type', props.filters.type)
     }
 
     // Add page number
