@@ -55,9 +55,9 @@
                             <td class="p-2">{{ new Date(company.created_at).toLocaleDateString('fa-IR') }}</td>
                             <td class="p-2 flex space-x-2">
                                 <button @click="viewCompany(company)"
-                                    class="text-blue-400 hover:text-blue-600">✏️</button>
+                                    class="text-blue-400 hover:text-blue-600 cursor-pointer">✏️</button>
                                 <button @click="deleteCompany(company.id)"
-                                    class="text-red-400 hover:text-red-600">🗑️</button>
+                                    class="text-red-400 hover:text-red-600 cursor-pointer">🗑️</button>
                             </td>
                         </tr>
                         <tr v-if="companies.data.length === 0">

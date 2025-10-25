@@ -65,6 +65,22 @@
                             <Link href="/admin/users/clients" class="block px-2 py-1 rounded hover:bg-gray-700">مشتریان
                             </Link>
                         </li>
+                        <li>
+                            <button @click="toggleCategory('permissions')" class="flex items-center justify-between w-full text-right px-2 py-1 rounded hover:bg-gray-700">
+                                <span>دسترسی‌ها</span>
+                                <svg v-if="sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transform transition-transform" :class="expanded.permissions ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <ul v-show="expanded.permissions" class="mt-1 mr-4 space-y-1">
+                                <li>
+                                    <Link href="/admin/users/permissions" class="block px-2 py-1 rounded hover:bg-gray-600">مجوزها</Link>
+                                </li>
+                                <li>
+                                    <Link href="/admin/users/roles" class="block px-2 py-1 rounded hover:bg-gray-600">نقش‌ها</Link>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -168,6 +184,7 @@ const sidebarOpen = ref(true)
 const expanded = ref({
     users: true,
     site: false,
+    permissions: false,
 })
 
 const toggleCategory = (key) => {
@@ -179,6 +196,7 @@ const toggleSidebar = () => {
     if (!sidebarOpen.value) {
         expanded.value.users = false
         expanded.value.site = false
+        expanded.value.permissions = false
     }
 }
 

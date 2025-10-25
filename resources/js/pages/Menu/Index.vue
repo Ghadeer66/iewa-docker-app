@@ -4,32 +4,23 @@
         <h1 class="text-3xl font-bold text-center text-gray-800 my-10">محصولات ایوا</h1>
 
         <!-- Filter Bar -->
-       <div class="container mx-auto px-6 mb-8">
-    <div class="overflow-x-auto py-2 no-scrollbar">
-        <div class="flex gap-3 w-max">
-            <button
-                v-for="filter in filters"
-                :key="filter.title"
-                @click="applyFilter(filter)"
-                :class="[
-                    'flex items-center gap-2 flex-shrink-0 px-4 py-2 rounded-full border text-sm transition cursor-pointer',
-                    activeFilter === filter.title
-                        ? 'bg-blue-500 text-white border-blue-500'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
-                ]"
-            >
-                <!-- Only show image if it exists -->
-                <img
-                    v-if="filter.image"
-                    class="w-5 h-5 object-contain"
-                    :src="filter.image"
-                    :alt="filter.title"
-                />
-                <span>{{ filter.title }}</span>
-            </button>
+        <div class="container mx-auto px-6 mb-8">
+            <div class="overflow-x-auto py-2 no-scrollbar">
+                <div class="flex gap-3 w-max">
+                    <button v-for="filter in filters" :key="filter.title" @click="applyFilter(filter)" :class="[
+                        'flex items-center gap-2 flex-shrink-0 px-4 py-2 rounded-full border text-sm transition cursor-pointer',
+                        activeFilter === filter.title
+                            ? 'bg-blue-500 text-white border-blue-500'
+                            : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+                    ]">
+                        <!-- Only show image if it exists -->
+                        <img v-if="filter.image" class="w-5 h-5 object-contain" :src="filter.image"
+                            :alt="filter.title" />
+                        <span>{{ filter.title }}</span>
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
 
         <!-- Loading State -->
@@ -43,46 +34,32 @@
             <!-- No Results Message -->
             <div v-if="meals.data.length === 0" class="text-center py-12">
                 <p class="text-gray-500 text-lg">محصولی با فیلتر انتخاب شده یافت نشد.</p>
-                <button
-                    @click="clearFilters"
-                    class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition cursor-pointer"
-                >
+                <button @click="clearFilters"
+                    class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition cursor-pointer">
                     حذف فیلترها
                 </button>
             </div>
 
             <!-- Meal Grid -->
             <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <MealCard
-                    v-for="meal in meals.data"
-                    :key="meal.id"
-                    :meal="meal"
-                    @add-to-cart="addToCart"
-                    @open-calendar="openCalendar"
-                    @view-details="viewDetails"
-                />
+                <MealCard v-for="meal in meals.data" :key="meal.id" :meal="meal" @add-to-cart="addToCart"
+                    @open-calendar="openCalendar" @view-details="viewDetails" />
             </div>
-<div class="mb-12"></div>
+            <div class="mb-12"></div>
             <!-- Pagination -->
-            <div v-if="meals.data.length > 0 && pagination.last_page > 1" class="mt-10 flex justify-center items-center gap-2 flex-wrap mb-8">
+            <div v-if="meals.data.length > 0 && pagination.last_page > 1"
+                class="mt-10 flex justify-center items-center gap-2 flex-wrap mb-8">
                 <!-- Previous Button -->
-                <button
-                    v-if="pagination.current_page > 1"
-                    @click="goToPage(pagination.current_page - 1)"
-                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition cursor-pointer"
-                >
+                <button v-if="pagination.current_page > 1" @click="goToPage(pagination.current_page - 1)"
+                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition cursor-pointer">
                     قبلی
                 </button>
 
                 <!-- First Page -->
-                <button
-                    v-if="pagination.current_page > 3"
-                    @click="goToPage(1)"
-                    :class="[
-                        'px-3 py-1 rounded-lg border border-gray-300 cursor-pointer',
-                        1 === pagination.current_page ? 'bg-blue-500 text-white border-blue-500' : 'bg-white hover:bg-gray-100'
-                    ]"
-                >
+                <button v-if="pagination.current_page > 3 && !visiblePages.includes(1)" @click="goToPage(1)" :class="[
+                    'px-3 py-1 rounded-lg border border-gray-300 cursor-pointer',
+                    1 === pagination.current_page ? 'bg-blue-500 text-white border-blue-500' : 'bg-white hover:bg-gray-100'
+                ]">
                     1
                 </button>
 
@@ -90,15 +67,10 @@
                 <span v-if="pagination.current_page > 4" class="px-2 text-gray-500">...</span>
 
                 <!-- Page Numbers -->
-                <button
-                    v-for="page in visiblePages"
-                    :key="page"
-                    @click="goToPage(page)"
-                    :class="[
-                        'px-3 py-1 rounded-lg border border-gray-300 cursor-pointer',
-                        page === pagination.current_page ? 'bg-blue-500 text-white border-blue-500' : 'bg-white hover:bg-gray-100'
-                    ]"
-                >
+                <button v-for="page in visiblePages" :key="page" @click="goToPage(page)" :class="[
+                    'px-3 py-1 rounded-lg border border-gray-300 cursor-pointer',
+                    page === pagination.current_page ? 'bg-blue-500 text-white border-blue-500' : 'bg-white hover:bg-gray-100'
+                ]">
                     {{ page }}
                 </button>
 
@@ -107,22 +79,19 @@
 
                 <!-- Last Page -->
                 <button
-                    v-if="pagination.current_page < pagination.last_page - 2"
-                    @click="goToPage(pagination.last_page)"
-                    :class="[
+                    v-if="pagination.current_page < pagination.last_page - 2 && !visiblePages.includes(pagination.last_page)"
+                    @click="goToPage(pagination.last_page)" :class="[
                         'px-3 py-1 rounded-lg border border-gray-300 cursor-pointer',
                         pagination.last_page === pagination.current_page ? 'bg-blue-500 text-white border-blue-500' : 'bg-white hover:bg-gray-100'
-                    ]"
-                >
+                    ]">
                     {{ pagination.last_page }}
                 </button>
 
+
                 <!-- Next Button -->
-                <button
-                    v-if="pagination.current_page < pagination.last_page"
+                <button v-if="pagination.current_page < pagination.last_page"
                     @click="goToPage(pagination.current_page + 1)"
-                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition cursor-pointer"
-                >
+                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition cursor-pointer">
                     بعدی
                 </button>
             </div>

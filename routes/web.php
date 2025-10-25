@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\MealImageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SectionElementController;
 use App\Http\Controllers\Admin\SectionTypeController;
 use App\Http\Controllers\Admin\TypeController;
@@ -94,10 +96,24 @@ Route::prefix('admin')->group(function () {
         Route::put('/users/admins/{user}', [AdminUserController::class, 'update'])->name('admin.admins.update');
         Route::delete('/users/admins/{user}', [AdminUserController::class, 'destroy'])->name('admin.admins.destroy');
 
+        // Permissions
+        Route::get('/users/permissions', [PermissionController::class, 'index'])->name('admin.permissions.index');
+        Route::post('/users/permissions', [PermissionController::class, 'store'])->name('admin.permissions.store');
+        Route::post('/users/permissions/assign-to-role', [PermissionController::class, 'assignToRole'])->name('admin.permissions.assign-to-role');
+        Route::post('/users/permissions/revoke-from-role', [PermissionController::class, 'revokeFromRole'])->name('admin.permissions.revoke-from-role');
+        Route::delete('/users/permissions/{permission}', [PermissionController::class, 'destroy'])->name('admin.permissions.destroy');
+
+        // Roles
+        Route::get('/users/roles', [RoleController::class, 'index'])->name('admin.roles.index');
+        Route::post('/users/roles', [RoleController::class, 'store'])->name('admin.roles.store');
+        Route::post('/users/roles/assign-to-admin', [RoleController::class, 'assignToAdmin'])->name('admin.roles.assign-to-admin');
+        Route::post('/users/roles/revoke-from-admin', [RoleController::class, 'revokeFromAdmin'])->name('admin.roles.revoke-from-admin');
+        Route::delete('/users/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
+
 
         Route::get('/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
         Route::post('/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
-        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy'); 
+        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
 
 
         // Admin Clients

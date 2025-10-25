@@ -24,10 +24,23 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
+{
+    if (Schema::hasTable('section_elements')) {
         Schema::table('section_elements', function (Blueprint $table) {
-        $table->dropForeign(['section_type_id']); // drop FK first
-    });
+            if (Schema::hasColumn('section_elements', 'section_type_id')) {
+                $foreignKeys = \DB::select("SELECT CONSTRAINT_NAME
+                                             FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                                             WHERE TABLE_NAME = 'section_elements'
+                                             AND COLUMN_NAME = 'section_type_id'
+                                             AND CONSTRAINT_SCHEMA = DATABASE()");
+                foreach ($foreignKeys as $fk) {
+                    $table->dropForeign([$fk->CONSTRAINT_NAME]);
+                }
+            }
+        });
+
         Schema::dropIfExists('section_elements');
     }
+}
+
 };

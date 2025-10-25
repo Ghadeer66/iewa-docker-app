@@ -13,14 +13,14 @@
                 />
                 <button
                     @click="searchAdmins"
-                    class="bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold"
+                    class="bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold cursor-pointer"
                 >
                     جستجو
                 </button>
                 <button
                     v-if="filters.search"
                     @click="clearSearch"
-                    class="bg-gray-600 text-white px-4 py-2 rounded font-bold"
+                    class="bg-gray-600 text-white px-4 py-2 rounded font-bold cursor-pointer"
                 >
                     پاک کردن
                 </button>
@@ -34,7 +34,7 @@
                     <input v-model="form.password" type="password" placeholder="رمز عبور" class="p-2 bg-gray-700 rounded text-white" />
                     <input v-model="form.phone" type="number" placeholder="شماره تلفن" class="p-2 bg-gray-700 rounded text-white" />
                 </div>
-                <button class="mt-4 bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold">افزودن ادمین</button>
+                <button class="mt-4 bg-yellow-500 text-gray-900 px-4 py-2 rounded font-bold cursor-pointer">افزودن ادمین</button>
             </form>
 
             <!-- Admins List -->
@@ -56,10 +56,10 @@
                             <td class="p-2">{{ admin.phone ?? '---' }}</td>
                             <td class="p-2">{{ new Date(admin.created_at).toLocaleDateString('fa-IR') }}</td>
                             <td class="p-2 flex space-x-2">
-                                <button @click="editAdmin(admin)" class="text-blue-400 hover:text-blue-600">
+                                <button @click="editAdmin(admin)" class="text-blue-400 hover:text-blue-600 cursor-pointer">
                                     ✏️
                                 </button>
-                                <button @click="deleteAdmin(admin.id)" class="text-red-400 hover:text-red-600">
+                                <button @click="deleteAdmin(admin.id)" class="text-red-400 hover:text-red-600 cursor-pointer">
                                     🗑️
                                 </button>
                             </td>

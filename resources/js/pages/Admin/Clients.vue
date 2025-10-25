@@ -124,9 +124,9 @@ function clearSearch() {
                             <td class="p-2">{{ new Date(client.created_at).toLocaleDateString('fa-IR') }}</td>
                             <td class="p-2 flex space-x-2">
                                 <button @click="viewClient(client)"
-                                    class="text-blue-400 hover:text-blue-600">👁️</button>
+                                    class="text-blue-400 hover:text-blue-600 cursor-pointer">👁️</button>
                                 <button @click="deleteClient(client.id)"
-                                    class="text-red-400 hover:text-red-600">🗑️</button>
+                                    class="text-red-400 hover:text-red-600 cursor-pointer">🗑️</button>
                             </td>
                         </tr>
                         <tr v-if="clients.length === 0">

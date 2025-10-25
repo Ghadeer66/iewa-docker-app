@@ -11,27 +11,20 @@ use Illuminate\Support\Facades\Storage;
 
 class MealImageController extends Controller
 {
-    public function index()
-    {
-        $mealImages = MealImage::with(['meal', 'image'])
-            ->latest()
-            ->get()
-            ->map(function ($mealImage) {
-                // Ensure the URL is correct
-                if ($mealImage->image) {
-                    $mealImage->image->url = $this->getImageUrl($mealImage->image->path);
-                }
-                return $mealImage;
-            });
+  public function index()
+{
+    $mealImages = MealImage::with(['meal', 'image'])
+        ->latest()
+        ->get();
 
-        $meals = Meal::select('id', 'title')
-            ->get();
+    $meals = Meal::select('id', 'title')->get();
 
-        return Inertia::render('Admin/MealsImages', [
-            'mealImages' => $mealImages,
-            'meals' => $meals
-        ]);
-    }
+    return Inertia::render('Admin/MealsImages', [
+        'mealImages' => $mealImages,
+        'meals' => $meals
+    ]);
+}
+
 
     private function getImageUrl($path)
     {
