@@ -90,7 +90,7 @@ class MenuController extends Controller
             'لایت' => 'light',
             'رژیمی' => 'diet',
             'انرژیک' => 'energy',
-            'کافئین' => 'caffeine',
+            'کافین' => 'caffeine',
             'مدرسه' => 'school',
         ];
 
