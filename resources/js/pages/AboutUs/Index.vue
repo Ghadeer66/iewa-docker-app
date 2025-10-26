@@ -133,6 +133,8 @@
                 <p class="mb-4">ﻣﺪﯾﺮ ﺑﺮﻧﺪ ﻇﺮﯾﻒ ﻣﺼﻮر</p>
                 <p class="mb-4">ﻣﺪﯾﺮ ارﺷﺪ ﺗﻮﺳﻌﻪ ﺑﺎزار ﮔﺮوه اﺳﻨﻮا ، اﻧﺘﺨﺎب</p>
                 <p class="mb-4">CEO در اﯾﻮا</p>
+                <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
+
                 <p class="mb-4">ﻣﺸﺘﺮﯾﺎنﺗﺎ ﺑﻪ اﻣﺮوز :</p>
                 <p class="mb-4">اﻧﺘﺨﺎب، ﺑﺮﻧﺎﺑﺎﻃﺮی ، اﯾﺮﯾﺴﺎ ، ﺑﺎﻧﮏ ﺳﭙﻪ ، ﺑﺎﻧﮏ ﺻﺎدرات</p>
                 <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
