@@ -70,11 +70,18 @@
         </div>
 
         <!-- Password -->
-        <div>
+        <div class="relative">
           <label class="text-gray-300 text-sm mb-1 block">رمز عبور</label>
-          <input type="password" v-model="form.password" placeholder="رمز عبور خود را وارد کنید"
-                 class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          <input :type="showRegisterPassword ? 'text' : 'password'" v-model="form.password" placeholder="رمز عبور خود را وارد کنید"
+                 class="w-full px-4 py-2 pr-10 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
                  :class="{ 'border-red-500': errors.password || (form.password && !isValidPassword(form.password)) }" />
+          <button
+            type="button"
+            @click="showRegisterPassword = !showRegisterPassword"
+            class="absolute  left-3 top-8 pr-3 flex items-center text-gray-400 hover:text-white"
+          >
+            {{ showRegisterPassword ? '🙈' : '👁️' }}
+          </button>
           <div class="text-xs mt-1">
             <p class="text-gray-400">رمز عبور باید شامل موارد زیر باشد:</p>
             <ul class="text-gray-400 mr-4 space-y-1">
@@ -89,13 +96,24 @@
         </div>
 
         <!-- Password Confirmation -->
-        <div>
+        <div class="relative">
           <label class="text-gray-300 text-sm mb-1 block">تکرار رمز عبور</label>
-          <input type="password" v-model="form.password_confirmation"
+          <input :type="showRegisterConfirmPassword ? 'text' : 'password'" v-model="form.password_confirmation"
                  placeholder="رمز عبور خود را مجدداً وارد کنید"
-                 class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
-                 :class="{ 'border-red-500': errors.password_confirmation }" />
-          <p v-if="errors.password_confirmation" class="text-red-400 text-xs mt-1">{{ errors.password_confirmation[0] }}</p>
+                 class="w-full px-4 py-2 pr-10 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+                 :class="{ 'border-red-500': errors.password_confirmation || !passwordsMatch }" />
+          <button
+            type="button"
+            @click="showRegisterConfirmPassword = !showRegisterConfirmPassword"
+            class="absolute  left-3 top-8 pr-3 flex items-center text-gray-400 hover:text-white"
+          >
+            {{ showRegisterConfirmPassword ? '🙈' : '👁️' }}
+          </button>
+          <div class="text-xs mt-1">
+            <p v-if="errors.password_confirmation" class="text-red-400">{{ errors.password_confirmation[0] }}</p>
+            <p v-if="form.password && form.password_confirmation && !passwordsMatch" class="text-red-400">رمزهای عبور مطابقت ندارند</p>
+            <p v-if="form.password && form.password_confirmation && passwordsMatch" class="text-green-400">رمزهای عبور مطابقت دارند</p>
+          </div>
         </div>
 
         <!-- Terms -->
@@ -114,8 +132,13 @@
           {{ error }}
         </div>
 
+        <!-- Success Message -->
+        <div v-if="$page.props.flash?.message" class="bg-green-500/20 border border-green-500 text-green-300 p-3 rounded-xl text-sm text-center">
+          {{ $page.props.flash.message }}
+        </div>
+
         <!-- Submit -->
-        <button type="submit" :disabled="loading"
+        <button type="submit" :disabled="loading || !passwordsMatch"
                 class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed">
           <span v-if="loading">در حال ثبت‌نام...</span>
           <span v-else>ثبت‌نام</span>
@@ -148,12 +171,42 @@
         </div>
 
         <!-- Password -->
-        <div>
+        <div class="relative">
           <label class="text-gray-300 text-sm mb-1 block">رمز عبور</label>
-          <input type="password" v-model="loginForm.password" placeholder="رمز خود را وارد کنید"
-                 class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+          <input :type="showLoginPassword ? 'text' : 'password'" v-model="loginForm.password" placeholder="رمز خود را وارد کنید"
+                 class="w-full px-4 py-2 pr-10 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
                  :class="{ 'border-red-500': loginErrors.password }" />
+          <button
+            type="button"
+            @click="showLoginPassword = !showLoginPassword"
+            class="absolute inset-y-0 left-3 top-7 pr-3 flex items-center text-gray-400 hover:text-white"
+          >
+            {{ showLoginPassword ? '🙈' : '👁️' }}
+          </button>
           <p v-if="loginErrors.password" class="text-red-400 text-xs mt-1">{{ loginErrors.password[0] }}</p>
+        </div>
+
+        <!-- Remember Me -->
+        <div class="flex items-center">
+          <input
+            id="remember"
+            v-model="loginForm.remember"
+            type="checkbox"
+            class="h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded"
+          />
+          <label for="remember" class="mr-2 block text-sm text-gray-300">
+            مرا به خاطر بسپار
+          </label>
+        </div>
+
+        <!-- Error Message for Login -->
+        <div v-if="loginError" class="bg-red-500/20 border border-red-500 text-red-300 p-3 rounded-xl text-sm text-center">
+          {{ loginError }}
+        </div>
+
+        <!-- Success Message -->
+        <div v-if="$page.props.flash?.message" class="bg-green-500/20 border border-green-500 text-green-300 p-3 rounded-xl text-sm text-center">
+          {{ $page.props.flash.message }}
         </div>
 
         <!-- Login Submit -->
@@ -207,6 +260,14 @@ const loginForm = reactive({
   remember: false
 })
 
+const showLoginPassword = ref(false)
+const showRegisterPassword = ref(false)
+const showRegisterConfirmPassword = ref(false)
+
+const passwordsMatch = computed(() => {
+  return form.password === form.password_confirmation
+})
+
 // Validation helpers
 const isValidName = (name) => /^[\u0600-\u06FF\s]+$/.test(name) && name.trim().length > 0
 const isValidPhone = (phone) => /^09\d{9}$/.test(phone)
@@ -218,8 +279,18 @@ const isValidPassword = (password) =>
 
 // Register function
 const register = async () => {
-  if (form.name && !isValidName(form.name)) { errors.value = { name: ['لطفاً نام را به صورت صحیح و فقط با حروف فارسی وارد کنید'] }; return }
-  if (form.phone && !isValidPhone(form.phone)) { errors.value = { phone: ['لطفاً یک شماره تلفن معتبر وارد کنید'] }; return }
+  if (form.name && !isValidName(form.name)) {
+    errors.value = { name: ['لطفاً نام را به صورت صحیح و فقط با حروف فارسی وارد کنید'] };
+    return
+  }
+  if (form.phone && !isValidPhone(form.phone)) {
+    errors.value = { phone: ['لطفاً یک شماره تلفن معتبر وارد کنید'] };
+    return
+  }
+  if (form.password !== form.password_confirmation) {
+    error.value = 'رمزهای عبور مطابقت ندارند'
+    return
+  }
 
   loading.value = true
   error.value = ''
@@ -228,10 +299,16 @@ const register = async () => {
   try {
     await router.post('/register', form, {
       onSuccess: () => console.log('Registration successful'),
-      onError: (err) => { if (err.errors) errors.value = err.errors; error.value = err.message || 'خطا در ثبت‌نام. لطفا مجددا تلاش کنید.' },
+      onError: (err) => {
+        if (err.errors) errors.value = err.errors;
+        error.value = err.message || 'خطا در ثبت‌نام. لطفا مجددا تلاش کنید.'
+      },
       onFinish: () => loading.value = false
     })
-  } catch { error.value = 'خطا در ارتباط با سرور'; loading.value = false }
+  } catch {
+    error.value = 'خطا در ارتباط با سرور';
+    loading.value = false
+  }
 }
 
 // Login function
@@ -243,10 +320,16 @@ const login = async () => {
   try {
     await router.post('/login', loginForm, {
       onSuccess: () => console.log('Login successful'),
-      onError: (err) => { if (err.errors) loginErrors.value = err.errors; loginError.value = err.message || 'خطا در ورود. لطفا مجددا تلاش کنید.' },
+      onError: (err) => {
+        if (err.errors) loginErrors.value = err.errors;
+        loginError.value = err.message || 'خطا در ورود. لطفا مجددا تلاش کنید.'
+      },
       onFinish: () => loginLoading.value = false
     })
-  } catch { loginError.value = 'خطا در ارتباط با سرور'; loginLoading.value = false }
+  } catch {
+    loginError.value = 'خطا در ارتباط با سرور';
+    loginLoading.value = false
+  }
 }
 </script>
 

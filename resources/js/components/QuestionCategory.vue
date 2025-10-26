@@ -5,7 +5,10 @@
       :style="{ background: gradient }"
       dir="rtl"
     >
-      <div class="flex items-center gap-4 overflow-x-auto no-scrollbar py-2">
+      <div
+        ref="scrollContainer"
+        class="flex items-center gap-4 overflow-x-auto no-scrollbar py-2"
+      >
         <div v-if="cta" class="flex-shrink-0 rounded-lg p-4 w-44 h-36 flex flex-col items-center justify-center text-center ">
           <div class="text-l font-large text-gray-800">
             {{ cta }}
@@ -33,6 +36,8 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
 const props = defineProps({
   items: {
     type: Array,
@@ -50,9 +55,70 @@ const props = defineProps({
 })
 
 const gradient = `linear-gradient(90deg, ${props.gradientFrom} 0%, ${props.gradientTo} 100%)`
+
+const scrollContainer = ref(null)
+const isDragging = ref(false)
+const startX = ref(0)
+const scrollLeft = ref(0)
+
+const handleMouseDown = (e) => {
+  isDragging.value = true
+  startX.value = e.pageX - scrollContainer.value.offsetLeft
+  scrollLeft.value = scrollContainer.value.scrollLeft
+  scrollContainer.value.style.cursor = 'grabbing'
+  document.body.style.userSelect = 'none'
+}
+
+const handleMouseLeave = () => {
+  if (isDragging.value) {
+    isDragging.value = false
+    scrollContainer.value.style.cursor = 'grab'
+    document.body.style.userSelect = ''
+  }
+}
+
+const handleMouseUp = () => {
+  if (isDragging.value) {
+    isDragging.value = false
+    scrollContainer.value.style.cursor = 'grab'
+    document.body.style.userSelect = ''
+  }
+}
+
+const handleMouseMove = (e) => {
+  if (!isDragging.value) return
+  e.preventDefault()
+  const x = e.pageX - scrollContainer.value.offsetLeft
+  const walk = (x - startX.value) * 2 // Adjust multiplier for scroll speed
+  scrollContainer.value.scrollLeft = scrollLeft.value - walk
+}
+
+onMounted(() => {
+  const container = scrollContainer.value
+  if (container) {
+    container.addEventListener('mousedown', handleMouseDown)
+    container.addEventListener('mouseleave', handleMouseLeave)
+  }
+  document.addEventListener('mouseup', handleMouseUp)
+  document.addEventListener('mousemove', handleMouseMove)
+})
+
+onUnmounted(() => {
+  const container = scrollContainer.value
+  if (container) {
+    container.removeEventListener('mousedown', handleMouseDown)
+    container.removeEventListener('mouseleave', handleMouseLeave)
+  }
+  document.removeEventListener('mouseup', handleMouseUp)
+  document.removeEventListener('mousemove', handleMouseMove)
+})
 </script>
 
 <style scoped>
-.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
 .no-scrollbar::-webkit-scrollbar { display: none; }
 </style>

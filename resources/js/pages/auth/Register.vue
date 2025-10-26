@@ -59,29 +59,45 @@
                 </div>
 
                 <!-- Password Field -->
-                <div>
+                <div class="relative">
                     <label class="text-gray-300 text-sm mb-1 block">رمز عبور</label>
                     <input
-                        type="password"
+                        :type="showPassword ? 'text' : 'password'"
                         v-model="form.password"
                         placeholder="رمز عبور خود را وارد کنید"
-                        class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+                        class="w-full px-4 py-2 pr-10 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
                         :class="{ 'border-red-500': errors.password }"
                     />
+                    <button
+                        type="button"
+                        @click="showPassword = !showPassword"
+                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white"
+                    >
+                        {{ showPassword ? '🙈' : '👁️' }}
+                    </button>
                     <p v-if="errors.password" class="text-red-400 text-xs mt-1">{{ errors.password[0] }}</p>
                 </div>
 
                 <!-- Password Confirmation Field -->
-                <div>
+                <div class="relative">
                     <label class="text-gray-300 text-sm mb-1 block">تکرار رمز عبور</label>
                     <input
-                        type="password"
+                        :type="showConfirmPassword ? 'text' : 'password'"
                         v-model="form.password_confirmation"
                         placeholder="رمز عبور خود را مجدداً وارد کنید"
-                        class="w-full px-4 py-2 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
-                        :class="{ 'border-red-500': errors.password_confirmation }"
+                        class="w-full px-4 py-2 pr-10 bg-gray-800 text-white rounded-xl border border-gray-700 focus:ring-2 focus:ring-lime-400 outline-none"
+                        :class="{ 'border-red-500': errors.password_confirmation || !passwordsMatch }"
                     />
+                    <button
+                        type="button"
+                        @click="showConfirmPassword = !showConfirmPassword"
+                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white"
+                    >
+                        {{ showConfirmPassword ? '🙈' : '👁️' }}
+                    </button>
                     <p v-if="errors.password_confirmation" class="text-red-400 text-xs mt-1">{{ errors.password_confirmation[0] }}</p>
+                    <p v-if="form.password && form.password_confirmation && !passwordsMatch" class="text-red-400 text-xs mt-1">رمزهای عبور مطابقت ندارند</p>
+                    <p v-if="form.password && form.password_confirmation && passwordsMatch" class="text-green-400 text-xs mt-1">رمزهای عبور مطابقت دارند</p>
                 </div>
 
                 <!-- Position Field -->
@@ -128,7 +144,7 @@
 
                 <button
                     type="submit"
-                    :disabled="loading"
+                    :disabled="loading || !passwordsMatch"
                     class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <span v-if="loading">در حال ثبت‌نام...</span>
@@ -145,7 +161,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 import AuthBase from '@/layouts/AuthLayout.vue'
 
@@ -163,8 +179,19 @@ const form = reactive({
 const loading = ref(false)
 const error = ref('')
 const errors = ref({})
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+
+const passwordsMatch = computed(() => {
+    return form.password === form.password_confirmation
+})
 
 const register = async () => {
+    if (!passwordsMatch.value) {
+        error.value = 'رمزهای عبور مطابقت ندارند'
+        return
+    }
+
     loading.value = true
     error.value = ''
     errors.value = {}
