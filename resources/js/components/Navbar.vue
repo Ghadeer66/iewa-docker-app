@@ -16,8 +16,9 @@
                         <Link href="/menu" class="hover:text-blue-300">محصولات</Link>
                     </li>
                     <li>
-                        <Link href="#" class="hover:text-blue-300">درباره ما</Link>
+                        <Link href="/about-us" class="hover:text-blue-300">درباره ما</Link>
                     </li>
+
                     <li>
                         <Link href="#" class="hover:text-blue-300"> بلاگ </Link>
                     </li>

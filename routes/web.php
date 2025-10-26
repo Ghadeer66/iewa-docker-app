@@ -36,7 +36,9 @@ Route::get('/user', [AuthController::class, 'user']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
-
+Route::get('/about-us', function () {
+    return inertia('AboutUs/Index');
+});
 // ----------------------
 // Protected User Routes
 // ----------------------
