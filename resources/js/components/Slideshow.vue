@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full overflow-hidden rounded-lg">
     <!-- Slide container -->
-    <div class="w-full h-100 aspect-[16/9] md:aspect-[3/1] bg-gray-100 flex items-center justify-center">
+    <div class="w-full h-150 aspect-[16/9] md:aspect-[3/1] bg-gray-100 flex items-center justify-center">
       <img
         v-if="currentItem"
         :src="resolveImage(currentItem)"
