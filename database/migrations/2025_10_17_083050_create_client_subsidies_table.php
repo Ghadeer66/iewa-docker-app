@@ -16,12 +16,16 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             // Optional: track which business granted it
             $table->foreignId('granted_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedTinyInteger('percentage'); // 1-100
+
+            $table->unsignedInteger('max_price'); // سقف خرید نفر, 0-5,000,000
+            $table->unsignedTinyInteger('percentage'); // 0-100
+
             $table->date('starts_at')->nullable();
             $table->date('ends_at')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

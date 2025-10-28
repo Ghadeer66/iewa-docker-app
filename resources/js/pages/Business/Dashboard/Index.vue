@@ -151,16 +151,18 @@
 
                             <!-- Submit Button -->
                             <div class="md:col-span-2 flex items-center gap-3 mt-2">
-                                <button :disabled="subsidyLoading" type="submit"
+                                <button :disabled="subsidyLoading || !subsidy.max_price || !subsidy.percentage"
+                                    type="submit"
                                     class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 cursor-pointer">
                                     {{ subsidyLoading ? 'در حال ذخیره...' : 'ذخیره سوبسید' }}
                                 </button>
                                 <div class="min-h-5">
                                     <span v-if="subsidyMessage" class="text-sm text-green-600">{{ subsidyMessage
-                                        }}</span>
+                                    }}</span>
                                     <span v-if="subsidyError" class="text-sm text-red-600">{{ subsidyError }}</span>
                                 </div>
                             </div>
+
 
                         </form>
                     </div>
@@ -334,7 +336,13 @@ const submitCsv = async () => {
 }
 
 // Subsidy form state
-const subsidy = reactive({ personal_code: '', percentage: null, starts_at: '', ends_at: '' })
+const subsidy = reactive({
+    personal_code: '',
+    max_price: null,     // added max_price
+    percentage: null,
+    starts_at: '',
+    ends_at: ''
+})
 const subsidyLoading = ref(false)
 const subsidyMessage = ref('')
 const subsidyError = ref('')
@@ -400,14 +408,23 @@ const submitDelete = async () => {
 const submitSubsidy = async () => {
     subsidyMessage.value = ''
     subsidyError.value = ''
-    if (!subsidy.personal_code || !subsidy.percentage) {
-        subsidyError.value = 'کد پرسنلی و درصد الزامی است'
+
+    // Front-end validation
+    if (!subsidy.personal_code || subsidy.max_price == null || subsidy.percentage == null) {
+        subsidyError.value = 'کد پرسنلی، سقف خرید و درصد الزامی است'
         return
     }
+
+    // Clamp values before sending
+    subsidy.max_price = Math.min(Math.max(subsidy.max_price, 0), 5000000)
+    subsidy.percentage = Math.min(Math.max(subsidy.percentage, 0), 100)
+
     subsidyLoading.value = true
+
     try {
         await router.post('/business/employees/subsidy-by-code', {
             personal_code: subsidy.personal_code,
+            max_price: subsidy.max_price,         // included max_price
             percentage: subsidy.percentage,
             starts_at: subsidy.starts_at || null,
             ends_at: subsidy.ends_at || null,
@@ -416,8 +433,24 @@ const submitSubsidy = async () => {
                 subsidyMessage.value = page?.props?.flash?.message || 'سوبسید ذخیره شد'
             },
             onError: (err) => {
-                subsidyError.value = err?.personal_code?.[0] || err?.percentage?.[0] || err?.message || 'خطا در ذخیره'
+                // err is the validation errors object from Laravel
+                if (err?.personal_code?.[0]) {
+                    subsidyError.value = 'کد پرسنلی پیدا نشد'
+                } else if (err?.max_price?.[0]) {
+                    subsidyError.value = 'سقف خرید مشخص نیست '
+                } else if (err?.percentage?.[0]) {
+                    subsidyError.value = 'درصد سوبسید مشخص نیست '
+                } else if (err?.starts_at?.[0]) {
+                    subsidyError.value = 'از تاریخ مشخص نیست '
+                } else if (err?.ends_at?.[0]) {
+                    subsidyError.value = 'تا تاریخ مشخص نیست '
+                } else if (err?.message) {
+                    subsidyError.value = err.message
+                } else {
+                    subsidyError.value = 'خطا در ذخیره'
+                }
             },
+
             onFinish: () => {
                 subsidyLoading.value = false
             },
