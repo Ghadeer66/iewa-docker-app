@@ -64,32 +64,6 @@ class ComprehensiveMealSeeder extends Seeder
                         ]
                     ],
                     [
-                        "category" => "economic",
-                        "meals" => [
-                            ["title" => "چیکنوا"],
-                            ["title" => "چیکن رول"],
-                            ["title" => "پنکیک سیب زمینی مرغ"]
-                        ]
-                    ],
-                    [
-                        "category" => "salad",
-                        "meals" => [
-                            ["title" => "ویتافروت سالاد"]
-                        ]
-                    ],
-                    [
-                        "category" => "sandwich",
-                        "meals" => [
-                            ["title" => "مرغ پستو"]
-                        ]
-                    ],
-                    [
-                        "category" => "breakfast",
-                        "meals" => [
-                            ["title" => "چیا تُست"]
-                        ]
-                    ],
-                    [
                         "category" => "cake",
                         "meals" => [
                             ["title" => "کیک ساده"],
@@ -102,43 +76,10 @@ class ComprehensiveMealSeeder extends Seeder
                 "type" => "energy",
                 "categories" => [
                     [
-                        "category" => "salad",
-                        "meals" => [
-                            ["title" => "ماشروم پروسالاد"],
-                            ["title" => "چیکن سالاد"],
-                            ["title" => "سالاد ایتالیانو"],
-                            ["title" => "پاستا سالاد"]
-                        ]
-                    ],
-                    [
                         "category" => "drinks",
                         "meals" => [
                             ["title" => "شیرشکلات"],
                             ["title" => "معجون انرژی درینک"]
-                        ]
-                    ],
-                    [
-                        "category" => "economic",
-                        "meals" => [
-                            ["title" => "چیکن ماسان"],
-                            ["title" => "میت اسپاگیتو"],
-                            ["title" => "مرغ و بادمجان"],
-                            ["title" => "گریک رایس"]
-                        ]
-                    ],
-                    [
-                        "category" => "sandwich",
-                        "meals" => [
-                            ["title" => "گرین ساندویچ"],
-                            ["title" => "چیز ساندویچ"]
-                        ]
-                    ],
-                    [
-                        "category" => "breakfast",
-                        "meals" => [
-                            ["title" => "تُست فرانسوی"],
-                            ["title" => "پینات تُست"],
-                            ["title" => "چیز تُست ارده ای"]
                         ]
                     ],
                     [
@@ -162,20 +103,6 @@ class ComprehensiveMealSeeder extends Seeder
                 "type" => "diet",
                 "categories" => [
                     [
-                        "category" => "salad",
-                        "meals" => [
-                            ["title" => "سالاد سزار"],
-                            ["title" => "فارما سالاد"]
-                        ]
-                    ],
-                    [
-                        "category" => "economic",
-                        "meals" => [
-                            ["title" => "چیکی یاتوری"],
-                            ["title" => "چیکن وجتبل"]
-                        ]
-                    ],
-                    [
                         "category" => "drinks",
                         "meals" => [
                             ["title" => "رد فروت میکس"],
@@ -189,12 +116,6 @@ class ComprehensiveMealSeeder extends Seeder
                         "category" => "coffee",
                         "meals" => [
                             ["title" => "بری درینک"]
-                        ]
-                    ],
-                    [
-                        "category" => "breakfast",
-                        "meals" => [
-                            ["title" => "اگ تُست مدیترانه ای"]
                         ]
                     ],
                     [
@@ -297,7 +218,7 @@ class ComprehensiveMealSeeder extends Seeder
                         'calories' => rand(150, 500),
                         'price' => rand(250000, 800000),
                         'is_vegan' => rand(0, 1) == 1,
-                        'kcal' => rand(150, 500) . ' کیلو کالری',
+                        'kcal' => rand(150, 500),
                         'nutritional_informations' => json_encode([
                             'انرژی' => rand(150, 500) . ' کیلوکالری',
                             'کربوهیدرات' => rand(20, 60) . ' گرم',

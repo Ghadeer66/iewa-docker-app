@@ -16,7 +16,7 @@
         <div class="p-4 flex flex-col flex-grow">
             <div class="flex justify-between items-center gap-4 bg-orange-100 p-3 rounded-xl mb-3">
                 <h3 class="font-bold text-gray-800 text-md">{{ meal.title }}</h3>
-                <h3 class="font-bold text-orange-500 text-md">{{ meal.kcal }} </h3>
+                <h3 class="font-bold text-orange-500 text-md">{{ meal.kcal }}  کالری </h3>
             </div>
 
             <!-- Price -->

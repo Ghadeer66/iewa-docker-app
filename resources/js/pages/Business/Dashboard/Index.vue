@@ -68,7 +68,7 @@
                                     <div class="text-gray-600">
                                         <span class="text-sm">فایل را اینجا رها کنید یا برای انتخاب کلیک کنید</span>
                                         <div v-if="csvFile" class="mt-2 text-xs text-gray-500 truncate">{{ csvFile.name
-                                            }}</div>
+                                        }}</div>
                                     </div>
                                 </div>
                             </label>
@@ -87,6 +87,7 @@
                 </div>
 
                 <!-- Subsidy Card -->
+                <!-- Subsidy Card -->
                 <div class="bg-white overflow-hidden shadow rounded-2xl border border-gray-100">
                     <div class="px-6 py-6">
                         <div class="flex items-center gap-3 mb-4">
@@ -102,30 +103,53 @@
                                 <p class="text-xs text-gray-500">کد پرسنلی را وارد کنید و درصد را تنظیم کنید</p>
                             </div>
                         </div>
+
                         <form @submit.prevent="submitSubsidy"
                             class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end text-black">
+
+                            <!-- Personal Code -->
                             <div>
                                 <label class="block text-sm text-gray-700 mb-1">کد پرسنلی کاربر</label>
                                 <input v-model="subsidy.personal_code" type="text"
                                     class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                     placeholder="مثلاً XA123" />
                             </div>
+
+                            <!-- Max Buying Price -->
                             <div>
-                                <label class="block text-sm text-gray-700 mb-1">درصد</label>
-                                <input v-model.number="subsidy.percentage" type="number" min="1" max="100"
+                                <label class="block text-sm text-gray-700 mb-1">سقف خرید نفر (تومان)</label>
+                                <input v-model.number="subsidy.max_price" type="number" min="0" max="5000000"
+                                    @input="subsidy.max_price = Math.min(subsidy.max_price || 0, 5000000)"
                                     class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                    placeholder="1-100" />
+                                    placeholder="0 - 5,000,000" />
                             </div>
+
+
+                            <!-- Subsidy Percentage -->
+                            <div>
+                                <label class="block text-sm text-gray-700 mb-1">درصد سوبسید</label>
+                                <input v-model.number="subsidy.percentage" type="number" min="0" max="100"
+                                    :disabled="!subsidy.max_price"
+                                    @input="subsidy.percentage = Math.min(Math.max(subsidy.percentage || 0, 0), 100)"
+                                    class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                    placeholder="0-100" />
+                            </div>
+
+                            <!-- Start Date -->
                             <div>
                                 <label class="block text-sm text-gray-700 mb-1">از تاریخ</label>
                                 <input v-model="subsidy.starts_at" type="date"
                                     class="w-full border rounded-lg px-3 py-2" />
                             </div>
+
+                            <!-- End Date -->
                             <div>
                                 <label class="block text-sm text-gray-700 mb-1">تا تاریخ</label>
                                 <input v-model="subsidy.ends_at" type="date"
                                     class="w-full border rounded-lg px-3 py-2" />
                             </div>
+
+                            <!-- Submit Button -->
                             <div class="md:col-span-2 flex items-center gap-3 mt-2">
                                 <button :disabled="subsidyLoading" type="submit"
                                     class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 cursor-pointer">
@@ -137,9 +161,11 @@
                                     <span v-if="subsidyError" class="text-sm text-red-600">{{ subsidyError }}</span>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
+
             </div>
 
             <!-- Clients List -->
@@ -162,91 +188,93 @@
                             </div>
                         </div>
 
-                                                                <div>
-                    <template v-if="user.clients && user.clients.length">
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-black">
-                            <ul class="divide-y divide-gray-200">
-                                <li
-                                    v-for="client in user.clients"
-                                    :key="client.id"
-                                    class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors duration-150"
-                                >
-                                    <div class="flex-1">
-                                        <div class="text-sm font-semibold text-gray-800">
-                                            {{ client.name }}
+                        <div>
+                            <template v-if="user.clients && user.clients.length">
+                                <div
+                                    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-black">
+                                    <ul class="divide-y divide-gray-200">
+                                        <li v-for="client in user.clients" :key="client.id"
+                                            class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                                            <div class="flex-1">
+                                                <div class="text-sm font-semibold text-gray-800">
+                                                    {{ client.name }}
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-0.5">
+                                                    <span class="font-medium text-gray-600">کد پرسنلی:</span>
+                                                    {{ client.personal_code }}
+                                                    <span class="mx-2">•</span>
+                                                    {{ client.phone }}
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-center gap-2">
+                                                <button @click="startEdit(client)"
+                                                    class="text-sm px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer">ویرایش</button>
+
+                                                <button @click="confirmDelete(client)"
+                                                    class="text-sm px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer">حذف</button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </template>
+
+                            <template v-else>
+                                <div
+                                    class="text-sm text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center">
+                                    هیچ کاربری به شما اختصاص داده نشده است.
+                                </div>
+                            </template>
+
+                            <!-- Inline edit modal -->
+                            <div v-if="editingClient" class="fixed inset-0 flex items-center justify-center z-50">
+                                <div class="absolute inset-0 bg-black/40" @click="cancelEdit"></div>
+                                <div class="bg-white rounded-xl shadow-lg p-6 z-10 w-full max-w-md">
+                                    <h4 class="text-lg font-semibold mb-3">ویرایش کاربر</h4>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-sm text-gray-700 mb-1 text-gray-400">نام</label>
+                                            <input v-model="editForm.name" type="text"
+                                                class="w-full border text-black rounded-lg px-3 py-2" />
                                         </div>
-                                        <div class="text-xs text-gray-500 mt-0.5">
-                                            <span class="font-medium text-gray-600">کد پرسنلی:</span>
-                                            {{ client.personal_code }}
-                                            <span class="mx-2">•</span>
-                                            {{ client.phone }}
+                                        <div>
+                                            <label class="block text-sm text-gray-700 mb-1">کد پرسنلی</label>
+                                            <input v-model="editForm.personal_code" type="text"
+                                                class="w-full text-black border rounded-lg px-3 py-2" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm text-gray-700 mb-1">تلفن</label>
+                                            <input v-model="editForm.phone" type="text"
+                                                class="w-full border text-black rounded-lg px-3 py-2" />
+                                        </div>
+                                        <div class="flex items-center gap-3 justify-end">
+                                            <button @click="cancelEdit"
+                                                class="px-4 py-2 text-white rounded-lg border cursor-pointer bg-red-400 hover:bg-red-500">انصراف</button>
+                                            <button @click="submitEdit"
+                                                class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">ذخیره</button>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="flex items-center gap-2">
-                                        <button
-                                            @click="startEdit(client)"
-                                            class="text-sm px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
-                                        >ویرایش</button>
-
-                                        <button
-                                            @click="confirmDelete(client)"
-                                            class="text-sm px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer"
-                                        >حذف</button>
+                            <!-- Delete confirmation modal -->
+                            <div v-if="deletingClient" class="fixed inset-0 flex items-center justify-center z-50">
+                                <div class="absolute inset-0 bg-black/40" @click="deletingClient = null"></div>
+                                <div class="bg-white rounded-xl shadow-lg p-6 z-10 w-full max-w-sm">
+                                    <h4 class="text-lg font-semibold mb-3">حذف کاربر</h4>
+                                    <p class="text-sm text-gray-700 mb-4">آیا مطمئن هستید که می‌خواهید این کاربر را حذف
+                                        کنید؟ این عمل برگشت‌ناپذیر
+                                        است.</p>
+                                    <div class="flex justify-end gap-3">
+                                        <button @click="deletingClient = null"
+                                            class="px-4 py-2 rounded-lg border">انصراف</button>
+                                        <button @click="submitDelete"
+                                            class="px-4 py-2 rounded-lg bg-red-600 text-white">حذف</button>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </template>
-
-                    <template v-else>
-                        <div
-                            class="text-sm text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center"
-                        >
-                            هیچ کاربری به شما اختصاص داده نشده است.
-                        </div>
-                    </template>
-
-                    <!-- Inline edit modal -->
-                    <div v-if="editingClient" class="fixed inset-0 flex items-center justify-center z-50">
-                        <div class="absolute inset-0 bg-black/40" @click="cancelEdit"></div>
-                        <div class="bg-white rounded-xl shadow-lg p-6 z-10 w-full max-w-md">
-                            <h4 class="text-lg font-semibold mb-3">ویرایش کاربر</h4>
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="block text-sm text-gray-700 mb-1 text-gray-400">نام</label>
-                                    <input v-model="editForm.name" type="text" class="w-full border text-black rounded-lg px-3 py-2" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm text-gray-700 mb-1">کد پرسنلی</label>
-                                    <input v-model="editForm.personal_code" type="text" class="w-full text-black border rounded-lg px-3 py-2" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm text-gray-700 mb-1">تلفن</label>
-                                    <input v-model="editForm.phone" type="text" class="w-full border text-black rounded-lg px-3 py-2" />
-                                </div>
-                                <div class="flex items-center gap-3 justify-end">
-                                    <button @click="cancelEdit" class="px-4 py-2 text-white rounded-lg border cursor-pointer bg-red-400 hover:bg-red-500">انصراف</button>
-                                    <button @click="submitEdit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">ذخیره</button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Delete confirmation modal -->
-                    <div v-if="deletingClient" class="fixed inset-0 flex items-center justify-center z-50">
-                        <div class="absolute inset-0 bg-black/40" @click="deletingClient = null"></div>
-                        <div class="bg-white rounded-xl shadow-lg p-6 z-10 w-full max-w-sm">
-                            <h4 class="text-lg font-semibold mb-3">حذف کاربر</h4>
-                            <p class="text-sm text-gray-700 mb-4">آیا مطمئن هستید که می‌خواهید این کاربر را حذف کنید؟ این عمل برگشت‌ناپذیر است.</p>
-                            <div class="flex justify-end gap-3">
-                                <button @click="deletingClient = null" class="px-4 py-2 rounded-lg border">انصراف</button>
-                                <button @click="submitDelete" class="px-4 py-2 rounded-lg bg-red-600 text-white">حذف</button>
-                            </div>
                         </div>
-                    </div>
-
-                </div>
 
                     </div>
                 </div>

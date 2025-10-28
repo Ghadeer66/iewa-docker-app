@@ -29,12 +29,12 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             CategoriesSeeder::class,
             IngredientsSeeder::class,
-            // \Database\Seeders\MealsSeeder::class,
+            \Database\Seeders\MealsSeeder::class,
             // MealCategoriesSeeder::class,
             // MealTypeSeeder::class,
             // MealIngredientsSeeder::class,
             // MealsImagesSeeder::class,
-            ComprehensiveMealSeeder::class,
+            // ComprehensiveMealSeeder::class,
         ]);
     }
 }
