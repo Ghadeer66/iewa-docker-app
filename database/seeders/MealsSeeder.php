@@ -21,6 +21,7 @@ class MealsSeeder extends Seeder
             PackageMealSeeder::class,
             SaladMealsSeeder::class,
             SandwichMealSeeder::class,
+            CakeMealSeeder::class,
             ComprehensiveMealSeeder::class
         ]);
     }

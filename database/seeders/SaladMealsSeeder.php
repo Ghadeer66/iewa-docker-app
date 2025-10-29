@@ -235,7 +235,7 @@ class SaladMealsSeeder extends Seeder
                         if ($fileSizeBytes <= 20 * 1024 * 1024) { // 20MB
                             try {
                                 Image::read($fullImagePath)
-                                    ->cover(300, 300)
+                                    ->cover(600, 400)
                                     ->save($thumbnailPath);
                                 $thumbnailUrl = 'images/thumbnails/' . $filename;
                             } catch (\Throwable $e) {

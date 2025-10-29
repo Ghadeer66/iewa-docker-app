@@ -253,9 +253,9 @@ class PackageMealSeeder extends Seeder
                     $fileSizeBytes = File::size($fullImagePath);
                     if ($fileSizeBytes <= 20 * 1024 * 1024) { // 20MB
                         try {
-                            // create exact 300x300 thumbnail (crop to cover)
+                            // create exact 600x600 thumbnail (crop to cover)
                             $img = Image::read($fullImagePath)
-                                ->cover(300, 300)
+                                ->cover(600, 500)
                                 ->save($thumbnailPath);
 
                             $thumbnailUrl = 'images/thumbnails/' . $filename;

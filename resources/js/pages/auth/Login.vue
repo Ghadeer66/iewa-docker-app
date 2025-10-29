@@ -64,7 +64,7 @@
         <button
           type="submit"
           :disabled="loading"
-          class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full py-3 rounded-xl bg-lime-400 text-gray-900 font-semibold hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <span v-if="loading">در حال ورود...</span>
           <span v-else>ورود</span>

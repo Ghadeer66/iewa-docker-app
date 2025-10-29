@@ -5,7 +5,7 @@
         <!-- Image -->
         <div class="relative w-full bg-gray-100">
             <img :src="meal.thumbnail_url ?? meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png')"
-                :alt="meal.title || 'meal'" class="w-full h-60 object-cover rounded-t-2xl" />
+                :alt="meal.title || 'meal'" class="w-full object-cover rounded-t-2xl" style="aspect-ratio: 3 / 2;" />
             <span v-if="meal.is_new"
                 class="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                 جدید
@@ -69,8 +69,22 @@
 
                     </div>
 
-                    <img :src="meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png')"
-                        :alt="meal.title || 'meal'" class="w-full h-60 object-cover rounded-lg shadow-sm" />
+                    <div v-if="galleryImages.length > 1" class="relative w-full">
+                        <img :src="galleryImages[currentSlide]" :alt="meal.title || 'meal'"
+                            class="w-full object-cover rounded-lg shadow-sm" style="aspect-ratio: 3 / 2;" />
+                        <!-- Prev -->
+                        <button @click="prevSlide" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">‹</button>
+                        <!-- Next -->
+                        <button @click="nextSlide" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">›</button>
+                        <!-- Dots -->
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                            <button v-for="(img, idx) in galleryImages" :key="idx" @click="goToSlide(idx)"
+                                :class="idx === currentSlide ? 'bg-white' : 'bg-white/50'"
+                                class="w-2.5 h-2.5 rounded-full"></button>
+                        </div>
+                    </div>
+                    <img v-else :src="galleryImages[0] ?? (meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png'))"
+                        :alt="meal.title || 'meal'" class="w-full object-cover rounded-lg shadow-sm" style="aspect-ratio: 3 / 2;" />
 
                     <!-- Nutrition Information -->
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -218,4 +232,28 @@ const comments = ref([
   { user: 'نیلوفر حدادیان', text: 'دخترم از مشتری های شماست و واقعا از خوردن غذاهای شما لذت میبره' },
   { user: 'مرتضی پیروانی', text: 'تنوع غذاها خوبه این سالاد و من از بوتیک گرفته بودم' }
 ])
+
+// Build gallery images from related images if present
+const galleryImages = computed(() => {
+    const imgs = Array.isArray(props.meal?.images)
+        ? props.meal.images
+            .map((img) => {
+                const u = img?.url
+                if (!u) return null
+                if (u.startsWith('http://') || u.startsWith('https://') || u.startsWith('/')) return u
+                return `/${u}`
+            })
+            .filter(Boolean)
+        : []
+    // Fallback to single provided url if no images relation
+    if (imgs.length === 0 && props.meal?.image_url) {
+        return [props.meal.image_url]
+    }
+    return imgs
+})
+
+const currentSlide = ref(0)
+const nextSlide = () => { if (galleryImages.value.length > 0) currentSlide.value = (currentSlide.value + 1) % galleryImages.value.length }
+const prevSlide = () => { if (galleryImages.value.length > 0) currentSlide.value = (currentSlide.value - 1 + galleryImages.value.length) % galleryImages.value.length }
+const goToSlide = (idx) => { if (idx >= 0 && idx < galleryImages.value.length) currentSlide.value = idx }
 </script>

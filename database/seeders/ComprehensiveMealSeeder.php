@@ -62,13 +62,6 @@ class ComprehensiveMealSeeder extends Seeder
                         "meals" => [
                             ["title" => "پرتقال"]
                         ]
-                    ],
-                    [
-                        "category" => "cake",
-                        "meals" => [
-                            ["title" => "کیک ساده"],
-                            ["title" => "کیک شکلاتی"]
-                        ]
                     ]
                 ]
             ],
@@ -80,14 +73,6 @@ class ComprehensiveMealSeeder extends Seeder
                         "meals" => [
                             ["title" => "شیرشکلات"],
                             ["title" => "معجون انرژی درینک"]
-                        ]
-                    ],
-                    [
-                        "category" => "cake",
-                        "meals" => [
-                            ["title" => "کیک کماج"],
-                            ["title" => "شیرمال خرما"],
-                            ["title" => "آچما مغزدار"]
                         ]
                     ],
                     [
@@ -119,12 +104,6 @@ class ComprehensiveMealSeeder extends Seeder
                         ]
                     ],
                     [
-                        "category" => "cake",
-                        "meals" => [
-                            ["title" => "فروت کیک"]
-                        ]
-                    ],
-                    [
                         "category" => "dessert",
                         "meals" => [
                             ["title" => "ویتافروت میکس"]
@@ -148,12 +127,6 @@ class ComprehensiveMealSeeder extends Seeder
                             ["title" => "کول لته"],
                             ["title" => "آمریکانو"],
                             ["title" => "چیلی کافی"]
-                        ]
-                    ],
-                    [
-                        "category" => "cake",
-                        "meals" => [
-                            ["title" => "کیک قهوه"]
                         ]
                     ],
                     [
