@@ -41,7 +41,8 @@ class PackageMealSeeder extends Seeder
                 'contraindications' => ['در افراد دارای آلرژی به تخم مرغ، عدم تحمل لاکتوز، بیماران دیابتی کنترل نشده و مبتلایان به نقرس حاد مصرف نشود.'],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/24f.png'
+                'image_path' => 'images/meals/packages/24f.png',
+                'price' => 160000,
             ],
             [
                 'title' => '12F',
@@ -60,7 +61,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/12f.png'
+                'image_path' => 'images/meals/packages/12f.png',
+                'price' => 180000,
             ],
             [
                 'title' => '13F',
@@ -75,7 +77,8 @@ class PackageMealSeeder extends Seeder
                 'contraindications' => ['افراد حساس به گلوتن و کافئین مصرف نکنند.'],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/13f.png'
+                'image_path' => 'images/meals/packages/13f.png',
+                'price' => 180000,
             ],
             [
                 'title' => '14F',
@@ -92,7 +95,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/15fn.png'
+                'image_path' => 'images/meals/packages/15fn.png',
+                'price' => 200000,
             ],
             [
                 'title' => '15F',
@@ -104,7 +108,8 @@ class PackageMealSeeder extends Seeder
                 'contraindications' => ['افراد دیابتی و گلوتن فری و حساس به لاکتوز مصرف نکنند.'],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/15f.png'
+                'image_path' => 'images/meals/packages/15f.png',
+                'price' => 275000,
             ],
             [
                 'title' => '23F',
@@ -121,7 +126,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/23f.png'
+                'image_path' => 'images/meals/packages/23f.png',
+                'price' => 165000,
             ],
             [
                 'title' => '22FN',
@@ -138,7 +144,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/22fn.png'
+                'image_path' => 'images/meals/packages/22fn.png',
+                'price' => 190000,
             ],
             [
                 'title' => '33F',
@@ -150,7 +157,8 @@ class PackageMealSeeder extends Seeder
                 'contraindications' => ['افراد دیابتی یا کسانی که مقاومت به انسولین دارند، با احتیاط مصرف کنند.'],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/33f.png'
+                'image_path' => 'images/meals/packages/33f.png',
+                'price' => 165000,
             ],
             [
                 'title' => '21F',
@@ -166,7 +174,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/21f.png'
+                'image_path' => 'images/meals/packages/21f.png',
+                'price' => 180000,
             ],
             [
                 'title' => '39F',
@@ -182,7 +191,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/39f.png'
+                'image_path' => 'images/meals/packages/39f.png',
+                'price' => 180000,
             ],
             [
                 'title' => '31F',
@@ -198,7 +208,8 @@ class PackageMealSeeder extends Seeder
                 ],
                 'categories' => ['package'],
                 'types' => ['energy'],
-                'image_path' => 'images/meals/packages/31f.png'
+                'image_path' => 'images/meals/packages/31f.png',
+                'price' => 170000,
             ],
         ];
 
@@ -214,7 +225,7 @@ class PackageMealSeeder extends Seeder
                 'slug' => $data['slug'],
                 'description' => 'از مجموعه صبحانه‌های سالم و انرژی زا ایوا.',
                 'calories' => $data['calories'],
-                'price' => 170000,
+                'price' => $data['price'],
                 'is_vegan' => false,
                 'kcal' => $data['calories'],
                 'nutritional_informations' => $data['nutritional_informations'],

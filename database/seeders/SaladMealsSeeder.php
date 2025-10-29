@@ -67,7 +67,7 @@ class SaladMealsSeeder extends Seeder
                 'slug' => 'sezar-salad',
                 'description' => 'سالاد سزار ایوا با مرغ، مغزها و پنیر پارمسان؛ مناسب برای سلامت دستگاه گوارش.',
                 'calories' => 263,
-                'price' => 170000,
+                'price' => 295000,
                 'is_vegan' => false,
                 'kcal' => 263,
                 'nutritional_informations' => [
@@ -94,7 +94,7 @@ class SaladMealsSeeder extends Seeder
                 'slug' => 'italiano-salad',
                 'description' => 'سالاد ایتالیانو با سبزیجات رنگارنگ و ترکیب بدون گلوتن برای کنترل فشار و چربی خون.',
                 'calories' => 350,
-                'price' => 185000,
+                'price' => 280000,
                 'is_vegan' => false,
                 'kcal' => 350,
                 'nutritional_informations' => [
@@ -122,7 +122,7 @@ class SaladMealsSeeder extends Seeder
                 'slug' => 'pharma-salad',
                 'description' => 'سالادی رژیمی با بیبی اسفناج و سبزیجات بخارپز برای تقویت سیستم ایمنی و بینایی.',
                 'calories' => 200,
-                'price' => 160000,
+                'price' => 250000,
                 'is_vegan' => true,
                 'kcal' => 200,
                 'nutritional_informations' => [
@@ -149,7 +149,7 @@ class SaladMealsSeeder extends Seeder
                 'slug' => 'mushroom-prosalad',
                 'description' => 'سالاد ماشروم پرو سالاد سرشار از پروتئین، آنتی‌اکسیدان و فیبر برای تقویت ایمنی بدن.',
                 'calories' => 265,
-                'price' => 175000,
+                'price' => 295000,
                 'is_vegan' => false,
                 'kcal' => 265,
                 'nutritional_informations' => [
@@ -176,7 +176,7 @@ class SaladMealsSeeder extends Seeder
                 'slug' => 'pasta-salad',
                 'description' => 'پاستا سالاد با مرغ گریل و سبزیجات رنگی؛ وعده‌ای سالم و پرانرژی.',
                 'calories' => 360,
-                'price' => 190000,
+                'price' => 280000,
                 'is_vegan' => false,
                 'kcal' => 360,
                 'nutritional_informations' => [

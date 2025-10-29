@@ -43,22 +43,17 @@
 
                     <div class="max-w-lg mx-auto mb-4">
                         <!-- Weekday labels -->
-                        <div class="grid grid-cols-5 gap-1 text-xs font-bold text-gray-600 mb-2 text-center">
+                        <div class="grid grid-cols-7 gap-1 text-xs font-bold text-gray-600 mb-2 text-center">
                             <div v-for="label in weekdayLabels" :key="label">{{ label }}</div>
                         </div>
 
                         <!-- Weeks -->
-                        <div v-for="(week, wi) in monthDays" :key="wi" class="grid grid-cols-5 gap-2 mb-3">
-                            <div v-for="day in week" :key="day.fullDate" @click="() => handleDayClick(day)"
-                                :class="cellClass(day)"
+                        <div v-for="(week, wi) in monthDays" :key="wi" class="grid grid-cols-7 gap-2 mb-9">
+                            <div v-for="day in week" :key="day.fullDate"
+                                @click="() => !isThursdayOrFriday(day) && handleDayClick(day)" :class="cellClass(day)"
                                 class="w-14 h-14 rounded-sm relative transition-colors select-none cursor-pointer group">
                                 <!-- Top-right icon -->
                                 <div class="absolute -top-3 -right-2 flex flex-col items-center">
-                                    <span
-                                        class="text-center text-red-500 text-[12px] font-bold rounded-full leading-none">
-                                        5
-                                    </span>
-
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="w-6 h-6 text-black drop-shadow-sm">
                                         <path fill-rule="evenodd"
@@ -70,7 +65,7 @@
                                 <!-- Center number -->
                                 <div
                                     class="absolute inset-0 flex items-center justify-end ml-1.5 text-sm font-bold text-gray-900">
-                                    5
+                                    {{ day.jDate }}
                                 </div>
 
                                 <!-- Footer -->
@@ -90,56 +85,53 @@
 
                 <!-- Right: Summary Column -->
                 <div class="w-64 flex flex-col py-16 items-stretch">
-  <div
-    class="h-[400px] rounded-xl p-4 text-white flex flex-col items-center justify-center text-center transition-all duration-500"
-    :class="planColorClass"
-  >
-    <div class="flex flex-col gap-4 w-full"> <!-- Minimal vertical spacing -->
+                    <div class="h-[350px] rounded-xl p-4 text-white flex flex-col items-center justify-center text-center transition-all duration-500"
+                        :class="planColorClass">
+                        <div class="flex flex-col gap-4 w-full"> <!-- Minimal vertical spacing -->
 
-      <!-- Plan Title -->
-      <div class="font-bold text-lg text-center mb-2">{{ planTitle }}</div>
+                            <!-- Plan Title -->
+                            <div class="font-bold text-lg text-center mb-2">{{ planTitle }}</div>
 
-      <!-- Discount -->
-      <div class="flex justify-between w-full px-2">
-        <div class="font-medium text-center mr-4">تخفیف:</div>
-        <div class="ml-10">{{ plan === 'daily' ? '۰٪' : discountPercentText }}</div>
-      </div>
+                            <!-- Discount -->
+                            <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-center mr-4">تخفیف:</div>
+                                <div class="ml-10">{{ plan === 'daily' ? '۰٪' : discountPercentText }}</div>
+                            </div>
 
-      <!-- Base Price -->
-      <div class="flex justify-between w-full px-2">
-        <div class="font-medium text-cener mr-4">قیمت:</div>
-        <div class="ml-6">{{ numberFormat(props.basePrice) }} تومان</div>
-      </div>
+                            <!-- Base Price -->
+                            <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-cener mr-4">قیمت:</div>
+                                <div class="ml-6">{{ numberFormat(props.basePrice) }} تومان</div>
+                            </div>
 
-      <!-- Total Price -->
-      <div class="flex justify-between w-full px-2">
-        <div class="font-medium text-center mr-4">جمع:</div>
-        <div class="ml-6">{{ numberFormat(totalPrice) }} تومان</div>
-      </div>
+                            <!-- Total Price -->
+                            <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-center mr-4">جمع:</div>
+                                <div class="ml-6">{{ numberFormat(totalPrice) }} تومان</div>
+                            </div>
 
-      <!-- Subsidy -->
-      <div class="flex justify-between w-full px-2">
-        <div class="font-medium text-center mr-4">سوبسید شرکت:</div>
-        <div class="ml-10">{{ subsidyApplied ? 'x%' : '۰٪' }}</div>
-      </div>
+                            <!-- Subsidy -->
+                            <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-center mr-4">سوبسید شرکت:</div>
+                                <div class="ml-10">{{ subsidyApplied ? 'x%' : '۰٪' }}</div>
+                            </div>
 
-      <!-- Payable Amount -->
-      <div class="flex justify-between  w-full px-2 mt-5">
-        <div class="font-medium text-right">قابل پرداخت:</div>
-        <div class="ml-3">{{ numberFormat(totalPrice) }} تومان</div>
-      </div>
+                            <!-- Payable Amount -->
+                            <div class="flex justify-between  w-full px-2 mt-5">
+                                <div class="font-medium text-right">قابل پرداخت:</div>
+                                <div class="ml-3">{{ numberFormat(totalPrice) }} تومان</div>
+                            </div>
 
-    </div>
-  </div>
+                        </div>
+                    </div>
 
-  <!-- Continue Button -->
-  <button
-    class="mt-5 h-12 bg-gray-200 text-black rounded-lg font-bold hover:bg-orange-300 transition-colors cursor-pointer"
-    @click="$emit('continue')"
-  >
-    ادامه خرید
-  </button>
-</div>
+                    <!-- Continue Button -->
+                    <button
+                        class="mt-5 h-12 bg-gray-200 text-black rounded-lg font-bold hover:bg-orange-300 transition-colors cursor-pointer"
+                        @click="$emit('continue')">
+                        ادامه خرید
+                    </button>
+                </div>
 
 
             </div>
@@ -164,7 +156,16 @@ const open = computed({
 });
 
 const isAtTop = ref(true);
-const weekdayLabels = ['ش', 'ی', 'د', 'س', 'چ']; // Saturday–Wednesday
+const baseWeekdayLabels = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج']; // Saturday–Friday
+const weekdayLabels = computed(() => {
+    const today = new Date();
+    const startIdx = (today.getDay() + 1) % 7; // 0=Sat .. 6=Fri
+    const labels = [];
+    for (let i = 0; i < 7; i++) {
+        labels.push(baseWeekdayLabels[(startIdx + i) % 7]);
+    }
+    return labels;
+});
 
 const selectedDates = ref([]);
 const monthDays = ref([]);
@@ -197,33 +198,42 @@ const planColorClass = computed(() => {
 });
 
 // Generate only Saturday–Wednesday days
-function generateDaysFromToday(count = 30) {
+function generateDaysFromToday() {
     const days = [];
-    let cur = new Date();
+    const today = new Date();
+    const start = new Date(today);
+    let cur = start;
 
-    for (let i = 0; i < count; i++) {
-        const weekdaySatIndex = (cur.getDay() + 1) % 7; // 0=Sat
-        if (weekdaySatIndex < 5) {
-            const j = toJalaali(cur.getFullYear(), cur.getMonth() + 1, cur.getDate());
-            days.push({
-                gDate: new Date(cur),
-                fullDate: cur.toISOString().split('T')[0],
-                jDate: j.jd,
-                jMonth: j.jm,
-                jYear: j.jy,
-                isToday: i === 0,
-                isSelected: false,
-                weekdaySatIndex
-            });
-        }
+    // Collect exactly 28 consecutive days starting from today
+    while (days.length < 28) {
+        const weekdaySatIndex = (cur.getDay() + 1) % 7; // 0=Sat .. 6=Fri
+        const j = toJalaali(cur.getFullYear(), cur.getMonth() + 1, cur.getDate());
+        const isToday = cur.toDateString() === today.toDateString();
+        days.push({
+            gDate: new Date(cur),
+            fullDate: cur.toISOString().split('T')[0],
+            jDate: j.jd,
+            jMonth: j.jm,
+            jYear: j.jy,
+            isToday,
+            isSelected: false,
+            weekdaySatIndex
+        });
         cur.setDate(cur.getDate() + 1);
     }
 
+    // Group into 4 rows of 7 days starting from today
     const weeks = [];
-    for (let i = 0; i < days.length; i += 5) {
-        weeks.push(days.slice(i, i + 5));
+    for (let i = 0; i < 28; i += 7) {
+        weeks.push(days.slice(i, i + 7));
     }
     monthDays.value = weeks;
+}
+
+// Check if day is Thursday or Friday
+function isThursdayOrFriday(day) {
+    const weekdaySatIndex = day.weekdaySatIndex; // 0=Sat .. 6=Fri
+    return weekdaySatIndex === 5 || weekdaySatIndex === 6; // Thursday=5, Friday=6
 }
 
 // Determine day type
@@ -338,6 +348,11 @@ function evaluatePlanAndPricing() {
 // Cell class for highlighting and lock style
 function cellClass(day) {
     const dayType = getDayType(day);
+
+    // Lock Thursday and Friday
+    if (isThursdayOrFriday(day)) {
+        return 'bg-gray-200 text-gray-400 border border-gray-300';
+    }
 
     // Only lock TODAY when afterTomorrowMode is active
     if (afterTomorrowMode.value && dayType === 'today') {

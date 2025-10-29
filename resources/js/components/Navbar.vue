@@ -23,7 +23,7 @@
                         <Link href="#" class="hover:text-blue-300"> بلاگ </Link>
                     </li>
                     <li>
-                        <Link href="#" class="hover:text-blue-300">تماس با ما</Link>
+                        <Link href="/contact" class="hover:text-blue-300">تماس با ما</Link>
                     </li>
                     <li>
                         <Link href="#" class="hover:text-blue-300"> مشاوره </Link>

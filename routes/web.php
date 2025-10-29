@@ -24,6 +24,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContactController;
 use Inertia\Inertia;
 
 // ----------------------
@@ -39,6 +40,10 @@ Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
 Route::get('/about-us', function () {
     return inertia('AboutUs/Index');
 });
+Route::get('/contact', function () {
+    return inertia('Contact/Index');
+});
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 // ----------------------
 // Protected User Routes
 // ----------------------
