@@ -1,1 +1,0 @@
-import{_ as t}from"./AdminAppLayout-EhTsHlAP.js";import{f as a,o,a as s}from"./app-CQHdLAOL.js";const c=Object.assign({layout:t},{__name:"SectionElements",setup(n){return(l,e)=>(o(),a("div",null,e[0]||(e[0]=[s("h2",{class:"text-xl font-bold mb-4"},"Manage Section Elements",-1)])))}});export{c as default};

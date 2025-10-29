@@ -53,7 +53,8 @@
                                 @click="() => !isThursdayOrFriday(day) && handleDayClick(day)" :class="cellClass(day)"
                                 class="w-14 h-14 rounded-sm relative transition-colors select-none cursor-pointer group">
                                 <!-- Top-right icon -->
-                                <div class="absolute -top-3 -right-2 flex flex-col items-center">
+                                <div v-if="!isThursdayOrFriday(day)" class="absolute -top-3 -right-2 flex flex-col items-center">
+                                    <div class="text-[12px]">0</div>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="w-6 h-6 text-black drop-shadow-sm">
                                         <path fill-rule="evenodd"
@@ -63,10 +64,9 @@
                                 </div>
 
                                 <!-- Center number -->
-                                <div
+                                <div v-if="!isThursdayOrFriday(day)"
                                     class="absolute inset-0 flex items-center justify-end ml-1.5 text-sm font-bold text-gray-900">
-                                    {{ day.jDate }}
-                                </div>
+                                    0 </div>
 
                                 <!-- Footer -->
                                 <div
