@@ -31,12 +31,7 @@ class CakeMealSeeder extends Seeder
 
         // Base cakes list (some may not have images; some may have 2). Slugs used to locate images.
         $cakes = [
-            [
-                'title' => 'کیک ساده',
-                'slug' => 'light-cake',
-                'calories' => 320,
-                'types' => ['energy'],
-            ],
+
             [
                 'title' => 'کیک شکلاتی',
                 'slug' => 'chocolate-cake',
@@ -71,7 +66,7 @@ class CakeMealSeeder extends Seeder
                 'title' => 'کیک وانیلی',
                 'slug' => 'vanilla-cake',
                 'calories' => 185,
-                'types' => ['energy'],
+                'types' => ['diet'],
                 'nutritional_informations' => ['کربوهیدرات' => '20 گرم', 'پروتئین' => '7 گرم', 'چربی' => '9 گرم'],
                 'consumable_items' => ['بعلت حضور تخم مرغ و شیر در منبع مناسبی از پروتئین و ویتامین دی می‌باشد'],
                 'contraindications' => ['در افراد گلوتن فری و بیماران دیابتی مصرف نشود'],
