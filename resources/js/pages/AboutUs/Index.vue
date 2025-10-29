@@ -82,76 +82,9 @@
 
             <hr class="border border-2 border-dark opacity-30 mt-12">
 
-            <!-- SOP section -->
+    
 
-            <div class="text-center mb-10">
-                <img src="images/sop.png" alt="Eiva Icon" class="w-35 h-40 mx-auto mt-12 mb-2" />
-            </div>
-            <p class="mb-4">روش ﻋﻤﯿﻠﯿﺎﺗﯽ:</p>
-            <p class="mb-4"> در اﯾﻨﺠﺎ ﺗﻨﻬﺎ ﺑﻪ ﭘﺮوﺳﻪ ﻋﻤﻠﯿﺎﺗﯽ ﻣﺪل ﺧﺮﯾﺪ ﺑﺴﻨﺪه ﻣﯿﮑﻨﻢ و از اﺷﺎره ﺑﻪ روش
-                ﻋﻤﻠﯿﺎﺗﯽ ﻣﺤﺼﻮل
-                وﻟﺠﺴﺘﯿﮏ اﺷﺎره ﻧﻤﯿﮑﻨﻢ: </p>
-            <p class="mb-4">ﻣﺸﺘﺮی اﯾﻮا ﺷﺮﮐﺖ ﻟﺤﺎظ ﻣﯿﺸﻮد و ﻣﺼﺮف ﮐﻨﻨﺪه ﭘﺮﺳﻨﻞ ﺷﺮﮐﺖ.</p>
-            <p class="mb-4">ﭘﺲ از راﯾﺰﻧﯽ ﺑﺎ ﺷﺮﮐﺖ ﺑﺨﺸﯽ از ﻣﺒﻠﻎ ﺧﺮﯾﺪ را ﺑﻪ ﻋﻨﻮان ﺳﻮﺑﺴﯿﺪ از ﺷﺮﮐﺖ درﯾﺎﻓﺖ
-                ﺧﻮاﻫﯿﻢﮐﺮد:</p>
-            <p class="mb-4">از10% ﺗﺎ 100 %</p>
-            <ul class="list-decimal pr-6 space-y-2">
-                <li>ﻣﺸﺘﺮی ﭘﺮﺳﻨﻞ ﺧﻮد را در داﺷﺒﻮرد اﯾﻮا ﺑﺎ ﻧﺎم و ﮐﺪ ﭘﺮﺳﻨﻠﯽ وارد ﻣﯿﮑﻨﺪ.</li>
-                <li>ﻣﺼﺮف کننده ﺑﺎ ﻣﺮاﺟﻌﻪ ﺑﻪ ﺳﺎﯾﺖ و ورود ﻧﺎم و ﮐﺪ ﭘﺮﺳﻨﻠﯽ و ﺷﻤﺎره ﺗﻤﺎس و
-                    ﭘﻮزﯾﺸﻦ
-                    ﺳﺎزﻣﺎﻧﯽﺛﺒﺖ ﻧﺎم ﻣﯿﮑﻨﺪ.</li>
-                <li>ﺑﺎ ﻣﺮاﺟﻌﻪ ﺑﻪ ﻣﺤﺼﻮل ﻣﯿﺘﻮاﻧﺪ ﺧﺮﯾﺪ اﻧﺠﺎم دﻫﺪ.</li>
-                <li>ﭘﻨﺠﺮه ﺗﻘﻮﯾﻢ ﺑﺎز و اﻧﺘﺨﺎب روز ﺑﺮای آن ﻣﺤﺼﻮل ﺧﺎص.</li>
-                <li>ﺧﺮﯾﺪ روزاﻧﻪ ﺷﺎﻣﻞ دو روز آﯾﻨﺪه.</li>
-                <li>ﺧﺮﯾﺪ ﻫﻔﺘﮕﯽ از ﺣﺪاﻗﻞ 3 روز آﯾﻨﺪه ﺗﺎ 3 ﻫﻔﺘﻪ.</li>
-                <li>ﺧﺮﯾﺪ ﻣﺎﻫﺎﻧﻪ ﺷﺎﻣل 4 ﻫﻔﺘﻪ.
-                    <p class="mb-4 mt-4">- روزاﻧﻪﺗﺨﻔﯿﻒ و ﺳﻮﺑﺴﯿﺪ ﻧﺪارد</p>
-                    <p class="mb-4">- ﻫﻔﺘﮕﯽ20 درﺻﺪ ﺗﺨﻔﯿﻒ و ﺳﻮﺑﺴﯿﺪ</p>
-                    <p>- ﻣﺎﻫﺎﻧﻪ40 درﺻﺪ ﺗﺨﻔﯿﻒ و ﺳﻮﺑﺴﯿﺪ</p>
-                </li>
-                <li>ﺑﺎ ﻧﻬﺎﯾﯽ ﮐﺮد ﺧﺮﯾﺪ وارد ﻓﺎﮐﺘﻮر ﺳﭙﺲ ﮐﺴﺮ ﺳﻮﺑﺴﯿﺪ ﻣﯿﺸﻮد .</li>
-                <li>ﻓﺎﮐﺘﻮر ﻧﻬﺎﯾﯽ + ﻣﺎﻟﯿﺎت.</li>
-                <li>اﺗﺼﺎل ﺑﻪ اواﻧﻮ و ﭘﺮداﺧﺖ اﻗﺴﺎط.</li>
-            </ul>
 
-            <hr class="border border-2 border-dark opacity-30 mt-12">
-
-            <!-- About us -->
-            <div class="text-center mb-10">
-                <img src="/images/icon_bw.png" alt="Eiva Icon" class="w-20 h-20 mx-auto mb-4 mt-10" />
-                <h1 class="text-4xl font-bold text-[#4e3356]">در ایوا</h1>
-            </div>
-            <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
-
-            <div class="text-center mb-8">
-                <p class="mb-4">ﻣﻦ ﻣﺤﺴﻦ ﻣﻬﺪوی ﻫﺴﺘﻢ</p>
-                <p class="mb-4">درﮐﺘﺮﯾﻨﮓ ﻗﺎدری ( اﯾﻮا ) ﻧﻘﺶ CEO را ﺑﺮ ﻋﻬﺪه دارم.</p>
-                <p class="mb-4">ﺗﺤﺼﯿﻼت: DBA .</p>
-                <p class="mb-4">ﻫﻢ ﺑﻨﯿﺎﻧﮕﺬار : ﻟﯿﻼ ﻗﺎدری، ﻣﺤﺴﻦ ﻣﻬﺪوی</p>
-                <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
-                <p class="mb-4"> ﺳﻮاﺑﻖ اﺟﺮاﯾﯽ :</p>
-                <p class="mb-4">ﻣﺪﯾﺮ ﺑﺮﻧﺪ ﻇﺮﯾﻒ ﻣﺼﻮر</p>
-                <p class="mb-4">ﻣﺪﯾﺮ ارﺷﺪ ﺗﻮﺳﻌﻪ ﺑﺎزار ﮔﺮوه اﺳﻨﻮا ، اﻧﺘﺨﺎب</p>
-                <p class="mb-4">CEO در اﯾﻮا</p>
-                <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
-
-                <p class="mb-4">ﻣﺸﺘﺮﯾﺎنﺗﺎ ﺑﻪ اﻣﺮوز :</p>
-                <p class="mb-4">اﻧﺘﺨﺎب، ﺑﺮﻧﺎﺑﺎﻃﺮی ، اﯾﺮﯾﺴﺎ ، ﺑﺎﻧﮏ ﺳﭙﻪ ، ﺑﺎﻧﮏ ﺻﺎدرات</p>
-                <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
-
-                <p class="mb-4">در ایوا:</p>
-                <p class="mb-4">ﺗﯿﻢﺗﻐﺬﯾﻪ و ﻣﺴﺌﻮﻟﯿﻦ ﻓﻨﯽ</p>
-                <p class="mb-4">R&D</p>
-                <p class="mb-4">زﻧﺠﯿﺮهﺗﺎﻣﯿﻦ</p>
-                <p class="mb-4">ﺗﻮﻟﯿﺪ</p>
-                <p class="mb-4">ﺗﯿﻢﻓﺮوش</p>
-                <p class="mb-4">ﺗﯿﻢﻣﺎرﮐﺘﯿﻨﮓ</p>
-                <p class="mb-4">ﻟﺠﺴﺘﯿﮏ</p>
-                <p class="mb-4">ﺗﯿﻢﻣﺎﻟﯽ</p>
-                <p class="mb-4">ﻧﻘﺶآﻓﺮﯾﻨﯽ ﻣﯿﮑﻨﻨﺪ.</p>
-                <hr class="border border-2 border-dark opacity-30 mt-8 mb-8 w-80 mx-120">
-
-            </div>
         </section>
     </Layout>
 </template>
