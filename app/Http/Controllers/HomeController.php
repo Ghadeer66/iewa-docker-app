@@ -15,8 +15,10 @@ class HomeController extends Controller
                     ->with(['images'])
                     ->get()
                     ->map(function ($meal) {
-                        $meal->image_url = $meal->images->first()
-                            ? asset($meal->images->first()->url)
+                        $firstImage = $meal->images->first();
+                        $meal->image_url = $firstImage ? asset($firstImage->url) : null;
+                        $meal->thumbnail_url = ($firstImage && $firstImage->thumbnail_url)
+                            ? asset($firstImage->thumbnail_url)
                             : null;
                         return $meal;
                     });

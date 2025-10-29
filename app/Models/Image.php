@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    protected $fillable = ['url', 'alt', 'extra'];
+    protected $fillable = ['url', 'alt', 'extra','thumbnail_url'];
 
     public function getUrlAttribute()
     {

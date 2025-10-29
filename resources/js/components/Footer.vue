@@ -53,7 +53,7 @@
 
             <div class=" items-center gap-6 my-3 text-sm text-black text-right ml-6 mb-2">
                 <p class="font-semibold"> ایمیل </p>
-                <p><a href="mailto:info@iewato.co" class="hover:underline">info@iewato.co</a></p>
+                <p><a href="mailto:info@iewato.ir" class="hover:underline">info@iewato.ir</a></p>
             </div>
 
             <div class="flex flex-col items-top space-y-1">

@@ -6,13 +6,23 @@ use Illuminate\Database\Seeder;
 use App\Models\Meal;
 use App\Models\Category;
 use App\Models\Type;
-use App\Models\Image;
+use App\Models\Image as ImageModel;
 use App\Models\Ingredient;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class SaladMealsSeeder extends Seeder
 {
     public function run(): void
     {
+        // increase memory for image processing in seeding
+        @ini_set('memory_limit', '512M');
+
+        // ensure thumbnail directory exists
+        $thumbDir = public_path('images/thumbnails');
+        if (!File::exists($thumbDir)) {
+            File::makeDirectory($thumbDir, 0755, true);
+        }
         $types = [
             'light', 'diet', 'energy', 'caffeine', 'school',
         ];
@@ -208,8 +218,39 @@ class SaladMealsSeeder extends Seeder
             });
             $meal->ingredients()->sync($ingredientIds);
 
-            // Attach image
-            $image = Image::firstOrCreate(['url' => $data['image_path']]);
+            // Prepare and generate thumbnail if possible
+            $imagePath = $data['image_path'] ?? null;
+            $thumbnailUrl = null;
+
+            if ($imagePath) {
+                $fullImagePath = public_path($imagePath);
+                if (File::exists($fullImagePath)) {
+                    $filename = pathinfo($imagePath, PATHINFO_BASENAME);
+                    $thumbnailPath = $thumbDir . '/' . $filename;
+
+                    if (File::exists($thumbnailPath)) {
+                        $thumbnailUrl = 'images/thumbnails/' . $filename;
+                    } else {
+                        $fileSizeBytes = File::size($fullImagePath);
+                        if ($fileSizeBytes <= 20 * 1024 * 1024) { // 20MB
+                            try {
+                                Image::read($fullImagePath)
+                                    ->cover(300, 300)
+                                    ->save($thumbnailPath);
+                                $thumbnailUrl = 'images/thumbnails/' . $filename;
+                            } catch (\Throwable $e) {
+                                // ignore and continue without thumbnail
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Attach image with optional thumbnail
+            $image = ImageModel::firstOrCreate(
+                ['url' => $imagePath],
+                ['thumbnail_url' => $thumbnailUrl]
+            );
             $meal->images()->syncWithoutDetaching([$image->id]);
         }
     }

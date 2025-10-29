@@ -36,12 +36,15 @@ class MenuController extends Controller
 
         $meals = $query->paginate(12);
 
-        // Add full URL for images and fix pagination URLs
+        // Add full URL for images and thumbnails, then fix pagination URLs
         $meals->getCollection()->transform(function ($meal) {
             if ($meal->images->isNotEmpty()) {
-                $meal->image_url = asset($meal->images->first()->url);
+                $firstImage = $meal->images->first();
+                $meal->image_url = asset($firstImage->url);
+                $meal->thumbnail_url = $firstImage->thumbnail_url ? asset($firstImage->thumbnail_url) : null;
             } else {
                 $meal->image_url = null;
+                $meal->thumbnail_url = null;
             }
             return $meal;
         });

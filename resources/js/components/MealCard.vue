@@ -4,7 +4,7 @@
 
         <!-- Image -->
         <div class="relative w-full bg-gray-100">
-            <img :src="meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png')"
+            <img :src="meal.thumbnail_url ?? meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png')"
                 :alt="meal.title || 'meal'" class="w-full h-60 object-cover rounded-t-2xl" />
             <span v-if="meal.is_new"
                 class="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">

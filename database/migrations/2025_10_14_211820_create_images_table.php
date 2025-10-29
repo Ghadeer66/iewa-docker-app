@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->string('alt')->nullable();
             $table->string('extra')->nullable();
+            $table->string('thumbnail_url')->nullable();
             $table->timestamps();
         });
     }

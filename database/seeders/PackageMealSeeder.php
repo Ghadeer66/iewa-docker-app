@@ -7,20 +7,28 @@ use App\Models\Meal;
 use App\Models\Type;
 use App\Models\Category;
 use App\Models\Ingredient;
-use App\Models\Image;
+use App\Models\Image as ImageModel;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class PackageMealSeeder extends Seeder
 {
     public function run(): void
     {
+        // increase memory limit for image processing during seeding
+        @ini_set('memory_limit', '512M');
+
         $defaultImagePath = 'images/default-meals-images/package.jpg';
 
-        $typeModel = Type::firstOrCreate(['title' => 'package']);
-        $categoryModel = Category::firstOrCreate(['title' => 'package']);
+        // define where thumbnails go
+        $thumbDir = public_path('images/thumbnails');
+        if (!File::exists($thumbDir)) {
+            File::makeDirectory($thumbDir, 0755, true);
+        }
 
         $meals = [
             [
-                'title' => 'کوکوسیب زمینی مرغ با پنیر ورقه ای و دسر دنت شکلاتی',
+                'title' => '24F',
                 'slug' => 'potato-chicken-cheese-dent-chocolate',
                 'calories' => 450,
                 'nutritional_informations' => ['کربوهیدرات' => '49 گرم', 'پروتئین' => '30 گرم', 'چربی' => '15 گرم'],
@@ -36,7 +44,7 @@ class PackageMealSeeder extends Seeder
                 'image_path' => 'images/meals/packages/24f.png'
             ],
             [
-                'title' => 'کوکوسیب زمینی با مرغ ـ نوشیدنی میوه های سرخ ـ دسر دنت شکلاتی',
+                'title' => '12F',
                 'slug' => 'potato-chicken-red-fruit-dent-chocolate',
                 'calories' => 560,
                 'nutritional_informations' => ['کربوهیدرات' => '77 گرم', 'پروتئین' => '30 گرم', 'چربی' => '14 گرم'],
@@ -55,7 +63,7 @@ class PackageMealSeeder extends Seeder
                 'image_path' => 'images/meals/packages/12f.png'
             ],
             [
-                'title' => 'ساندویچ نان چاپاتا با مرغ و پنیر + نوشیدنی پرتقال + دسر دنت قهوه',
+                'title' => '13F',
                 'slug' => 'ciabatta-chicken-cheese-orange-coffee-dent',
                 'calories' => 580,
                 'nutritional_informations' => ['کربوهیدرات' => '70 گرم', 'پروتئین' => '48 گرم', 'چربی' => '11.5 گرم'],
@@ -70,7 +78,7 @@ class PackageMealSeeder extends Seeder
                 'image_path' => 'images/meals/packages/13f.png'
             ],
             [
-                'title' => 'ساندویچ نان چاپاتا با مرغ و پنیر و نوشیدنی کول کافی و دسر دنت میوه ای',
+                'title' => '14F',
                 'slug' => 'ciabatta-chicken-cheese-cool-coffee-fruit-dent',
                 'calories' => 490,
                 'nutritional_informations' => ['کربوهیدرات' => '50 گرم', 'پروتئین' => '46 گرم', 'چربی' => '12.5 گرم'],
@@ -194,7 +202,7 @@ class PackageMealSeeder extends Seeder
             ],
         ];
 
-        // Preload or create types and category
+        // Preload or create types and categories
         $typeModels = collect(['energy', 'diet', 'light'])
             ->mapWithKeys(fn($t) => [$t => Type::firstOrCreate(['title' => $t])]);
         $categoryModels = collect(['package'])
@@ -228,9 +236,42 @@ class PackageMealSeeder extends Seeder
                 collect($data['types'])->map(fn($t) => $typeModels[$t]->id)
             );
 
-            // Attach image (default if not provided)
+            // Prepare image path
             $imagePath = $data['image_path'] ?? $defaultImagePath;
-            $image = Image::firstOrCreate(['url' => $imagePath]);
+            $fullImagePath = public_path($imagePath);
+            $thumbnailUrl = null;
+
+            // Generate thumbnail if the file exists
+            if (File::exists($fullImagePath)) {
+                $filename = pathinfo($imagePath, PATHINFO_BASENAME);
+                $thumbnailPath = $thumbDir . '/' . $filename;
+
+                if (File::exists($thumbnailPath)) {
+                    $thumbnailUrl = 'images/thumbnails/' . $filename;
+                } else {
+                    // Skip extremely large source files to avoid OOM in GD
+                    $fileSizeBytes = File::size($fullImagePath);
+                    if ($fileSizeBytes <= 20 * 1024 * 1024) { // 20MB
+                        try {
+                            // create exact 300x300 thumbnail (crop to cover)
+                            $img = Image::read($fullImagePath)
+                                ->cover(300, 300)
+                                ->save($thumbnailPath);
+
+                            $thumbnailUrl = 'images/thumbnails/' . $filename;
+                        } catch (\Throwable $e) {
+                            // swallow image errors during seeding; proceed without thumbnail
+                        }
+                    }
+                }
+            }
+
+            // Create image record (with thumbnail)
+            $image = ImageModel::firstOrCreate(
+                ['url' => $imagePath],
+                ['thumbnail_url' => $thumbnailUrl]
+            );
+
             $meal->images()->syncWithoutDetaching([$image->id]);
         }
     }
