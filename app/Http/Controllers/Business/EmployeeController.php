@@ -115,8 +115,8 @@ class EmployeeController extends Controller
                         'name' => $name,
                         'email' => $email,
                         'personal_code' => $personalCode,
-                        'phone' => $phone,
-                        'password' => Hash::make(str()->random(12)),
+                        'phone' => '0'.$phone,
+                        'password' => Hash::make('password'),
                         'position' => 'employee',
                         'belongs_to' => Auth::id(),
                     ]);

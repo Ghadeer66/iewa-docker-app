@@ -54,7 +54,7 @@
                                 class="w-14 h-14 rounded-sm relative transition-colors select-none cursor-pointer group">
                                 <!-- Top-right icon -->
                                 <div v-if="!isThursdayOrFriday(day)" class="absolute -top-3 -right-2 flex flex-col items-center">
-                                    <div class="text-[12px]">0</div>
+                                    <div class="text-[12px]">{{ dayCountFor(day.fullDate) }}</div>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="w-6 h-6 text-black drop-shadow-sm">
                                         <path fill-rule="evenodd"
@@ -84,7 +84,7 @@
                 </div>
 
                 <!-- Right: Summary Column -->
-                <div class="w-64 flex flex-col py-16 items-stretch">
+                <div class="w-75 flex flex-col py-16 items-stretch">
                     <div class="h-[350px] rounded-xl p-4 text-white flex flex-col items-center justify-center text-center transition-all duration-500"
                         :class="planColorClass">
                         <div class="flex flex-col gap-4 w-full"> <!-- Minimal vertical spacing -->
@@ -92,34 +92,51 @@
                             <!-- Plan Title -->
                             <div class="font-bold text-lg text-center mb-2">{{ planTitle }}</div>
 
+                            <!-- Base Price -->
+                            <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-cener mr-4">قیمت محصول:</div>
+                                <div class="ml-6">{{ numberFormat(props.basePrice) }} تومان</div>
+                            </div>
+
+                            <!-- Subsidy -->
+                            <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-center mr-4">سوبسید شرکت:</div>
+                                <div class="ml-10">{{ subsidyPercentDisplay }}</div>
+                            </div>
+
                             <!-- Discount -->
                             <div class="flex justify-between w-full px-2">
                                 <div class="font-medium text-center mr-4">تخفیف:</div>
                                 <div class="ml-10">{{ plan === 'daily' ? '۰٪' : discountPercentText }}</div>
                             </div>
 
-                            <!-- Base Price -->
-                            <div class="flex justify-between w-full px-2">
-                                <div class="font-medium text-cener mr-4">قیمت:</div>
-                                <div class="ml-6">{{ numberFormat(props.basePrice) }} تومان</div>
-                            </div>
+
+                            <!-- Taxes -->
+                            <!-- <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-center mr-4">ماليات:</div>
+                                <div class="ml-10">۱۰٪</div>
+                            </div> -->
+
+                            <!-- Shipping cost -->
+                            <!-- <div class="flex justify-between w-full px-2">
+                                <div class="font-medium text-center mr-4">هزینه حمل:</div>
+                                <div class="ml-6">۵۰.۰۰۰ تومان</div>
+                            </div> -->
+
+
 
                             <!-- Total Price -->
                             <div class="flex justify-between w-full px-2">
                                 <div class="font-medium text-center mr-4">جمع:</div>
-                                <div class="ml-6">{{ numberFormat(totalPrice) }} تومان</div>
+                                <div class="ml-6">{{ numberFormat(priceToPay) }} تومان</div>
                             </div>
 
-                            <!-- Subsidy -->
-                            <div class="flex justify-between w-full px-2">
-                                <div class="font-medium text-center mr-4">سوبسید شرکت:</div>
-                                <div class="ml-10">{{ subsidyApplied ? 'x%' : '۰٪' }}</div>
-                            </div>
+
 
                             <!-- Payable Amount -->
                             <div class="flex justify-between  w-full px-2 mt-5">
-                                <div class="font-medium text-right">قابل پرداخت:</div>
-                                <div class="ml-3">{{ numberFormat(totalPrice) }} تومان</div>
+                                <div class="font-medium text-right mr-4">قابل پرداخت:</div>
+                                <div class="ml-6">{{ numberFormat(totalPrice) }} تومان</div>
                             </div>
 
                         </div>
@@ -141,11 +158,18 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
+import axios from 'axios';
+import { useCartStore } from '@/stores/cart'
+import { storeToRefs } from 'pinia'
 import { toJalaali } from 'jalaali-js';
 
 const props = defineProps({
     open: Boolean,
-    basePrice: { type: Number, default: 200000 }
+    basePrice: { type: Number, default: 200000 },
+    mealId: { type: String, default: 'default' },
+    mealTitle: { type: String, default: 'محصول' },
+    mealImage: { type: String, default: '' },
+    mealQuantity: { type: Number, default: 1 }
 });
 
 const emit = defineEmits(['update:open', 'continue']);
@@ -170,16 +194,37 @@ const weekdayLabels = computed(() => {
 const selectedDates = ref([]);
 const monthDays = ref([]);
 const afterTomorrowMode = ref(false);
+const cart = useCartStore();
+const { items } = storeToRefs(cart);
+
+// Reactive counts per date for the current meal
+const countsMap = computed(() => {
+    const map = Object.create(null);
+    // existing purchases in cart (for ALL meals)
+    for (const it of items.value) {
+        map[it.dateISO] = (map[it.dateISO] || 0) + 1;
+    }
+    // also reflect current selections (optimistic count before add)
+    for (const d of selectedDates.value) {
+        map[d] = (map[d] || 0) + 1;
+    }
+    return map;
+});
 
 const shippingDaily = 50000;
 const shippingShared = 5000;
-const subsidyPercent = 0.3;
+const subsidyRate = ref(0); // 0..1
 
 const plan = ref('daily');
 const planTitle = ref('---');
 const discountPercentText = ref('');
 const subsidyApplied = ref(false);
+const subsidyPercentDisplay = computed(() => {
+    const pct = Math.round((subsidyRate.value || 0) * 100);
+    return (pct > 0 ? pct : 0).toLocaleString('fa-IR') + '٪';
+});
 const perDayPrice = ref(props.basePrice);
+const priceToPay = ref(0);
 const totalPrice = ref(0);
 
 const numberFormat = (n) => n.toLocaleString('fa-IR');
@@ -290,9 +335,10 @@ function handleDayClick(day) {
 
 function evaluatePlanAndPricing() {
     perDayPrice.value = props.basePrice;
+    priceToPay.value = 0;
     totalPrice.value = 0;
     discountPercentText.value = '';
-    subsidyApplied.value = false;
+    subsidyApplied.value = subsidyRate.value > 0;
 
     if (selectedDates.value.length === 0) {
         plan.value = 'daily';
@@ -331,19 +377,27 @@ function evaluatePlanAndPricing() {
         subsidyApplied.value = false;
     }
 
-    // Pricing
+    // Pricing according to requested formula:
+    // priceAfterSubsidy = basePrice - basePrice * subsidy
+    // priceAfterDiscount = priceAfterSubsidy - priceAfterSubsidy * discount
     let discount = 0;
     if (plan.value === 'weekly') discount = 0.2;
     if (plan.value === 'monthly') discount = 0.4;
 
-    let priceAfterDiscount = props.basePrice * (1 - discount);
-    if (subsidyApplied.value) priceAfterDiscount *= (1 - subsidyPercent);
+    const priceAfterSubsidy = props.basePrice * (1 - (subsidyRate.value || 0));
+    const priceAfterDiscount = priceAfterSubsidy * (1 - discount);
 
     perDayPrice.value = Math.round(priceAfterDiscount);
-    const shipping = plan.value === 'daily' ? shippingDaily : shippingShared;
-    totalPrice.value = perDayPrice.value * count + shipping;
+    // const shipping = plan.value === 'daily' ? shippingDaily : shippingShared;
+    priceToPay.value = perDayPrice.value;
+    totalPrice.value = perDayPrice.value * count ;//+ shipping;
 }
 
+
+function dayCountFor(dateISO) {
+    const n = countsMap.value[dateISO] || 0
+    return n.toLocaleString('fa-IR')
+}
 
 // Cell class for highlighting and lock style
 function cellClass(day) {
@@ -378,9 +432,23 @@ function cellClass(day) {
 
 const handleScroll = () => (isAtTop.value = window.scrollY < 50);
 
-onMounted(() => {
+onMounted(async () => {
     generateDaysFromToday();
     window.addEventListener('scroll', handleScroll);
+    // Fetch user's subsidy
+    try {
+        const { data } = await axios.get('/api/me/subsidy');
+        const pct = Number(data?.percentage ?? 0);
+        if (!Number.isNaN(pct) && pct > 0) {
+            subsidyRate.value = Math.min(Math.max(pct, 0), 100) / 100;
+        } else {
+            subsidyRate.value = 0;
+        }
+    } catch (e) {
+        subsidyRate.value = 0;
+    }
+    // Re-evaluate prices in case open with preselected state later
+    evaluatePlanAndPricing();
 });
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
@@ -388,10 +456,35 @@ onUnmounted(() => {
 
 const backMessageVisible = ref(false);
 function handleBackClick() {
+    if (selectedDates.value.length > 0) {
+        cart.addSelections(
+            props.mealId,
+            props.mealTitle,
+            selectedDates.value.slice(),
+            perDayPrice.value,
+            props.mealImage,
+            props.mealQuantity || 1,
+        )
+    }
+    selectedDates.value = []
+    monthDays.value.forEach((week) => week.forEach((d) => (d.isSelected = false)))
+    evaluatePlanAndPricing()
+
     backMessageVisible.value = true;
     setTimeout(() => (backMessageVisible.value = false), 3000);
     open.value = false;
 }
+import { watch } from 'vue'
+watch(() => props.mealId, () => {
+    selectedDates.value = []
+    monthDays.value.forEach((week) => week.forEach((d) => (d.isSelected = false)))
+    evaluatePlanAndPricing()
+})
+watch(items, () => {
+    // re-evaluate to refresh amounts if needed
+    evaluatePlanAndPricing()
+})
+
 </script>
 
 <style scoped>

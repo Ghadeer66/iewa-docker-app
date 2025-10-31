@@ -141,7 +141,15 @@
 
     <!-- Conditional Components -->
     <RulesButton v-if="user" />
-    <Calender v-if="user" v-model:open="calendarOpen" :basePrice="selectedBasePrice" />
+    <Calender
+      v-if="user"
+      v-model:open="calendarOpen"
+      :basePrice="selectedBasePrice"
+      :mealId="selectedMealId"
+      :mealTitle="selectedMealTitle"
+      :mealImage="selectedMealImage"
+      :mealQuantity="selectedMealQuantity"
+    />
   </AppLayout>
 </template>
 
@@ -155,6 +163,10 @@ import { router, usePage } from '@inertiajs/vue3'
 
 const calendarOpen = ref(false)
 const selectedBasePrice = ref(0)
+const selectedMealId = ref('')
+const selectedMealTitle = ref('')
+const selectedMealImage = ref('')
+const selectedMealQuantity = ref(1)
 const loading = ref(false)
 const activeFilter = ref('همه')
 const isDragging = ref(false)
@@ -228,6 +240,13 @@ const viewDetails = (meal) => router.get(`/meals/${meal.id}`)
 function openCalendar(payload) {
   const base = payload && typeof payload === 'object' && 'basePrice' in payload ? Number(payload.basePrice) : Number(payload)
   selectedBasePrice.value = isNaN(base) ? 0 : base
+  // set meal info if provided
+  if (payload && typeof payload === 'object') {
+    if ('mealId' in payload) selectedMealId.value = String(payload.mealId)
+    if ('mealTitle' in payload) selectedMealTitle.value = payload.mealTitle || ''
+    if ('mealImage' in payload) selectedMealImage.value = payload.mealImage || ''
+    if ('quantity' in payload) selectedMealQuantity.value = Number(payload.quantity) || 1
+  }
   calendarOpen.value = true
 }
 

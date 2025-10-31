@@ -43,7 +43,59 @@ Route::get('/about-us', function () {
 Route::get('/contact', function () {
     return inertia('Contact/Index');
 });
+Route::get('/cart', function () {
+    return inertia('Cart/Index');
+});
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// SEO keyword landing pages
+Route::get('/iewa', fn() => inertia('Landing/Iewa'));
+Route::get('/iewato', fn() => inertia('Landing/Iewato'));
+Route::get('/ایوا', fn() => inertia('Landing/EiwaFa'));
+Route::get('/ایواتو', fn() => inertia('Landing/EiwatoFa'));
+
+// Dynamic sitemap.xml
+Route::get('/sitemap.xml', function () {
+    $urls = [
+        url('/'),
+        url('/menu'),
+        url('/about-us'),
+        url('/contact'),
+        url('/iewa'),
+        url('/iewato'),
+        url('/ایوا'),
+        url('/ایواتو'),
+    ];
+
+    $xml = view('sitemap', ['urls' => $urls])->render();
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+});
+
+// ----------------------
+// API: current user's subsidy
+// ----------------------
+Route::middleware('auth')->get('/api/me/subsidy', function () {
+    $user = \Illuminate\Support\Facades\Auth::user();
+    $row = \Illuminate\Support\Facades\DB::table('client_subsidies')
+        ->where('user_id', $user->id)
+        ->first();
+
+    if (!$row) {
+        return response()->json(['percentage' => 0, 'max_price' => 0]);
+    }
+
+    $today = now()->toDateString();
+    // Check date window if provided
+    if (($row->starts_at && $row->starts_at > $today) ||
+        ($row->ends_at && $row->ends_at < $today)) {
+        return response()->json(['percentage' => 0, 'max_price' => 0]);
+    }
+
+    return response()->json([
+        'percentage' => (int) $row->percentage,
+        'max_price' => (int) $row->max_price,
+    ]);
+});
 // ----------------------
 // Protected User Routes
 // ----------------------

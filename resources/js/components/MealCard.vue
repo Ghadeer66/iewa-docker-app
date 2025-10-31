@@ -222,7 +222,16 @@ const increaseQuantity = () => { quantity.value++ }
 const decreaseQuantity = () => { if (quantity.value > 1) quantity.value-- }
 
 const emit = defineEmits(['open-calendar'])
-const emitOpenCalendar = () => { emit('open-calendar', { basePrice: discountedPrice.value }) }
+const emitOpenCalendar = () => {
+    const image = (props.meal.thumbnail_url ?? props.meal.image_url ?? (props.meal.image ? `/${props.meal.image}` : '/images/placeholder.png'))
+    emit('open-calendar', {
+        basePrice: discountedPrice.value,
+        mealId: props.meal.id,
+        mealTitle: props.meal.title,
+        mealImage: image,
+        quantity: quantity.value,
+    })
+}
 
 const comments = ref([
   { user: 'نیلوفر زمانی', text: 'کیفیت فوق العاده کاملا تازه' },

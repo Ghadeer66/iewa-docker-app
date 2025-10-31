@@ -1,0 +1,1 @@
+import{_ as a}from"./AdminAppLayout-DfCKMEAs.js";import{e as s,o as t,a as o}from"./app-B0552H22.js";const p=Object.assign({layout:a},{__name:"Types",setup(n){return(r,e)=>(t(),s("div",null,e[0]||(e[0]=[o("h2",{class:"text-xl font-bold mb-4"},"Manage Types",-1)])))}});export{p as default};
