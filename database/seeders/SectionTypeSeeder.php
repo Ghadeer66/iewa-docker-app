@@ -43,7 +43,7 @@ class SectionTypeSeeder extends Seeder
                 ['title' => 'نوشیدنی', 'image' => 'images/food-types/drinks.png'],
                 ['title' => 'اوتمیل', 'image' => 'images/food-types/ot-meal.png'],
                 ['title' => 'صبحانه', 'image' => 'images/food-types/breakfast.png'],
-                ['title' => 'دسیرت‌ها', 'image' => 'images/food-types/dessert.png'],
+                ['title' => 'دسر‌ها', 'image' => 'images/food-types/dessert.png'],
             ],
             'problem' => [
                 ['title' => 'چربی خون', 'image' => 'https://getjoule.co/assets/desktop/images1/diet/metabolism.png'],

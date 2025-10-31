@@ -81,7 +81,7 @@ class MenuController extends Controller
             'نوشیدنی' => 'drinks',
             'اوتمیل' => 'ott-meal',
             'صبحانه' => 'breakfast',
-            'دسیرت‌ها' => 'dessert',
+            'دسر‌ها' => 'dessert',
         ];
 
         return $categoryMap[$filterTitle] ?? null;

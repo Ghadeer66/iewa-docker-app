@@ -194,7 +194,7 @@ const filters = [
   { title: 'نوشیدنی', image: '/images/food-types/drinks.png', type: 'category' },
   { title: 'اوتمیل', image: '/images/food-types/ot-meal.png', type: 'category' },
   { title: 'صبحانه', image: '/images/food-types/breakfast.png', type: 'category' },
-  { title: 'دسیرت‌ها', image: '/images/food-types/dessert.png', type: 'category' },
+  { title: 'دسر‌ها', image: '/images/food-types/dessert.png', type: 'category' },
 ]
 
 // Pagination visible pages

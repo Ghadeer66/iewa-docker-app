@@ -59,7 +59,7 @@ class HomeController extends Controller
             'drinks' => 'نوشیدنی',
             'ott-meal' => 'اوتمیل',
             'breakfast' => 'صبحانه',
-            'dessert' => 'دسیرت‌ها',
+            'dessert' => 'دسر‌ها',
         ];
 
         return $map[$englishTitle] ?? $englishTitle;
