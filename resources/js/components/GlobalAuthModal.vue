@@ -8,7 +8,7 @@
          class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 w-full max-w-[500px] md:max-w-[600px] lg:max-w-[700px] max-h-[90vh] overflow-y-auto p-6 no-scrollbar">
 
       <h1 class="text-2xl md:text-3xl text-center text-lime-300 font-semibold mb-6">
-        فرم ثبت‌نام پرسنل انتخاب<br>در ایوا
+        فرم ثبت‌نام
       </h1>
 
       <form @submit.prevent="register" class="space-y-4">
