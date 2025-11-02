@@ -25,7 +25,7 @@ class SandwichMealSeeder extends Seeder
                     'کربوهیدرات' => '40 گرم',
                     'چربی' => '6 گرم',
                 ],
-                'ingredients' => ['فیله مرغ', 'گوجه چری', 'ریحون', 'نان', 'کاهو', 'سس پستو'],
+                'ingredients' => ['فیله مرغ', ' گوجه خشک', 'نان چاپاتا', 'کاهو', 'سس پستو'],
                 'consumable_items' => [
                     'یک وعده غذایی سالم و سبک که انرژی مورد نیاز بدن را تامین می‌کند و به عضله‌سازی کمک می‌کند.',
                 ],
@@ -35,6 +35,7 @@ class SandwichMealSeeder extends Seeder
                 'types' => ['light'],
                 'categories' => ['sandwich'],
                 'image_path' => null,
+                'price' => 270000,
             ],
             [
                 'title' => 'گرین ساندویچ',
@@ -45,7 +46,7 @@ class SandwichMealSeeder extends Seeder
                     'کربوهیدرات' => '35 گرم',
                     'چربی' => '13 گرم',
                 ],
-                'ingredients' => ['نان', 'فیله مرغ', 'دیپ فلفل دلمه', 'زیتون سبز', 'کاهو'],
+                'ingredients' => ['نان چاپاتا', 'فیله مرغ', 'دیپ فلفل دلمه', 'زیتون سبز', 'کاهو'],
                 'consumable_items' => [
                     'منبع مناسبی از پروتئین و برای عضله‌سازی مناسب است.',
                     'همچنین سرشار از کلسیم می‌باشد.',
@@ -56,6 +57,7 @@ class SandwichMealSeeder extends Seeder
                 'types' => ['energy'],
                 'categories' => ['sandwich'],
                 'image_path' => null,
+                'price' => 260000,
             ],
             [
                 'title' => 'چیز تست',
@@ -77,11 +79,12 @@ class SandwichMealSeeder extends Seeder
                     'در رژیم‌های گلوتن فری قابل استفاده نیست.',
                 ],
                 'types' => ['light'],
-                'categories' => ['sandwich'],
+                'categories' => ['breakfast'],
                 'image_path' => null,
+                'price' => 280000,
             ],
             [
-                'title' => 'چیزساندویچ',
+                'title' => 'چیکن چیز',
                 'slug' => 'cheese-sandwich',
                 'calories' => 430,
                 'nutritional_informations' => [
@@ -100,13 +103,36 @@ class SandwichMealSeeder extends Seeder
                 'types' => ['diet'],
                 'categories' => ['sandwich'],
                 'image_path' => null,
+                'price' => 280000,
+            ],
+            [
+                'title' => ' تست بادام زمینی',
+                'slug' => 'potato-sandwich',
+                'calories' => 430,
+                'nutritional_informations' => [
+                    'پروتئین' => '35 گرم',
+                    'کربوهیدرات' => '40 گرم',
+                    'چربی' => '15 گرم',
+                ],
+                'ingredients' => ['نان چاپاتا', 'پنیر ورقه‌ای', 'مرغ', 'گوجه خشک', 'کنجد', 'کاهو'],
+                'consumable_items' => [
+                    'منبع مناسبی از پروتئین و جهت عضله‌سازی موثر است.',
+                    'بدلیل وجود کنجد منبع مناسبی از چربی مفید و بدون کلسترول می‌باشد.',
+                ],
+                'contraindications' => [
+                    'در رژیم‌های کم‌کربوهیدرات، گلوتن فری و بیماران سلیاکی توصیه نمی‌شود.',
+                ],
+                'types' => ['diet'],
+                'categories' => ['sandwich'],
+                'image_path' => null,
+                'price' => 150000,
             ],
         ];
 
         // Preload or create related types and category
         $typeModels = collect(['light', 'energy', 'diet'])
             ->mapWithKeys(fn($t) => [$t => Type::firstOrCreate(['title' => $t])]);
-        $categoryModels = collect(['sandwich'])
+        $categoryModels = collect(['sandwich','breakfast'])
             ->mapWithKeys(fn($c) => [$c => Category::firstOrCreate(['title' => $c])]);
 
         foreach ($meals as $data) {
@@ -115,7 +141,7 @@ class SandwichMealSeeder extends Seeder
                 'slug' => $data['slug'],
                 'description' => 'از مجموعه ساندویچ‌های سالم و سبک ایوا.',
                 'calories' => $data['calories'],
-                'price' => 190000,
+                'price' => $data['price'],
                 'is_vegan' => false,
                 'kcal' => $data['calories'],
                 'nutritional_informations' => $data['nutritional_informations'],

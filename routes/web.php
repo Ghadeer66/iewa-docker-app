@@ -57,14 +57,54 @@ Route::get('/ایواتو', fn() => inertia('Landing/EiwatoFa'));
 // Dynamic sitemap.xml
 Route::get('/sitemap.xml', function () {
     $urls = [
-        url('/'),
-        url('/menu'),
-        url('/about-us'),
-        url('/contact'),
-        url('/iewa'),
-        url('/iewato'),
-        url('/ایوا'),
-        url('/ایواتو'),
+        [
+            'loc' => url('/'),
+            'changefreq' => 'daily',
+            'priority' => '1.0',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/menu'),
+            'changefreq' => 'daily',
+            'priority' => '0.9',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/about-us'),
+            'changefreq' => 'monthly',
+            'priority' => '0.7',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/contact'),
+            'changefreq' => 'monthly',
+            'priority' => '0.7',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/iewa'),
+            'changefreq' => 'monthly',
+            'priority' => '0.6',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/iewato'),
+            'changefreq' => 'monthly',
+            'priority' => '0.6',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/ایوا'),
+            'changefreq' => 'monthly',
+            'priority' => '0.6',
+            'lastmod' => now()->toAtomString(),
+        ],
+        [
+            'loc' => url('/ایواتو'),
+            'changefreq' => 'monthly',
+            'priority' => '0.6',
+            'lastmod' => now()->toAtomString(),
+        ],
     ];
 
     $xml = view('sitemap', ['urls' => $urls])->render();

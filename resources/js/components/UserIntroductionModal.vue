@@ -1,0 +1,259 @@
+<template>
+  <Transition name="modal">
+    <div
+      v-if="showModal"
+      class="fixed inset-0 flex items-center justify-center z-[100] backdrop-blur-md bg-black/30"
+      @click.self="closeModal"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-2xl max-w-2xl w-11/12 max-h-[85vh] overflow-y-auto p-8 relative transform transition-all"
+        dir="rtl"
+      >
+      <!-- Close Button -->
+      <button
+        @click="closeModal"
+        class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
+        aria-label="بستن"
+      >
+        ×
+      </button>
+
+      <!-- Header -->
+      <div class="text-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">خوش آمدید!</h2>
+        <p class="text-gray-600">راهنمای استفاده از سیستم</p>
+      </div>
+
+      <!-- Content -->
+      <div class="space-y-6">
+        <!-- Section 1: Filter Groups -->
+        <div class="bg-blue-50 rounded-lg p-6 border-r-4 border-blue-500">
+          <h3 class="text-xl font-bold text-blue-700 mb-3 flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+              />
+            </svg>
+            گروه‌های فیلتر
+          </h3>
+          <p class="text-gray-700 leading-relaxed">
+            در صفحه محصولات، می‌توانید از دکمه‌های فیلتر برای دسته‌بندی محصولات استفاده کنید:
+          </p>
+          <ul class="mt-3 space-y-2 text-gray-700 list-disc list-inside">
+            <li><strong>همه:</strong> نمایش تمام محصولات</li>
+            <li><strong>لاین غذای اقتصادی:</strong> غذاهای اقتصادی</li>
+            <li><strong>پک میانوعده:</strong> پکیج‌های میانوعده</li>
+            <li><strong>سالاد:</strong> انواع سالادها</li>
+            <li><strong>ساندویچ:</strong> ساندویچ‌ها</li>
+            <li><strong>کیک و نان:</strong> محصولات کیک و نان</li>
+            <li><strong>دمنوش و قهوه:</strong> نوشیدنی‌های گرم</li>
+            <li><strong>نوشیدنی:</strong> سایر نوشیدنی‌ها</li>
+            <li><strong>اوتمیل:</strong> محصولات اوتمیل</li>
+            <li><strong>صبحانه:</strong> وعده‌های صبحانه</li>
+            <li><strong>دسر‌ها:</strong> انواع دسر</li>
+          </ul>
+          <p class="mt-3 text-sm text-gray-600">
+            با کلیک روی هر گروه فیلتر، فقط محصولات مربوط به آن دسته نمایش داده می‌شوند.
+          </p>
+        </div>
+
+        <!-- Section 2: Calendar Numbers -->
+        <div class="bg-green-50 rounded-lg p-6 border-r-4 border-green-500">
+          <h3 class="text-xl font-bold text-green-700 mb-3 flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            اعداد روی تقویم
+          </h3>
+          <p class="text-gray-700 leading-relaxed">
+            روی هر روز در تقویم، یک عدد در بالای آیکون سبد خرید نمایش داده می‌شود.
+          </p>
+          <div class="mt-3 bg-white rounded p-4 border border-green-200">
+            <p class="text-gray-700 font-medium mb-2">این عدد نشان می‌دهد:</p>
+            <p class="text-gray-700">
+              <strong>تعداد محصولاتی که قبلاً برای آن روز در سبد خرید شما ثبت شده‌اند.</strong>
+            </p>
+            <p class="text-sm text-gray-600 mt-2">
+              برای مثال، اگر عدد ۲ نمایش داده شود، یعنی شما قبلاً ۲ محصول برای آن روز انتخاب کرده‌اید.
+            </p>
+          </div>
+          <p class="text-gray-700 leading-relaxed mt-6">
+            وسط هر روز در تقویم، یک عدد نمایش داده می‌شود.
+          </p>
+          <div class="mt-3 bg-white rounded p-4 border border-green-200">
+            <p class="text-gray-700 font-medium mb-2">این عدد نشان می‌دهد:</p>
+            <p class="text-gray-700">
+              <strong>تعداد کاربرانی در شرکت شما که در این روز محصولی را خریداری کرده‌اند.</strong>
+            </p>
+            <p class="text-sm text-gray-600 mt-2">
+              برای مثال، اگر عدد ۲ نمایش داده شود، یعنی ۲ کاربر در این روز محصولی را خریداری کرده‌اند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 3: Price Calculation -->
+        <div class="bg-purple-50 rounded-lg p-6 border-r-4 border-purple-500">
+          <h3 class="text-xl font-bold text-purple-700 mb-3 flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            محاسبه قیمت کل
+          </h3>
+          <p class="text-gray-700 leading-relaxed mb-4">
+            قیمت کل بر اساس تعداد روزهای انتخابی و نوع پلن محاسبه می‌شود:
+          </p>
+
+          <div class="space-y-3">
+            <!-- Daily Plan -->
+            <div class="bg-white rounded p-4 border border-purple-200">
+              <h4 class="font-bold text-red-600 mb-2">خرید روزانه</h4>
+              <p class="text-sm text-gray-700">
+                اگر کمتر از ۳ روز انتخاب کنید، بدون تخفیف محاسبه می‌شود.
+              </p>
+            </div>
+
+            <!-- Weekly Plan -->
+            <div class="bg-white rounded p-4 border border-purple-200">
+              <h4 class="font-bold text-green-600 mb-2">خرید هفتگی (۳ روز یا بیشتر)</h4>
+              <p class="text-sm text-gray-700">
+                با انتخاب ۳ روز یا بیشتر، <strong>۲۰٪ تخفیف</strong> اعمال می‌شود.
+              </p>
+            </div>
+
+            <!-- Monthly Plan -->
+            <div class="bg-white rounded p-4 border border-purple-200">
+              <h4 class="font-bold text-purple-600 mb-2">
+                خرید ماهانه (۸ روز یا بیشتر، حداقل یک روز در هر هفته)
+              </h4>
+              <p class="text-sm text-gray-700">
+                با انتخاب ۸ روز یا بیشتر که حداقل یکی در هر هفته باشد، <strong>۴۰٪ تخفیف</strong> اعمال
+                می‌شود.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-white rounded p-4 border border-purple-200">
+            <p class="text-gray-700 font-medium mb-2">فرمول محاسبه:</p>
+            <ol class="text-sm text-gray-700 space-y-1 list-decimal list-inside">
+              <li>ابتدا سوبسید شرکت اعمال می‌شود: قیمت پایه × (۱ - درصد سوبسید)</li>
+              <li>سپس تخفیف پلن اعمال می‌شود: قیمت پس از سوبسید × (۱ - درصد تخفیف)</li>
+              <li>قیمت هر روز × تعداد روزهای انتخابی = قیمت کل قابل پرداخت</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-8 flex justify-center">
+        <button
+          @click="closeModal"
+          class="px-8 py-3 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition-colors cursor-pointer shadow-md hover:shadow-lg"
+        >
+          فهمیدم، متشکرم
+        </button>
+      </div>
+    </div>
+  </div>
+  </Transition>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
+const user = page.props.auth?.user || null
+
+const showModal = ref(false)
+
+const STORAGE_KEY = 'user_menu_introduction_seen'
+
+onMounted(() => {
+  // Only show for registered users
+  if (!user) {
+    return
+  }
+
+  // Check if user has seen the introduction
+  const hasSeen = localStorage.getItem(STORAGE_KEY)
+  if (!hasSeen) {
+    // Show modal after a short delay for better UX
+    setTimeout(() => {
+      showModal.value = true
+    }, 500)
+  }
+})
+
+const closeModal = () => {
+  showModal.value = false
+  // Mark as seen in localStorage
+  localStorage.setItem(STORAGE_KEY, 'true')
+}
+</script>
+
+<style scoped>
+/* Backdrop blur */
+.backdrop-blur-md {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Modal transition animations */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-active > div,
+.modal-leave-active > div {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from > div,
+.modal-leave-to > div {
+  transform: scale(0.9) translateY(-20px);
+  opacity: 0;
+}
+
+.modal-enter-to > div,
+.modal-leave-from > div {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+</style>

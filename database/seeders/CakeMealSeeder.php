@@ -40,7 +40,7 @@ class CakeMealSeeder extends Seeder
                 'price' => 130000,
             ],
             [
-                'title' => 'شیرمال خرما',
+                'title' => ' کیک لایه خرما',
                 'slug' => 'shirmaal-date',
                 'calories' => 360,
                 'types' => ['energy'],

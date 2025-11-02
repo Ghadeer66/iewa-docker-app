@@ -6,14 +6,25 @@ use Illuminate\Database\Seeder;
 use App\Models\Meal;
 use App\Models\Type;
 use App\Models\Category;
-use App\Models\Image;
+use App\Models\Image as ImageModel;
 use App\Models\Ingredient;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Laravel\Facades\Image;
 
 class EconomicMealSeeder extends Seeder
 {
     public function run(): void
     {
+        // increase memory limit for image processing
+        @ini_set('memory_limit', '512M');
+
         $defaultImagePath = 'images/default-meals-images/economic.jpg';
+
+        // define where thumbnails will be stored
+        $thumbDir = public_path('images/thumbnails');
+        if (!File::exists($thumbDir)) {
+            File::makeDirectory($thumbDir, 0755, true);
+        }
 
         $meals = [
             [
@@ -36,7 +47,7 @@ class EconomicMealSeeder extends Seeder
                 ],
                 'types' => ['light'],
                 'categories' => ['economic'],
-                'image_path' => null,
+                'image_path' => 'images/meals/economic/chickenoa.png',
             ],
             [
                 'title' => 'چیکی یاتوری',
@@ -58,23 +69,7 @@ class EconomicMealSeeder extends Seeder
                 ],
                 'types' => ['diet'],
                 'categories' => ['economic'],
-                'image_path' => null,
-            ],
-            [
-                'title' => 'چیکن ماسان',
-                'slug' => 'chicken-masan',
-                'calories' => 335,
-                'nutritional_informations' => [
-                    'کربوهیدرات' => '50 گرم',
-                    'پروتئین' => '24 گرم',
-                    'چربی' => '4.5 گرم',
-                ],
-                'ingredients' => ['سینه مرغ', 'قارچ', 'برنج قهوه‌ای', 'فلفل دلمه رنگی', 'گوجه'],
-                'consumable_items' => ['بعنوان یک غذای سالم و تامین کننده انرژی مورد نیاز بدن قابل استفاده است.'],
-                'contraindications' => ['قابل استفاده در رژیم کتوژنیک نیست.'],
-                'types' => ['energy'],
-                'categories' => ['economic'],
-                'image_path' => null,
+                'image_path' => 'images/meals/economic/chicky-yatori.png',
             ],
             [
                 'title' => 'میت اسپاگیتو',
@@ -93,7 +88,7 @@ class EconomicMealSeeder extends Seeder
                 'contraindications' => ['بدلیل وجود پیاز برای مادران شیرده توصیه نمیشود.'],
                 'types' => ['energy'],
                 'categories' => ['economic'],
-                'image_path' => null,
+                'image_path' => 'images/meals/economic/meat-spagheto.png',
             ],
             [
                 'title' => 'مرغ و بادمجان',
@@ -111,23 +106,7 @@ class EconomicMealSeeder extends Seeder
                 'contraindications' => ['قابل استفاده در رژیم کتوژنیک نیست.'],
                 'types' => ['energy'],
                 'categories' => ['economic'],
-                'image_path' => null,
-            ],
-            [
-                'title' => 'چیکن رول (رول مغزدار مرغ)',
-                'slug' => 'chicken-roll',
-                'calories' => 270,
-                'nutritional_informations' => [
-                    'کربوهیدرات' => '13 گرم',
-                    'پروتئین' => '34 گرم',
-                    'چربی' => '10 گرم',
-                ],
-                'ingredients' => ['آرد گندم', 'تخم مرغ', 'مرغ', 'پودر پانکو'],
-                'consumable_items' => ['بعنوان یک وعده غذای سالم و سبک قابل استفاده است.'],
-                'contraindications' => ['در بیماران سلیاکی و رژیم‌های گلوتن فری قابل استفاده نیست.'],
-                'types' => ['light'],
-                'categories' => ['economic'],
-                'image_path' => null,
+                'image_path' => 'images/meals/economic/chicken-eggplant.png',
             ],
             [
                 'title' => 'چیکن وجتبل',
@@ -138,14 +117,14 @@ class EconomicMealSeeder extends Seeder
                     'پروتئین' => '23 گرم',
                     'چربی' => '6 گرم',
                 ],
-                'ingredients' => [],
+                'ingredients' => ['بادمجان کبابی'],
                 'consumable_items' => [
                     'بعنوان یک غذای سبک و کم کالری و افرادیکه در رژیم کاهش وزن هستند و ورزشکاران انتخاب مناسبی می‌باشد.',
                 ],
                 'contraindications' => ['ندارد'],
                 'types' => ['diet'],
                 'categories' => ['economic'],
-                'image_path' => null,
+                'image_path' => 'images/meals/economic/chicken-vegetable.png',
             ],
             [
                 'title' => 'گریک رایس',
@@ -167,11 +146,11 @@ class EconomicMealSeeder extends Seeder
                 ],
                 'types' => ['energy'],
                 'categories' => ['economic'],
-                'image_path' => null,
+                'image_path' => 'images/meals/economic/greek-rice.png',
             ],
         ];
 
-        // Pre-fetch or create types and categories
+        // Preload or create types and categories
         $typeModels = collect(['light', 'diet', 'energy'])
             ->mapWithKeys(fn($t) => [$t => Type::firstOrCreate(['title' => $t])]);
         $categoryModels = collect(['economic'])
@@ -183,7 +162,7 @@ class EconomicMealSeeder extends Seeder
                 'slug' => $data['slug'],
                 'description' => 'این غذای اکونومی از سری غذاهای سالم ایوا است.',
                 'calories' => $data['calories'],
-                'price' => 180000,
+                'price' => 250000,
                 'is_vegan' => false,
                 'kcal' => $data['calories'],
                 'nutritional_informations' => $data['nutritional_informations'],
@@ -191,13 +170,13 @@ class EconomicMealSeeder extends Seeder
                 'contraindications' => $data['contraindications'],
             ]);
 
-            // Attach ingredients (create if not exist)
+            // Attach ingredients
             $ingredientIds = collect($data['ingredients'])->map(function ($title) {
                 return Ingredient::firstOrCreate(['title' => $title])->id;
             });
             $meal->ingredients()->sync($ingredientIds);
 
-            // Attach categories & types
+            // Attach category and type
             $meal->categories()->sync(
                 collect($data['categories'])->map(fn($c) => $categoryModels[$c]->id)
             );
@@ -205,9 +184,38 @@ class EconomicMealSeeder extends Seeder
                 collect($data['types'])->map(fn($t) => $typeModels[$t]->id)
             );
 
-            // Handle image (use default if none provided)
+            // Image handling with thumbnail
             $imagePath = $data['image_path'] ?? $defaultImagePath;
-            $image = Image::firstOrCreate(['url' => $imagePath]);
+            $fullImagePath = public_path($imagePath);
+            $thumbnailUrl = null;
+
+            if (File::exists($fullImagePath)) {
+                $filename = pathinfo($imagePath, PATHINFO_BASENAME);
+                $thumbnailPath = $thumbDir . '/' . $filename;
+
+                if (File::exists($thumbnailPath)) {
+                    $thumbnailUrl = 'images/thumbnails/' . $filename;
+                } else {
+                    $fileSizeBytes = File::size($fullImagePath);
+                    if ($fileSizeBytes <= 20 * 1024 * 1024) { // skip >20MB
+                        try {
+                            $img = Image::read($fullImagePath)
+                                ->cover(1000, 800)
+                                ->save($thumbnailPath);
+
+                            $thumbnailUrl = 'images/thumbnails/' . $filename;
+                        } catch (\Throwable $e) {
+                            // Ignore image processing errors during seeding
+                        }
+                    }
+                }
+            }
+
+            $image = ImageModel::firstOrCreate(
+                ['url' => $imagePath],
+                ['thumbnail_url' => $thumbnailUrl]
+            );
+
             $meal->images()->syncWithoutDetaching([$image->id]);
         }
     }

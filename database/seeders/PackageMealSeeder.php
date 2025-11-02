@@ -28,7 +28,7 @@ class PackageMealSeeder extends Seeder
 
         $meals = [
             [
-                'title' => '24F',
+                'title' => 'کوکو سیب و مرغ',
                 'slug' => 'potato-chicken-cheese-dent-chocolate',
                 'calories' => 450,
                 'nutritional_informations' => ['کربوهیدرات' => '49 گرم', 'پروتئین' => '30 گرم', 'چربی' => '15 گرم'],
@@ -45,7 +45,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 160000,
             ],
             [
-                'title' => '12F',
+                'title' => 'کوکو سیب',
                 'slug' => 'potato-chicken-red-fruit-dent-chocolate',
                 'calories' => 560,
                 'nutritional_informations' => ['کربوهیدرات' => '77 گرم', 'پروتئین' => '30 گرم', 'چربی' => '14 گرم'],
@@ -65,7 +65,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 180000,
             ],
             [
-                'title' => '13F',
+                'title' => 'ساندویچ چاپاتا',
                 'slug' => 'ciabatta-chicken-cheese-orange-coffee-dent',
                 'calories' => 580,
                 'nutritional_informations' => ['کربوهیدرات' => '70 گرم', 'پروتئین' => '48 گرم', 'چربی' => '11.5 گرم'],
@@ -78,10 +78,10 @@ class PackageMealSeeder extends Seeder
                 'categories' => ['package'],
                 'types' => ['energy'],
                 'image_path' => 'images/meals/packages/13f.png',
-                'price' => 180000,
+                'price' => 280000,
             ],
             [
-                'title' => '14F',
+                'title' => 'کیک کمال',
                 'slug' => 'ciabatta-chicken-cheese-cool-coffee-fruit-dent',
                 'calories' => 490,
                 'nutritional_informations' => ['کربوهیدرات' => '50 گرم', 'پروتئین' => '46 گرم', 'چربی' => '12.5 گرم'],
@@ -99,7 +99,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 200000,
             ],
             [
-                'title' => '15F',
+                'title' => ' ساندویچ مرغ و پنیر',
                 'slug' => '15f',
                 'calories' => 312,
                 'nutritional_informations' => ['کربوهیدرات' => '50 گرم', 'پروتئین' => '10 گرم', 'چربی' => '8 گرم'],
@@ -112,7 +112,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 275000,
             ],
             [
-                'title' => '23F',
+                'title' => 'حمص',
                 'slug' => '23f',
                 'calories' => 260,
                 'nutritional_informations' => ['کربوهیدرات' => '28 گرم', 'پروتئین' => '10.5 گرم', 'چربی' => '12 گرم'],
@@ -130,7 +130,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 165000,
             ],
             [
-                'title' => '22FN',
+                'title' => 'دیپ',
                 'slug' => '22fn',
                 'calories' => 485,
                 'nutritional_informations' => ['کربوهیدرات' => '47 گرم', 'پروتئین' => '14 گرم', 'چربی' => '27 گرم'],
@@ -145,10 +145,10 @@ class PackageMealSeeder extends Seeder
                 'categories' => ['package'],
                 'types' => ['energy'],
                 'image_path' => 'images/meals/packages/22fn.png',
-                'price' => 190000,
+                'price' => 175000,
             ],
             [
-                'title' => '33F',
+                'title' => 'کیک میوه ای',
                 'slug' => '33f',
                 'calories' => 250,
                 'nutritional_informations' => ['کربوهیدرات' => '45 گرم', 'پروتئین' => '5 گرم', 'چربی' => '6 گرم'],
@@ -161,7 +161,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 165000,
             ],
             [
-                'title' => '21F',
+                'title' => ' آچما مغزدار ',
                 'slug' => '21f',
                 'calories' => 550,
                 'nutritional_informations' => ['کربوهیدرات' => '85 گرم', 'پروتئین' => '20 گرم', 'چربی' => '15 گرم'],
@@ -178,7 +178,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 180000,
             ],
             [
-                'title' => '39F',
+                'title' => 'چما مغز دار ',
                 'slug' => '39f',
                 'calories' => 450,
                 'nutritional_informations' => ['کربوهیدرات' => '74 گرم', 'پروتئین' => '18 گرم', 'چربی' => '10 گرم'],
@@ -195,7 +195,7 @@ class PackageMealSeeder extends Seeder
                 'price' => 180000,
             ],
             [
-                'title' => '31F',
+                'title' => 'کیک لایه مغزدار',
                 'slug' => '31f',
                 'calories' => 465,
                 'nutritional_informations' => ['کربوهیدرات' => '55 گرم', 'پروتئین' => '17 گرم', 'چربی' => '20 گرم'],

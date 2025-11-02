@@ -1,5 +1,25 @@
 <template>
   <AppLayout>
+    <Head>
+      <title>منوی محصولات ایوا | سفارش آنلاین غذا</title>
+      <meta name="description" content="منوی کامل محصولات ایوا شامل انواع غذاهای سالم، سالاد، ساندویچ، صبحانه، نوشیدنی و دسر. مشاهده قیمت و سفارش آنلاین." />
+      <meta name="keywords" content="منوی ایوا, محصولات ایوا, سفارش غذا, غذای سالم, سالاد, ساندویچ, صبحانه, نوشیدنی" />
+      <link rel="canonical" :href="canonical" />
+
+      <!-- Open Graph -->
+      <meta property="og:title" content="منوی محصولات ایوا | سفارش آنلاین غذا" />
+      <meta property="og:description" content="منوی کامل محصولات ایوا شامل انواع غذاهای سالم، سالاد، ساندویچ، صبحانه، نوشیدنی و دسر." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" :content="canonical" />
+      <meta property="og:image" :content="ogImage" />
+
+      <!-- Twitter -->
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="منوی محصولات ایوا | سفارش آنلاین غذا" />
+      <meta name="twitter:description" content="منوی کامل محصولات ایوا شامل انواع غذاهای سالم، سالاد، ساندویچ، صبحانه، نوشیدنی و دسر." />
+      <meta name="twitter:image" :content="ogImage" />
+    </Head>
+
     <!-- Title -->
     <h1 class="text-3xl font-bold text-center text-gray-800 my-10">محصولات ایوا</h1>
 
@@ -140,9 +160,9 @@
     </div>
 
     <!-- Conditional Components -->
-    <RulesButton v-if="user" />
+    <RulesButton v-if="user && !cartIsOpen" />
     <Calender
-      v-if="user"
+      v-if="user && !cartIsOpen"
       v-model:open="calendarOpen"
       :basePrice="selectedBasePrice"
       :mealId="selectedMealId"
@@ -150,6 +170,9 @@
       :mealImage="selectedMealImage"
       :mealQuantity="selectedMealQuantity"
     />
+
+    <!-- User Introduction Modal (one-time only, Menu page only) -->
+    <UserIntroductionModal v-if="user" />
   </AppLayout>
 </template>
 
@@ -158,10 +181,25 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import MealCard from '@/components/MealCard.vue'
 import RulesButton from '@/components/RulesButton.vue'
 import Calender from '@/components/Calender.vue'
-import { ref, computed } from 'vue'
+import UserIntroductionModal from '@/components/UserIntroductionModal.vue'
+import { Head } from '@inertiajs/vue3'
+import { ref, computed, inject, watch } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 
+const cartIsOpenRef = inject('cartIsOpen', ref(false))
+const cartIsOpen = computed(() => cartIsOpenRef.value)
+
+const canonical = computed(() => typeof window !== 'undefined' ? window.location.href : '')
+const ogImage = computed(() => typeof window !== 'undefined' ? `${window.location.origin}/images/icon.png` : '')
+
 const calendarOpen = ref(false)
+
+// Close calendar when cart opens
+watch(cartIsOpen, (isOpen) => {
+  if (isOpen && calendarOpen.value) {
+    calendarOpen.value = false
+  }
+})
 const selectedBasePrice = ref(0)
 const selectedMealId = ref('')
 const selectedMealTitle = ref('')

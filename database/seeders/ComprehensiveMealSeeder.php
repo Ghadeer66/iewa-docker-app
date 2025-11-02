@@ -60,7 +60,7 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "drinks",
                         "meals" => [
-                            ["title" => "پرتقال"]
+                            ["title" => "پرتقال", "price" => 60000, "calories" => 80]
                         ]
                     ]
                 ]
@@ -71,15 +71,15 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "drinks",
                         "meals" => [
-                            ["title" => "شیرشکلات"],
-                            ["title" => "معجون انرژی درینک"]
+                            ["title" => "شیرشکلات", "price" => 180000, "calories" => 250],
+                            ["title" => "معجون انرژی درینک", "price" => 140000, "calories" => 320]
                         ]
                     ],
                     [
                         "category" => "dessert",
                         "meals" => [
-                            ["title" => "دسر شکلاتی"],
-                            ["title" => "دسر دورنگ قهوه شکلات"]
+                            ["title" => "دسر شکلاتی", "price" => 220000, "calories" => 280],
+                            ["title" => "دسر دورنگ قهوه شکلات", "price" => 240000, "calories" => 310]
                         ]
                     ]
                 ]
@@ -90,29 +90,30 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "drinks",
                         "meals" => [
-                            ["title" => "رد فروت میکس"],
-                            ["title" => "اسموتی نعنازنحبیل"],
-                            ["title" => "نوشیدنی بیدمشک"],
-                            ["title" => "نوشیدنی بهار نارنج"],
+                            ["title" => "رد فروت میکس", "price" => 70000, "calories" => 120],
+                            ["title" => "اسموتی نعنازنحبیل", "price" => 180000, "calories" => 140],
+                            ["title" => "نوشیدنی بیدمشک", "price" => 50000, "calories" => 50],
+                            ["title" => "نوشیدنی بهار نارنج", "price" => 50000, "calories" => 55],
+                            ["title" => " موهیتو ", "price" => 60000, "calories" => 90],
 
                         ]
                     ],
                     [
                         "category" => "coffee",
                         "meals" => [
-                            ["title" => "بری درینک"]
+                            ["title" => "دمنوشته بری درینک", "price" => 180000, "calories" => 45]
                         ]
                     ],
                     [
                         "category" => "dessert",
                         "meals" => [
-                            ["title" => "ویتافروت میکس"]
+                            ["title" => "ویتافروت میکس", "price" => 200000, "calories" => 180]
                         ]
                     ],
                     [
                         "category" => "ott-meal",
                         "meals" => [
-                            ["title" => "اوتمیل چیا"]
+                            ["title" => "اوتمیل چیا", "price" => 220000, "calories" => 350]
                         ]
                     ]
                 ]
@@ -123,22 +124,22 @@ class ComprehensiveMealSeeder extends Seeder
                     [
                         "category" => "coffee",
                         "meals" => [
-                            ["title" => "شیر قهوه"],
-                            ["title" => "کول لته"],
-                            ["title" => "آمریکانو"],
-                            ["title" => "چیلی کافی"]
+                            ["title" => "کافی میلک", "price" => 70000, "calories" => 150],
+                            ["title" => "کول لته", "price" => 65000, "calories" => 180],
+                            ["title" => "آمریکانو", "price" => 60000, "calories" => 10],
+                            ["title" => "چیلی کافی", "price" => 70000, "calories" => 120]
                         ]
                     ],
                     [
                         "category" => "dessert",
                         "meals" => [
-                            ["title" => "دسر قهوه"]
+                            ["title" => "دسر قهوه", "price" => 230000, "calories" => 290]
                         ]
                         ],
                         [
                         "category" => "ott-meal",
                         "meals" => [
-                            ["title" => "اوتمیل قهوه"]
+                            ["title" => "اوتمیل قهوه", "price" => 220000, "calories" => 380]
                         ]
                     ]
                 ]
@@ -183,15 +184,19 @@ class ComprehensiveMealSeeder extends Seeder
                         $counter++;
                     }
 
+                    // Get price from mealInfo or use random default
+                    $price = $mealInfo['price'] ?? rand(250000, 800000);
+                    $calories = $mealInfo['calories'] ?? rand(150, 500);
+
                     // Create meal data
                     $mealsToInsert[] = [
                         'title' => $title,
                         'slug' => $slug,
                         'description' => "توضیحات {$title}",
-                        'calories' => rand(150, 500),
-                        'price' => rand(250000, 800000),
+                        'calories' => $calories,
+                        'price' => $price,
                         'is_vegan' => rand(0, 1) == 1,
-                        'kcal' => rand(150, 500),
+                        'kcal' => $calories,
                         'nutritional_informations' => json_encode([
                             'انرژی' => rand(150, 500) . ' کیلوکالری',
                             'کربوهیدرات' => rand(20, 60) . ' گرم',

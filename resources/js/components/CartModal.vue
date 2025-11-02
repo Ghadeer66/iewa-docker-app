@@ -5,7 +5,7 @@
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden">
                 <div class="flex items-center justify-between px-5 py-4 border-b">
                     <div class="text-lg font-bold">سبد خرید</div>
-                    <button @click="emit('close')" class="text-gray-600 hover:text-black" aria-label="close">✕</button>
+                    <button @click="emit('close')" class="text-gray-600 hover:text-black cursor-pointer" aria-label="close">✕</button>
                 </div>
                 <div class="max-h-[80vh] overflow-y-auto p-6">
                     <div v-if="items.length === 0" class="text-gray-600">سبد خرید خالی است.</div>
@@ -20,16 +20,16 @@
                                 <div class="text-sm font-bold">جمع: {{ numberFormat(group.count * group.price) }} تومان</div>
                             </div>
                             <div class="flex flex-col gap-2">
-                                <button @click="removeOne(group)" class="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm">کاهش یکی</button>
-                                <button @click="removeAll(group)" class="px-3 py-1 rounded bg-red-100 hover:bg-red-200 text-sm text-red-700">حذف همه</button>
+                                <button @click="removeOne(group)" class="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer">کاهش یکی</button>
+                                <button @click="removeAll(group)" class="px-3 py-1 rounded bg-red-100 hover:bg-red-200 text-sm text-red-700 cursor-pointer">حذف همه</button>
                             </div>
                         </div>
                         <div class="mt-2 text-right text-xl font-extrabold">مجموع کل: {{ numberFormat(grandTotal) }} تومان</div>
                     </div>
                 </div>
                 <div class="px-5 py-4 border-t flex justify-end gap-3">
-                    <button @click="emit('close')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">بستن</button>
-                    <button class="px-4 py-2 rounded-lg bg-[#4e3356] text-white hover:opacity-90">ادامه پرداخت</button>
+                    <button @click="emit('close')" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer">بستن</button>
+                    <button class="px-4 py-2 rounded-lg bg-[#4e3356] text-white hover:opacity-90 cursor-pointer">ادامه پرداخت</button>
                 </div>
             </div>
         </div>

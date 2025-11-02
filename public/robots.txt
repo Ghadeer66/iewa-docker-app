@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /business/
+Disallow: /profile/
+
+Sitemap: https://iewato.ir/sitemap.xml

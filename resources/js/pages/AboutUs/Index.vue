@@ -1,8 +1,28 @@
 <template>
     <Layout>
+        <Head>
+            <title>درباره ایوا | تاریخچه، چشم‌انداز و ارزش‌های ما</title>
+            <meta name="description" content="درباره ایوا - مجموعه غذایی ایوا با نگرش نو در صنعت تغذیه، تولید غذاهای سالم و افزایش آگاهی بر بدن. مجوز سیب سلامت و محصولات باکیفیت." />
+            <meta name="keywords" content="درباره ایوا, تاریخچه ایوا, چشم‌انداز ایوا, ارزش‌های ایوا, غذای سالم" />
+            <link rel="canonical" :href="canonical" />
+
+            <!-- Open Graph -->
+            <meta property="og:title" content="درباره ایوا | تاریخچه، چشم‌انداز و ارزش‌های ما" />
+            <meta property="og:description" content="درباره ایوا - مجموعه غذایی ایوا با نگرش نو در صنعت تغذیه، تولید غذاهای سالم و افزایش آگاهی بر بدن." />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" :content="canonical" />
+            <meta property="og:image" :content="ogImage" />
+
+            <!-- Twitter -->
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="درباره ایوا | تاریخچه، چشم‌انداز و ارزش‌های ما" />
+            <meta name="twitter:description" content="درباره ایوا - مجموعه غذایی ایوا با نگرش نو در صنعت تغذیه، تولید غذاهای سالم و افزایش آگاهی بر بدن." />
+            <meta name="twitter:image" :content="ogImage" />
+        </Head>
+
         <section class="container mx-auto px-34 py-12 text-right text-[22px] leading-relaxed text-gray-800">
             <div class="text-center mb-10">
-                <img src="/images/icon_bw.png" alt="Eiva Icon" class="w-20 h-20 mx-auto mb-4" />
+                <img src="/images/icon_bw.png" alt="لوگوی ایوا - مجموعه غذایی سالم" class="w-20 h-20 mx-auto mb-4" />
                 <h1 class="text-4xl font-bold text-[#4e3356]">درباره ایوا</h1>
             </div>
 
@@ -44,7 +64,7 @@
 
             <!-- Vision -->
             <div class="text-center mb-10">
-                <img src="images/eye.png" alt="Eiva Icon" class="w-30 h-35 mx-auto mt-10 mb-2" />
+                <img src="images/eye.png" alt="چشم‌انداز ایوا - افزایش آگاهی بر بدن و سلامت فرد" class="w-30 h-35 mx-auto mt-10 mb-2" />
             </div>
             <p class="mb-4 ">
                 چشم‌انداز اصلی ایوا در ایران عزیز افزایش آگاهی بر بدن و سلامت فرد به وسیله تغذیه است.
@@ -56,7 +76,7 @@
 
             <!-- Values -->
             <div class="text-center mb-10">
-                <img src="images/diamond.png" alt="Eiva Icon" class="w-30 h-52 mx-auto mt-4 mb-0" />
+                <img src="images/diamond.png" alt="ارزش‌های ایوا - کیفیت و سلامت" class="w-30 h-52 mx-auto mt-4 mb-0" />
             </div>
             <p class="mb-4">
                 در اﯾﻮا ﻗﺼﺪ ﻧﺪارﯾﻢ ﺗﺎ ﺗﻨﻬﺎ ﺑﻪ ﺗﻮﻟﯿﺪ ﻣﺤﺼﻮل ﺑﭙﺮدازﯾﻢ. ﻣﺤﺼﻮل در اﯾﻮا ﻧﺘﯿﺠﻪ
@@ -82,7 +102,7 @@
 
             <hr class="border border-2 border-dark opacity-30 mt-12">
 
-    
+
 
 
         </section>
@@ -91,4 +111,9 @@
 
 <script setup>
 import Layout from '@/layouts/AppLayout.vue'
+import { Head } from '@inertiajs/vue3'
+import { computed } from 'vue'
+
+const canonical = computed(() => typeof window !== 'undefined' ? window.location.href : '')
+const ogImage = computed(() => typeof window !== 'undefined' ? `${window.location.origin}/images/icon.png` : '')
 </script>

@@ -30,6 +30,7 @@ class SaladMealsSeeder extends Seeder
         $categories = [
             'economic', 'package', 'salad', 'sandwich', 'cake', 'coffee', 'drinks', 'ott-meal', 'breakfast', 'dessert',
         ];
+        $defaultImagePath = 'images/default-meals-images/salad.jpg';
 
         // ensure types and categories exist
         $typeModels = collect($types)->mapWithKeys(fn($t) => [$t => Type::firstOrCreate(['title' => $t])]);
@@ -197,6 +198,31 @@ class SaladMealsSeeder extends Seeder
                 'types' => ['energy'],
                 'image_path' => 'images/meals/salads/pasta-salad.png',
             ],
+            [
+                'title' => 'ویتافروت میکس',
+                'slug' => 'vitafruit-mix-salad',
+                'kcal' => 180,
+                'calories' => 180,
+                'nutritional_informations' => [
+                    'انرژی' => '180 کیلوکالری',
+                    'کربوهیدرات' => '28 گرم',
+                    'پروتئین' => '4 گرم',
+                    'چربی' => '5 گرم'
+                ],
+                'ingredients' => ['میوه‌های مختلف', 'ماست', 'عسل'],
+                'consumable_items' => [
+                    'منبع ویتامین و فیبر',
+                    'پروبیوتیک از ماست'
+                ],
+                'contraindications' => [
+                    'افراد حساس به لاکتوز مصرف نکنند',
+                    'در صورت حساسیت غذایی با احتیاط مصرف شود'
+                ],
+                'types' => ['diet'],
+                'categories' => ['salad'],
+                'image_path' => null,
+                'price' => 200000,
+            ],
         ];
 
         foreach ($meals as $data) {
@@ -219,7 +245,7 @@ class SaladMealsSeeder extends Seeder
             $meal->ingredients()->sync($ingredientIds);
 
             // Prepare and generate thumbnail if possible
-            $imagePath = $data['image_path'] ?? null;
+            $imagePath = $data['image_path'] ?? $defaultImagePath;
             $thumbnailUrl = null;
 
             if ($imagePath) {

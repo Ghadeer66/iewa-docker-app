@@ -45,7 +45,7 @@
                 </button>
 
                 <button @click="emitOpenCalendar"
-                    class="px-4 py-2 rounded-md text-sm transition bg-green-500 text-white hover:bg-green-600">
+                    class="px-4 py-2 rounded-md text-sm transition bg-green-500 text-white hover:bg-green-600 cursor-pointer">
                     انتخاب روز
                 </button>
             </div>
@@ -233,7 +233,7 @@ const emitOpenCalendar = () => {
     })
 }
 
-const comments = ref([
+/*const comments = ref([
   { user: 'نیلوفر زمانی', text: 'کیفیت فوق العاده کاملا تازه' },
   { user: 'نیلوفر شکرانه اقدام', text: 'والا خوشمزه و عالی بود آدم ازش سیر نمیشه' },
   { user: 'شیما طوسی', text: 'واقعا عالی و بینظیر بود' },
@@ -241,7 +241,7 @@ const comments = ref([
   { user: 'نیلوفر حدادیان', text: 'دخترم از مشتری های شماست و واقعا از خوردن غذاهای شما لذت میبره' },
   { user: 'مرتضی پیروانی', text: 'تنوع غذاها خوبه این سالاد و من از بوتیک گرفته بودم' }
 ])
-
+*/
 // Build gallery images from related images if present
 const galleryImages = computed(() => {
     const imgs = Array.isArray(props.meal?.images)

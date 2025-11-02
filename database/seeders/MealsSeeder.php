@@ -22,7 +22,12 @@ class MealsSeeder extends Seeder
             SaladMealsSeeder::class,
             SandwichMealSeeder::class,
             CakeMealSeeder::class,
-            ComprehensiveMealSeeder::class
+            // ComprehensiveMealSeeder::class
+            DessertMealSeeder::class,
+            DrinksMealSeeder::class,
+            OttMealSeeder::class,
+            CoffeeMealSeeder::class,
+
         ]);
     }
 }

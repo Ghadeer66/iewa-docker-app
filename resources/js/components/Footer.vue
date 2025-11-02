@@ -149,6 +149,11 @@
                 </div>
 
             </div>
+
+
+            <div class="flex justify-center">
+                <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=666141&Code=oLabxdxn9HwDXM3sUpeSSpZnybwAST8s'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=666141&Code=oLabxdxn9HwDXM3sUpeSSpZnybwAST8s' alt='' style='cursor:pointer' code='oLabxdxn9HwDXM3sUpeSSpZnybwAST8s'></a>
+            </div>
         </div>
 
         <hr class="border-gray-300 my-4" />

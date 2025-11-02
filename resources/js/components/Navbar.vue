@@ -5,7 +5,7 @@
             <div class="flex items-center gap-6">
                 <!-- logo image instead of text; uses storage path -->
                 <Link href="/" class="inline-flex items-center gap-3">
-                <img src="icon.png" alt="اوا" class="h-10 w-10 object-contain" />
+                <img src="icon.png" alt="لوگوی ایوا - سفارش غذای سالم" class="h-10 w-10 object-contain" />
                 </Link>
 
                 <ul class="hidden md:flex gap-6 text-black text-sm items-center">
@@ -52,7 +52,7 @@
                 <template v-else>
                     <div class="flex items-center gap-3">
                         <button @click.prevent="showCart = true"
-                            class="relative inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-[#3e4095] bg-purple border border-purple-500 shadow-sm hover:bg-purple-500 hover:text-white hover:shadow-md hover:-translate-y-0.5 transition"
+                            class="relative inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-[#3e4095] bg-purple border border-purple-500 shadow-sm hover:bg-purple-500 hover:text-white hover:shadow-md hover:-translate-y-0.5 transition cursor-pointer"
                             aria-label="سبد خرید">
                         <!-- License: MIT. Made by phosphor: https://github.com/phosphor-icons/phosphor-icons -->
                         <svg fill="purple" width="20px" height="20px" viewBox="0 0 256 256" id="Flat"
@@ -87,14 +87,23 @@
             </div>
         </div>
     </nav>
-    <CartModal v-if="showCart" @close="showCart=false" />
+    <CartModal v-if="showCart" @close="showCart = false" />
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Link, usePage, router } from '@inertiajs/vue3'
 import { useCartStore } from '@/stores/cart'
 import CartModal from '@/components/CartModal.vue'
+
+const props = defineProps({
+  cartIsOpen: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['update:cartIsOpen'])
 
 // guard against undefined props during initial render / SSR
 const page = usePage()
@@ -102,7 +111,12 @@ const user = computed(() => page.props.auth?.user ?? null)
 const cart = useCartStore()
 const cartCount = computed(() => cart.count)
 const cartCountFormatted = computed(() => cartCount.value.toLocaleString('fa-IR'))
-const showCart = ref(false)
+
+const showCart = computed({
+  get: () => props.cartIsOpen,
+  set: (val) => emit('update:cartIsOpen', val)
+})
+
 const logout = () => {
     router.post('/logout')
 }

@@ -1,5 +1,25 @@
 <template>
     <Layout>
+      <Head>
+        <title>تماس با ایوا | ارتباط با ما</title>
+        <meta name="description" content="تماس با ایوا - پشتیبانی، تلفن، ایمیل و آدرس. در هر زمان آماده پاسخ‌گویی به سوالات و درخواست‌های شما هستیم." />
+        <meta name="keywords" content="تماس با ایوا, پشتیبانی ایوا, آدرس ایوا, تلفن ایوا, ایمیل ایوا" />
+        <link rel="canonical" :href="canonical" />
+
+        <!-- Open Graph -->
+        <meta property="og:title" content="تماس با ایوا | ارتباط با ما" />
+        <meta property="og:description" content="تماس با ایوا - پشتیبانی، تلفن، ایمیل و آدرس. در هر زمان آماده پاسخ‌گویی به سوالات و درخواست‌های شما هستیم." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" :content="canonical" />
+        <meta property="og:image" :content="ogImage" />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="تماس با ایوا | ارتباط با ما" />
+        <meta name="twitter:description" content="تماس با ایوا - پشتیبانی، تلفن، ایمیل و آدرس." />
+        <meta name="twitter:image" :content="ogImage" />
+      </Head>
+
       <section class="container mx-auto px-6 py-12 text-right rtl">
         <!-- Header -->
         <div class="text-center mb-12">
@@ -91,7 +111,12 @@
 
   <script setup>
   import Layout from '@/layouts/AppLayout.vue'
+  import { Head } from '@inertiajs/vue3'
   import { useForm, router } from '@inertiajs/vue3'
+  import { computed } from 'vue'
+
+  const canonical = computed(() => typeof window !== 'undefined' ? window.location.href : '')
+  const ogImage = computed(() => typeof window !== 'undefined' ? `${window.location.origin}/images/icon.png` : '')
 
   const form = useForm({
     name: '',

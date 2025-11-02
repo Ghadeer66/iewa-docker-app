@@ -1,5 +1,25 @@
 <template>
     <Layout>
+        <Head>
+            <title>ایوا | سفارش غذای سالم و باکیفیت</title>
+            <meta name="description" content="ایوا - سفارش آنلاین غذای سالم، تازه و باکیفیت برای سازمان‌ها و شركت‌ها. منوی متنوع، قیمت مناسب و ارسال سریع." />
+            <meta name="keywords" content="ایوا, سفارش غذا, غذای سالم, کترینگ سازمانی, منوی غذا, اصفهان, غذای تازه" />
+            <link rel="canonical" :href="canonical" />
+
+            <!-- Open Graph -->
+            <meta property="og:title" content="ایوا | سفارش غذای سالم و باکیفیت" />
+            <meta property="og:description" content="ایوا - سفارش آنلاین غذای سالم، تازه و باکیفیت برای سازمان‌ها و شركت‌ها. منوی متنوع، قیمت مناسب و ارسال سریع." />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" :content="canonical" />
+            <meta property="og:image" :content="ogImage" />
+
+            <!-- Twitter -->
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="ایوا | سفارش غذای سالم و باکیفیت" />
+            <meta name="twitter:description" content="ایوا - سفارش آنلاین غذای سالم، تازه و باکیفیت برای سازمان‌ها و شركت‌ها." />
+            <meta name="twitter:image" :content="ogImage" />
+        </Head>
+
         <!-- IF USER NOT AUTHENTICATED -->
         <div v-if="!$page.props.auth.user"
             class="fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-lg z-50">
@@ -63,7 +83,7 @@
                 </div>
             </section>
 
-            <RulesButton />
+            <RulesButton v-if="!cartIsOpen" />
         </div>
     </Layout>
 </template>
@@ -76,8 +96,15 @@ import QuestionCategory from '@/components/QuestionCategory.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CircleBorderCategoriesList from '@/components/CircleBorderCategoriesList.vue'
 import RulesButton from '@/components/RulesButton.vue'
-import { ref, reactive } from 'vue'
+import { Head } from '@inertiajs/vue3'
+import { ref, reactive, computed, inject } from 'vue'
 import { router } from '@inertiajs/vue3'
+
+const cartIsOpenRef = inject('cartIsOpen', ref(false))
+const cartIsOpen = computed(() => cartIsOpenRef.value)
+
+const canonical = computed(() => typeof window !== 'undefined' ? window.location.href : '')
+const ogImage = computed(() => typeof window !== 'undefined' ? `${window.location.origin}/images/icon.png` : '')
 
 defineProps({
     meals: Array,
