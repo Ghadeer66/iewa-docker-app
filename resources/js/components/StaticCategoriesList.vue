@@ -1,13 +1,14 @@
+```vue
 <template>
   <section class="container mx-auto px-6 py-6">
-    <!-- single-line responsive row: items share available width and keep one row -->
-    <div class="flex gap-6 flex-nowrap">
+    <!-- responsive grid/flex: 2-column grid on mobile, single-line flex row on md+ -->
+    <div class="grid md:flex grid-cols-2 md:flex-row md:flex-nowrap gap-6">
       <div
         v-for="cat in items"
         :key="cat.title"
-        class="flex-1 min-w-0"
+        class="md:flex-1 md:min-w-0"
       >
-        <!-- make the card keep an aspect ratio; width is controlled by flex -->
+        <!-- make the card keep an aspect ratio; width is controlled by flex/grid -->
         <div
           class="w-full bg-gray-100 rounded-xl p-3 flex flex-col items-center text-center shadow-sm hover:shadow-md transition cursor-pointer"
           @click="handleTypeClick(cat.title)"
@@ -49,3 +50,4 @@ const handleTypeClick = (typeTitle) => {
 /* subtle card hover lift */
 div[role="presentation"] { /* noop to satisfy tooling if needed */ }
 </style>
+```

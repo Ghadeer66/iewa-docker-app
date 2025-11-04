@@ -42,7 +42,7 @@ class SaladMealsSeeder extends Seeder
                 'slug' => 'pro-chicken-salad',
                 'description' => 'سالاد پروچیکن با مرغ گریل و سبزیجات تازه، مناسب برای افزایش انرژی و تعادل غذایی.',
                 'calories' => 330,
-                'price' => 180000,
+                'price' => 270000,
                 'is_vegan' => false,
                 'kcal' => 330,
                 'nutritional_informations' => [

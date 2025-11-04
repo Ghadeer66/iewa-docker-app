@@ -31,7 +31,7 @@
             </ul>
             <div class="text-sm text-black text-right mr-6">
                 <p>تماس: <a href="tel:+989027383170" class="hover:underline">989027383170+</a></p>
-                <p class="mt-1">آدرس : ایران، اصفهان، خیابان کهندژ، کوچه ۱۱۹، بلاک ۱۴</p>
+                <p class="mt-1">آدرس : ایران، اصفهان، خیابان کهندژ، کوچه گلبرگ، بلاک ۱۴</p>
             </div>
         </div>
 

@@ -1,3 +1,4 @@
+```vue
 <template>
     <Layout>
         <Head>
@@ -83,7 +84,15 @@
                 </div>
             </section>
 
-            <RulesButton v-if="!cartIsOpen" />
+            <!-- Rules Button - Desktop -->
+            <div v-if="user && !cartIsOpen" class="hidden md:block">
+                <RulesButton />
+            </div>
+
+            <!-- Rules Button - Mobile Bottom Bar -->
+            <div v-if="user && !cartIsOpen" class="md:hidden fixed bottom-4 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 px-4 py-3 text-center">
+                <RulesButton class="inline-block" />
+            </div>
         </div>
     </Layout>
 </template>
@@ -96,15 +105,22 @@ import QuestionCategory from '@/components/QuestionCategory.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CircleBorderCategoriesList from '@/components/CircleBorderCategoriesList.vue'
 import RulesButton from '@/components/RulesButton.vue'
-import { Head } from '@inertiajs/vue3'
-import { ref, reactive, computed, inject } from 'vue'
+import { Head, usePage } from '@inertiajs/vue3'
+import { ref, reactive, computed, inject, onMounted } from 'vue'
 import { router } from '@inertiajs/vue3'
+import axios from 'axios'
+import StaticCategoriesList from '@/components/StaticCategoriesList.vue'
+import CompaniesCategoriesList from '@/components/CompaniesCategoriesList.vue'
+
+const page = usePage()
 
 const cartIsOpenRef = inject('cartIsOpen', ref(false))
 const cartIsOpen = computed(() => cartIsOpenRef.value)
 
 const canonical = computed(() => typeof window !== 'undefined' ? window.location.href : '')
 const ogImage = computed(() => typeof window !== 'undefined' ? `${window.location.origin}/images/icon.png` : '')
+
+const user = computed(() => page.props.auth?.user ?? null)
 
 defineProps({
     meals: Array,
@@ -218,11 +234,6 @@ const specificationsCategories = ref([])
 // const clientsCategories = ref([])
 
 // Data fetching for categories
-import { onMounted } from 'vue'
-import axios from 'axios'
-import StaticCategoriesList from '@/components/StaticCategoriesList.vue'
-import CompaniesCategoriesList from '@/components/CompaniesCategoriesList.vue'
-
 const categories = ref([])
 onMounted(async () => {
     try {
@@ -269,3 +280,4 @@ const clientsCategories = ref([
     { image: '/images/customers/sepah.png', title: 'عنوان ۴' },
 ])
 </script>
+```

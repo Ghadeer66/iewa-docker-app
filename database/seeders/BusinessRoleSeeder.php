@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -11,15 +10,11 @@ use Spatie\Permission\Models\Permission;
 
 class BusinessRoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Reset cached roles and permissions to avoid stale guard mismatches
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create business permissions (explicit guard_name to 'web')
+        // Define and create permissions
         $permissions = [
             'access business dashboard',
             'manage business profile',
@@ -31,28 +26,16 @@ class BusinessRoleSeeder extends Seeder
             'manage business employees'
         ];
 
-        foreach ($permissions as $permissionName) {
-            Permission::firstOrCreate([
-                'name' => $permissionName,
-                'guard_name' => 'web',
-            ]);
+        foreach ($permissions as $name) {
+            Permission::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
         }
 
-        // Create roles (explicit guard_name to 'web')
-        $adminRole = Role::firstOrCreate([
-            'name' => 'admin',
-            'guard_name' => 'web',
-        ]);
-        $businessRole = Role::firstOrCreate([
-            'name' => 'business',
-            'guard_name' => 'web',
-        ]);
-        $clientRole = Role::firstOrCreate([
-            'name' => 'client',
-            'guard_name' => 'web',
-        ]);
+        // Create roles
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $businessRole = Role::firstOrCreate(['name' => 'business', 'guard_name' => 'web']);
+        $clientRole = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);
 
-        // Admin gets all permissions plus admin-specific ones
+        // Add extra admin permissions
         $adminPermissions = array_merge($permissions, [
             'manage all users',
             'manage all businesses',
@@ -62,30 +45,22 @@ class BusinessRoleSeeder extends Seeder
             'manage system settings'
         ]);
 
-        // Create admin permissions
-        foreach (['manage all users', 'manage all businesses', 'manage all clients', 'access admin panel', 'view system analytics', 'manage system settings'] as $permissionName) {
-            Permission::firstOrCreate([
-                'name' => $permissionName,
-                'guard_name' => 'web',
-            ]);
+        foreach ([
+            'manage all users', 'manage all businesses', 'manage all clients',
+            'access admin panel', 'view system analytics', 'manage system settings'
+        ] as $perm) {
+            Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
         }
 
         $adminRole->syncPermissions($adminPermissions);
         $businessRole->syncPermissions($permissions);
 
-        // Create sample admin user
+        // Create users
         $this->createSampleAdminUser($adminRole);
+        $businessUsers = $this->createSampleBusinessUsers($businessRole);
+        $this->createSampleClientUsers($clientRole, $businessUsers);
 
-        // Create sample business users
-        $this->createSampleBusinessUsers($businessRole);
-
-        $this->command->info('Roles and permissions created successfully!');
-        $this->command->info('Sample admin user created:');
-        $this->command->info('Email: admin@example.com | Password: password');
-        $this->command->info('Sample business users created:');
-        $this->command->info('Email: business1@example.com | Password: password');
-        $this->command->info('Email: business2@example.com | Password: password');
-        $this->command->info('Email: restaurant@example.com | Password: password');
+        $this->command->info('Roles, permissions, and users created successfully.');
     }
 
     private function createSampleAdminUser($adminRole)
@@ -93,7 +68,7 @@ class BusinessRoleSeeder extends Seeder
         $adminUser = User::firstOrCreate(
             ['email' => 'admin@example.com'],
             [
-                'name' => 'System Administrator',
+                'name' => 'محسن مهدوی',
                 'phone' => '1234567890',
                 'personal_code' => 'ADMIN001',
                 'position' => 'Administrator',
@@ -101,19 +76,14 @@ class BusinessRoleSeeder extends Seeder
             ]
         );
 
-        if (!$adminUser->hasRole('admin')) {
-            $adminUser->assignRole($adminRole);
-        }
+        $adminUser->assignRole($adminRole);
     }
 
-    /**
-     * Create sample business users
-     */
-    private function createSampleBusinessUsers(Role $businessRole): void
+    private function createSampleBusinessUsers(Role $businessRole)
     {
-        $businessUsers = [
+        $businessUsersData = [
             [
-                'name' => 'کسب‌وکار نمونه یک',
+                'name' => 'رضا کریمی',
                 'email' => 'business1@example.com',
                 'phone' => '09120000001',
                 'personal_code' => 'PC0001',
@@ -125,7 +95,7 @@ class BusinessRoleSeeder extends Seeder
                 'password' => Hash::make('password'),
             ],
             [
-                'name' => 'کسب‌وکار نمونه دو',
+                'name' => 'مینا احمدی',
                 'email' => 'business2@example.com',
                 'phone' => '09120000002',
                 'personal_code' => 'PC0002',
@@ -137,7 +107,7 @@ class BusinessRoleSeeder extends Seeder
                 'password' => Hash::make('password'),
             ],
             [
-                'name' => 'رستوران بهشت',
+                'name' => 'ناصر موسوی',
                 'email' => 'restaurant@example.com',
                 'phone' => '09120000003',
                 'personal_code' => 'PC0003',
@@ -150,16 +120,56 @@ class BusinessRoleSeeder extends Seeder
             ]
         ];
 
-        foreach ($businessUsers as $userData) {
+        $createdBusinesses = [];
+
+        foreach ($businessUsersData as $data) {
+            $user = User::firstOrCreate(['email' => $data['email']], $data);
+            $user->assignRole($businessRole);
+            $createdBusinesses[] = $user;
+        }
+
+        return $createdBusinesses;
+    }
+
+    private function createSampleClientUsers(Role $clientRole, array $businessUsers)
+    {
+        $clientUsersData = [
+            [
+                'name' => 'سارا محمدی',
+                'email' => 'client@example.com',
+                'phone' => '09130000001',
+                'personal_code' => 'PD0001',
+                'position' => 'client',
+                'password' => Hash::make('password'),
+            ],
+            [
+                'name' => 'احمد رضایی',
+                'email' => 'client2@example.com',
+                'phone' => '09130000002',
+                'personal_code' => 'PD0002',
+                'position' => 'client',
+                'password' => Hash::make('password'),
+            ],
+            [
+                'name' => 'لیلا موسوی',
+                'email' => 'client3@example.com',
+                'phone' => '09130000003',
+                'personal_code' => 'PD0003',
+                'position' => 'client',
+                'password' => Hash::make('password'),
+            ],
+        ];
+
+        // Assign each client to a business via belongs_to
+        foreach ($clientUsersData as $index => $data) {
+            $belongsTo = $businessUsers[$index % count($businessUsers)]->id;
+
             $user = User::firstOrCreate(
-                ['email' => $userData['email']],
-                $userData
+                ['email' => $data['email']],
+                array_merge($data, ['belongs_to' => $belongsTo])
             );
 
-            // Assign business role to user
-            if (!$user->hasRole('business')) {
-                $user->assignRole($businessRole);
-            }
+            $user->assignRole($clientRole);
         }
     }
 }

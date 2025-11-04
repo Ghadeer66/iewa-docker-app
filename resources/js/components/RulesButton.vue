@@ -1,22 +1,32 @@
+```vue
 <template>
   <div dir="rtl">
     <!-- Floating button -->
     <button
-  @click="open = true"
-  :class="[
-    'fixed top-1/2 transform -translate-y-1/2 transition-all duration-700 z-50 cursor-pointer shadow-lg flex items-center justify-center font-bold bg-[#3e4095] text-white ',
-    isAtTop
-      ? 'left-0 px-6 py-3 rounded-r-xl text-base'
-      : '-left-1 px-4 py-2 rounded-r-xl text-sm opacity-70 hover:left-0 hover:px-6 hover:py-3 hover:text-base hover:text-center hover:opacity-100'
-  ]"
->
-  <transition name="fade" mode="out-in">
-    <span :key="isAtTop ? 'full' : 'short'">
-      {{ isAtTop ? 'راهنما و قوانین' : 'قوانین' }}
-    </span>
-  </transition>
-</button>
+      v-if="floating"
+      @click="open = true"
+      :class="[
+        'fixed top-1/2 transform -translate-y-1/2 transition-all duration-700 z-50 cursor-pointer shadow-lg flex items-center justify-center font-bold bg-[#3e4095] text-white ',
+        isShrunk
+          ? '-left-1 px-4 py-2 rounded-r-xl text-sm opacity-70 hover:left-0 hover:px-6 hover:py-3 hover:text-base hover:text-center hover:opacity-100'
+          : 'left-0 px-6 py-3 rounded-r-xl text-base'
+      ]"
+    >
+      <transition name="fade" mode="out-in">
+        <span :key="isShrunk ? 'short' : 'full'">
+          {{ isShrunk ? 'قوانین' : 'راهنما و قوانین' }}
+        </span>
+      </transition>
+    </button>
 
+    <!-- Non-floating button for bar -->
+    <button
+      v-else
+      @click="open = true"
+      class="w-full px-4 py-2 rounded bg-[#3e4095] text-white font-bold text-sm hover:bg-[#3e4095]/90 transition cursor-pointer"
+    >
+      راهنما و قوانین
+    </button>
 
     <!-- Modal with blurred background -->
     <div
@@ -131,19 +141,46 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+
+const props = defineProps({
+  floating: {
+    type: Boolean,
+    default: true
+  }
+});
+
+const emit = defineEmits(['update:modelValue']);
 
 const open = ref(false);
+
 const isAtTop = ref(true);
+const isMobile = ref(false);
+
+const isShrunk = computed(() => !isAtTop.value || isMobile.value);
 
 const handleScroll = () => {
-  isAtTop.value = window.scrollY < 50;
+  if (props.floating) {
+    isAtTop.value = window.scrollY < 50;
+  }
+};
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768;
 };
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  if (props.floating) {
+    window.addEventListener("scroll", handleScroll);
+  }
 });
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener('resize', checkMobile);
+  if (props.floating) {
+    window.removeEventListener("scroll", handleScroll);
+  }
 });
 </script>
+```

@@ -22,14 +22,14 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            \Database\Seeders\SectionTypeSeeder::class,
-            \Database\Seeders\ImagesSeeder::class,
-            \Database\Seeders\BusinessRoleSeeder::class,
-            \Database\Seeders\AssignBusinessRoleToUsersSeeder::class,
+            SectionTypeSeeder::class,
+            ImagesSeeder::class,
+            BusinessRoleSeeder::class,
+            AssignBusinessRoleToUsersSeeder::class,
             TypeSeeder::class,
             CategoriesSeeder::class,
             IngredientsSeeder::class,
-            \Database\Seeders\MealsSeeder::class,
+            MealsSeeder::class,
             // MealCategoriesSeeder::class,
             // MealTypeSeeder::class,
             // MealIngredientsSeeder::class,

@@ -16,7 +16,7 @@
         <div class="p-4 flex flex-col flex-grow">
             <div class="flex justify-between items-center gap-4 bg-orange-100 p-3 rounded-xl mb-3">
                 <h3 class="font-bold text-gray-800 text-md">{{ meal.title }}</h3>
-                <h3 class="font-bold text-orange-500 text-md">{{ meal.kcal }}  کالری </h3>
+                <h3 class="font-bold text-orange-500 text-md">{{ meal.kcal }} کالری </h3>
             </div>
 
             <!-- Price -->
@@ -73,9 +73,11 @@
                         <img :src="galleryImages[currentSlide]" :alt="meal.title || 'meal'"
                             class="w-full object-cover rounded-lg shadow-sm" style="aspect-ratio: 3 / 2;" />
                         <!-- Prev -->
-                        <button @click="prevSlide" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">‹</button>
+                        <button @click="prevSlide"
+                            class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">‹</button>
                         <!-- Next -->
-                        <button @click="nextSlide" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">›</button>
+                        <button @click="nextSlide"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">›</button>
                         <!-- Dots -->
                         <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
                             <button v-for="(img, idx) in galleryImages" :key="idx" @click="goToSlide(idx)"
@@ -83,8 +85,10 @@
                                 class="w-2.5 h-2.5 rounded-full"></button>
                         </div>
                     </div>
-                    <img v-else :src="galleryImages[0] ?? (meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png'))"
-                        :alt="meal.title || 'meal'" class="w-full object-cover rounded-lg shadow-sm" style="aspect-ratio: 3 / 2;" />
+                    <img v-else
+                        :src="galleryImages[0] ?? (meal.image_url ?? (meal.image ? `/${meal.image}` : '/images/placeholder.png'))"
+                        :alt="meal.title || 'meal'" class="w-full object-cover rounded-lg shadow-sm"
+                        style="aspect-ratio: 3 / 2;" />
 
                     <!-- Nutrition Information -->
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -113,22 +117,6 @@
                         انتخاب روز
                     </button>
 
-                    <!-- Contraindications -->
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h3 class="font-semibold text-gray-700 mb-2">موارد منع مصرف</h3>
-                        <ul class="list-disc list-inside text-gray-600 text-sm">
-                            <li v-for="item in meal.contraindications" :key="item">{{ item }}</li>
-                        </ul>
-                    </div>
-
-                    <!-- Consumable Items -->
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h3 class="font-semibold text-gray-700 mb-2">موارد مصرف</h3>
-                        <ul class="list-disc list-inside text-gray-600 text-sm">
-                            <li v-for="item in meal.consumable_items" :key="item">{{ item }}</li>
-                        </ul>
-                    </div>
-
                     <!-- Ingredients -->
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <h3 class="font-semibold text-gray-700 mb-2">محتویات</h3>
@@ -137,47 +125,83 @@
                         </ul>
                     </div>
 
+                    <!-- Ingredients -->
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-700 mb-2">درباره محصول</h3>
+                        <ul class="list-disc list-inside text-gray-600 text-sm">
+                            <!-- <li v-for="ingredient in meal.ingredients" :key="ingredient.id">{{ ingredient.title }}</li> -->
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-700 mb-4 text-center">موارد مصرف و منع مصرف</h3>
+
+                        <table class="w-full text-sm text-gray-600 border-collapse">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="py-2 px-4 text-right font-medium w-1/2 border-l border-gray-300">موارد
+                                        مصرف</th>
+                                    <th class="py-2 px-4 text-right font-medium w-1/2">موارد منع مصرف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="i in Math.max(meal.consumable_items.length, meal.contraindications.length)"
+                                    :key="i">
+                                    <td class="py-2 px-4 align-top border-l border-gray-300">
+                                        {{ meal.consumable_items[i - 1] || '-' }}
+                                    </td>
+                                    <td class="py-2 px-4 align-top">
+                                        {{ meal.contraindications[i - 1] || '-' }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
                     <!-- Plans -->
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <h3 class="font-semibold text-gray-700 mb-2">💡 تخفیف پلن‌ها</h3>
                         <ul class="list-disc list-inside text-gray-600 text-sm">
                             <li v-for="item in plansWithPrices" :key="item.plan">
-                                {{ item.plan }}: {{ item.discountPercent }}٪ قیمت پس از تخفیف: {{ item.priceAfterDiscount.toLocaleString() }} تومان
+                                {{ item.plan }}: {{ item.discountPercent }}٪ قیمت پس از تخفیف: {{
+                                    item.priceAfterDiscount.toLocaleString() }} تومان
                             </li>
                         </ul>
                     </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <h3 class="font-semibold text-gray-800 mb-3">نظرات شما</h3>
+
+        <!-- Comment Input -->
+        <div class="flex mb-4 gap-2">
+            <input type="text" placeholder="تو هم نظر خودت رو بزار..."
+                class="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <button class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">ارسال نظر</button>
+        </div>
+
+        <!-- Comments List -->
+        <div class="flex flex-col space-y-3">
+            <div v-for="(comment, index) in comments" :key="index"
+                class="flex gap-3 bg-white p-3 rounded-lg border border-gray-200">
+                <div class="flex-shrink-0">
+                    <div
+                        class="w-10 h-10 rounded-full bg-lime-400 flex items-center justify-center text-white text-lg font-bold">
+                        {{ comment.user.charAt(0) }}
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-semibold text-gray-800">{{ comment.user }}</span>
+                    <span class="text-gray-600 text-sm">{{ comment.text }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
                 </div>
 
                 <!-- Right Column: Sticky Comments -->
-                <div class="w-80 border-l border-gray-200 bg-gray-50 p-4 flex flex-col">
-                    <h3 class="font-semibold text-gray-800 mb-3">نظرات شما</h3>
 
-                    <!-- Comment Input -->
-                    <div class="flex mb-4 gap-2">
-                        <input type="text" placeholder="تو هم نظر خودت رو بزار..."
-                            class="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
-                        <button
-                            class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">ارسال
-                            نظر</button>
-                    </div>
-
-                    <!-- Comments List -->
-                    <div class="flex-1 space-y-3 overflow-y-auto">
-                        <div v-for="(comment, index) in comments" :key="index"
-                            class="flex gap-3 bg-white p-3 rounded-lg border border-gray-200">
-                            <div class="flex-shrink-0">
-                                <div
-                                    class="w-10 h-10 rounded-full bg-lime-400 flex items-center justify-center text-white text-lg font-bold">
-                                    {{ comment.user.charAt(0) }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col">
-                                <span class="font-semibold text-gray-800">{{ comment.user }}</span>
-                                <span class="text-gray-600 text-sm">{{ comment.text }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>

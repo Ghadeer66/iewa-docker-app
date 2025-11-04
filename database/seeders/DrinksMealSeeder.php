@@ -71,7 +71,7 @@ class DrinksMealSeeder extends Seeder
                 'types' => ['energy'],
                 'categories' => ['drinks'],
                 'image_path' => 'images/meals/drinks/chocolate-milk.png',
-                'price' => 180000,
+                'price' => 80000,
             ],
             [
                 'title' => 'معجون انرژی درینک',
@@ -120,32 +120,6 @@ class DrinksMealSeeder extends Seeder
                 'categories' => ['drinks'],
                 'image_path' => 'images/meals/drinks/red-fruit-mix.png',
                 'price' => 70000,
-            ],
-            [
-                'title' => 'اسموتی بهشتی',
-                'slug' => 'paradise-smoothie',
-                'calories' => 150,
-                'nutritional_informations' => [
-                    'انرژی' => '150 کیلوکالری',
-                    'کربوهیدرات' => '35 گرم',
-                    'پروتئین' => '2 گرم',
-                    'چربی' => '0.3 گرم'
-                ],
-                'ingredients' => ['سیب', 'نعناع', 'زنجبیل', 'لیمو', 'عسل', 'خیار', 'آب'],
-                'consumable_items' => [
-                    'تعادل فوق‌العاده‌ای از طعم‌ها',
-                    'سم‌زدایی و هیدراتاسیون عالی',
-                    'تقویت سیستم ایمنی',
-                    'دارای فیبر بالا و کمک به کاهش نفخ',
-                    'کمک به کاهش وزن'
-                ],
-                'contraindications' => [
-                    'افرادیکه به زنجبیل آلرژی دارند و افراد دیابتی با احتیاط مصرف شود'
-                ],
-                'types' => ['diet'],
-                'categories' => ['drinks'],
-                'image_path' => null,
-                'price' => 180000,
             ],
             [
                 'title' => 'نوشیدنی بیدمشک',
@@ -216,31 +190,6 @@ class DrinksMealSeeder extends Seeder
                 'image_path' => 'images/meals/drinks/mohito.png',
                 'price' => 60000,
             ],
-             [
-                 'title' => 'نوشیدنی آرامش',
-                 'slug' => 'calm-drink',
-                 'calories' => 40,
-                 'nutritional_informations' => [
-                     'انرژی' => '40 کیلوکالری',
-                     'کربوهیدرات' => '3.5 گرم',
-                     'پروتئین' => '2 گرم',
-                     'چربی' => '2 گرم'
-                 ],
-                 'ingredients' => ['عرق بیدمشک', 'تخم شربتی', 'دانه چیا', 'آب آشامیدنی', 'شیرین کننده رژیمی'],
-                 'consumable_items' => [
-                     'فیبر بسیار بالا (نسبت به کالری)',
-                     'منبع عالی امگا-۳ گیاهی',
-                     'هیدراتاسیون عالی با آزادسازی تدریجی آب',
-                     'بدون قند و کم کالری'
-                 ],
-                 'contraindications' => [
-                     'مصرف با داروهای رقیق‌کننده خون با احتیاط (به دلیل امگا-۳) انجام شود'
-                 ],
-                 'types' => ['diet'],
-                 'categories' => ['drinks'],
-                 'image_path' => null,
-                 'price' => 50000,
-             ],
         ];
 
         // Preload or create related types and category
@@ -296,7 +245,7 @@ class DrinksMealSeeder extends Seeder
                         try {
                             // create exact 600x600 thumbnail (crop to cover)
                             $img = Image::read($fullImagePath)
-                                ->cover(600, 800)
+                                ->cover(600, 400)
                                 ->save($thumbnailPath);
 
                             $thumbnailUrl = 'images/thumbnails/' . $filename;
@@ -308,10 +257,11 @@ class DrinksMealSeeder extends Seeder
             }
 
             // Create image record (with thumbnail)
-            $image = ImageModel::firstOrCreate(
+            $image = ImageModel::updateOrCreate(
                 ['url' => $imagePath],
                 ['thumbnail_url' => $thumbnailUrl]
             );
+
 
             $meal->images()->syncWithoutDetaching([$image->id]);
         }

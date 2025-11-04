@@ -201,7 +201,7 @@ class CoffeeMealSeeder extends Seeder
                         try {
                             // create exact 600x600 thumbnail (crop to cover)
                             $img = Image::read($fullImagePath)
-                                ->cover(600, 800)
+                                ->cover(600, 400)
                                 ->save($thumbnailPath);
 
                             $thumbnailUrl = 'images/thumbnails/' . $filename;

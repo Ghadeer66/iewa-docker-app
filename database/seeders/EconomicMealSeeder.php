@@ -200,7 +200,7 @@ class EconomicMealSeeder extends Seeder
                     if ($fileSizeBytes <= 20 * 1024 * 1024) { // skip >20MB
                         try {
                             $img = Image::read($fullImagePath)
-                                ->cover(1000, 800)
+                                ->cover(600, 400)
                                 ->save($thumbnailPath);
 
                             $thumbnailUrl = 'images/thumbnails/' . $filename;
