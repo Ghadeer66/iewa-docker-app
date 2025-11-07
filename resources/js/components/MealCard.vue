@@ -71,7 +71,7 @@
 
                     <div v-if="galleryImages.length > 1" class="relative w-full">
                         <img :src="galleryImages[currentSlide]" :alt="meal.title || 'meal'"
-                            class="w-full object-cover rounded-lg shadow-sm" style="aspect-ratio: 3 / 2;" />
+                            class="w-full    object-cover rounded-lg shadow-sm" style="aspect-ratio: 3 / 2;" />
                         <!-- Prev -->
                         <button @click="prevSlide"
                             class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center">‹</button>
