@@ -547,10 +547,7 @@ function applySelections() {
     if (selectedDates.value.length > 0) {
         cart.addSelections(
             props.mealId,
-            props.mealTitle,
             selectedDates.value.slice(),
-            perDayPrice.value,
-            props.mealImage,
             props.mealQuantity || 1,
         );
     }
@@ -572,11 +569,8 @@ const handleBackClick = () => {
         // Add all selected dates for this meal to the cart
         cart.addSelections(
             props.mealId,
-            props.mealTitle,
             selectedDates.value,
-            finalPrice,
-            props.mealImage,
-            props.mealQuantity
+            props.mealQuantity || 1,
         )
     }
 

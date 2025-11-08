@@ -84,8 +84,13 @@ class User extends Authenticatable
     }
 
     public function parent_business()
-{
-    // assuming 'belongs_to' stores the business user ID
-    return $this->belongsTo(User::class, 'belongs_to');
-}
+    {
+        // assuming 'belongs_to' stores the business user ID
+        return $this->belongsTo(User::class, 'belongs_to');
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
 }

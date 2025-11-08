@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SectionElementController;
 use App\Http\Controllers\Admin\SectionTypeController;
 use App\Http\Controllers\Admin\TypeController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Business\AuthController as BusinessAuthController;
 use App\Http\Controllers\Business\DashboardController as BusinessDashboardController;
@@ -127,7 +128,8 @@ Route::middleware('auth')->get('/api/me/subsidy', function () {
     $today = now()->toDateString();
     // Check date window if provided
     if (($row->starts_at && $row->starts_at > $today) ||
-        ($row->ends_at && $row->ends_at < $today)) {
+        ($row->ends_at && $row->ends_at < $today)
+    ) {
         return response()->json(['percentage' => 0, 'max_price' => 0]);
     }
 
@@ -147,6 +149,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/wallet', [ProfileController::class, 'wallet'])->name('profile.wallet');
     Route::get('/profile/comments', [ProfileController::class, 'comments'])->name('profile.comments');
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
+
+    // Cart Routes
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart', [CartController::class, 'store']);
+    Route::delete('/cart/{id}/one', [CartController::class, 'removeOne']);
+    Route::delete('/cart/{id}/all', [CartController::class, 'removeAll']);
+    Route::delete('/cart', [CartController::class, 'clear']);
 });
 
 // ----------------------

@@ -1,122 +1,101 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
 
-// ---- Types ----
-export interface Item {
+export interface CartItem {
+  id: number
   mealId: string
   mealTitle: string
-  mealImage?: string
   dateISO: string
   price: number
+  mealImage?: string
+  quantity: number
 }
 
-interface State {
-  items: Item[]
-  userId?: string
-}
-
-// ---- Helpers ----
-function storageKey(userId?: string) {
-  return userId ? `cart_${userId}` : 'cart_guest'
-}
-
-function load(userId?: string): State {
-  try {
-    const data = localStorage.getItem(storageKey(userId))
-    if (!data) return { items: [], userId }
-    const parsed = JSON.parse(data)
-    return {
-      items: Array.isArray(parsed.items) ? parsed.items : [],
-      userId,
-    }
-  } catch {
-    return { items: [], userId }
-  }
-}
-
-function save(state: State) {
-  try {
-    localStorage.setItem(storageKey(state.userId), JSON.stringify({ items: state.items }))
-  } catch (e) {
-    console.error('Failed to save cart:', e)
-  }
-}
-
-// ---- Store ----
 export const useCartStore = defineStore('cart', {
-  // Automatically load from localStorage on startup
-  state: (): State => load(),
+  state: () => ({
+    items: [] as CartItem[],
+    // pending operations for optimistic UI (list of cart ids currently mutating)
+    pending: [] as number[],
+  }),
 
   getters: {
-    // Total count of items
-    count: (state): number => state.items.length,
-
-    // Return count of meals per date
-    countsByDate: (state) => {
-      return (mealId: string): Record<string, number> => {
-        const map: Record<string, number> = {}
-        for (const it of state.items as Item[]) { // <--- typed here
-          if (it.mealId !== mealId) continue
-          map[it.dateISO] = (map[it.dateISO] || 0) + 1
-        }
-        return map
-      }
-    },
+    count: (state) => state.items.length,
   },
 
   actions: {
-    // Initialize when user logs in/out
-    initialize(userId?: string) {
-      const loaded = load(userId)
-      this.items = loaded.items
-      this.userId = userId
-    },
-
-    // Add an item to the cart
-    add(item: Item) {
-      this.items.push(item)
-      save(this)
-    },
-
-    // Add multiple selections (used by calendar) — adds one item per date, repeated by quantity
-    addSelections(
-      mealId: string,
-      mealTitle: string,
-      dates: string[],
-      price: number,
-      mealImage?: string,
-      quantity = 1
-    ) {
-      for (const d of dates) {
-        for (let i = 0; i < Math.max(1, quantity); i++) {
-          this.items.push({ mealId, mealTitle, mealImage, dateISO: d, price })
-        }
+    async loadCart() {
+      try {
+        const { data } = await axios.get('/cart')
+        this.items = Array.isArray(data) ? (data as CartItem[]) : []
+      } catch (error) {
+        console.error('Failed to load cart:', error)
       }
-      save(this)
     },
 
-    // Remove one instance of a meal/date combination
-    removeOne(mealId: string, dateISO: string, price: number) {
-      const idx = this.items.findIndex(
-        (it: Item) => it.mealId === mealId && it.dateISO === dateISO && it.price === price
-      )
-      if (idx !== -1) {
+    // Initialize store from server-provided items (used after login)
+    initialize(items: CartItem[]) {
+      this.items = Array.isArray(items) ? items : []
+      this.pending = []
+    },
+
+    async addSelections(mealId: string, dates: string[], quantity: number = 1) {
+      try {
+        await axios.post('/cart', { mealId, dates, quantity })
+        await this.loadCart()
+      } catch (error) {
+        console.error('Failed to add to cart:', error)
+      }
+    },
+
+    async removeOne(cartId: number) {
+      // Optimistic UI: apply change locally immediately, then call server.
+      // On error, rollback to previous state.
+      const prev = JSON.parse(JSON.stringify(this.items)) as CartItem[]
+
+      const idx = this.items.findIndex((i) => i.id === cartId)
+      if (idx === -1) return
+
+      // apply local optimistic change
+      if (this.items[idx].quantity > 1) {
+        this.items[idx].quantity = this.items[idx].quantity - 1
+      } else {
         this.items.splice(idx, 1)
-        save(this)
+      }
+
+      // mark pending
+      if (!this.pending.includes(cartId)) this.pending.push(cartId)
+
+      try {
+        await axios.delete(`/cart/${cartId}/one`)
+        // sync with server to get authoritative state
+        await this.loadCart()
+      } catch (error) {
+        // rollback
+        this.items = prev
+        console.error('Failed to remove one:', error)
+      } finally {
+        // clear pending flag
+        this.pending = this.pending.filter((id) => id !== cartId)
       }
     },
 
-    // Remove all items from a specific group
-    removeGroup(mealId: string, dateISO: string, price: number) {
-      this.items = this.items.filter(
-        (it: Item) => !(it.mealId === mealId && it.dateISO === dateISO && it.price === price)
-      )
-      save(this)
+    async removeAll(cartId: number) {
+      try {
+        await axios.delete(`/cart/${cartId}/all`)
+        // Refresh from server to ensure UI matches backend
+        await this.loadCart()
+      } catch (error) {
+        console.error('Failed to remove all:', error)
+      }
     },
 
-    // Empty the cart
-    clearAll() {
-      this.items = []
-      save(this)
+    async clearAll() {
+      try {
+        await axios.delete('/cart')
+        this.items = []
+      } catch (error) {
+        console.error('Failed to clear cart:', error)
+      }
     },
   },
 })

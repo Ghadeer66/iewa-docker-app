@@ -228,6 +228,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
+import { useCartStore } from '@/stores/cart'
 
 const showAuthModal = computed(() => {
   const currentPath = window.location.pathname
@@ -315,22 +316,45 @@ const register = async () => {
 const login = async () => {
   loginLoading.value = true
   loginError.value = ''
-  loginErrors.value = {}
 
   try {
     await router.post('/login', loginForm, {
-      onSuccess: () => console.log('Login successful'),
+      onSuccess: async () => {
+        // ensure cart store is loaded and then reload Inertia page props so all components get fresh auth/cart data
+        try {
+          const cart = useCartStore()
+          // prefer canonical loader (falls back to initialize if needed)
+          if (cart.loadCart) {
+            await cart.loadCart()
+          } else if (cart.initialize) {
+            const res = await fetch('/cart', { headers: { Accept: 'application/json' } })
+            const data = await res.json()
+            cart.initialize(data.items || [])
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to load cart after login', e)
+        }
+
+        // Force Inertia to reload page props so components relying on $page.props update immediately
+        try {
+          await router.reload()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to reload page after login', e)
+        }
+      },
       onError: (err) => {
-        if (err.errors) loginErrors.value = err.errors;
-        loginError.value = err.message || 'خطا در ورود. لطفا مجددا تلاش کنید.'
+        loginError.value = err.message || 'خطا در ورود'
       },
       onFinish: () => loginLoading.value = false
     })
   } catch {
-    loginError.value = 'خطا در ارتباط با سرور';
+    loginError.value = 'خطا در ارتباط با سرور'
     loginLoading.value = false
   }
 }
+
 </script>
 
 <style>
