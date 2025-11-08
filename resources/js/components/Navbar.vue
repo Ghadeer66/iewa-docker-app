@@ -258,10 +258,8 @@ const cart = useCartStore()
 const cartCount = computed(() => cart.count)
 const cartCountFormatted = computed(() => cartCount.value.toLocaleString('fa-IR'))
 
-const showCart = computed({
-    get: () => props.cartIsOpen,
-    set: (val) => emit('update:cartIsOpen', val),
-})
+const showCart = ref(false)
+
 
 const mobileOpen = ref(false)
 

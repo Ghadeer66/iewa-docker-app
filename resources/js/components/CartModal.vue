@@ -28,6 +28,7 @@
                     </div>
                 </div>
                 <div class="px-3 md:px-5 py-3 md:py-4 border-t flex flex-col sm:flex-row justify-end gap-2 md:gap-3">
+                    <button @click="confirmClearAll" class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 cursor-pointer text-sm w-full sm:w-auto">حذف همه</button>
                     <button @click="emit('close')" class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer text-sm w-full sm:w-auto">بستن</button>
                     <button class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg bg-[#4e3356] text-white hover:opacity-90 cursor-pointer text-sm w-full sm:w-auto">ادامه پرداخت</button>
                 </div>
@@ -67,5 +68,14 @@ function removeOne(g) {
 }
 function removeAll(g) {
     cart.removeGroup(g.mealId, g.dateISO, g.price)
+}
+
+function confirmClearAll() {
+    if (!items.value || items.value.length === 0) return;
+    // eslint-disable-next-line no-alert
+    if (confirm('آیا مطمئن هستید که می‌خواهید تمام سبد را خالی کنید؟')) {
+        cart.clearAll()
+        emit('close')
+    }
 }
 </script>

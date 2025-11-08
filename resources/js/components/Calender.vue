@@ -1,4 +1,3 @@
-```vue
 <template>
     <div dir="rtl" class="relative">
         <!-- Floating Button -->
@@ -83,7 +82,7 @@
                     </div>
 
                     <div v-if="selectedDates.length > 0" class="text-center text-xs md:text-sm text-gray-600 mb-2">
-                        روزهای انتخاب شده: {{ selectedDates.length }} روز
+                        روزهای انتخاب شده: {{ totalSelectedDaysCount }}  روز
                     </div>
                 </div>
 
@@ -91,36 +90,30 @@
                 <div class="w-full md:w-75 flex flex-col py-4 md:py-16 items-stretch">
                     <div class="h-64 md:h-[350px] rounded-xl p-3 md:p-4 text-white flex flex-col items-center justify-center text-center transition-all duration-500"
                         :class="planColorClass">
-                        <div class="flex flex-col gap-2 md:gap-4 w-full"> <!-- Reduced vertical spacing on mobile -->
+                        <div class="flex flex-col gap-2 md:gap-4 w-full">
 
-                            <!-- Plan Title -->
                             <div class="font-bold text-base md:text-lg text-center mb-1 md:mb-2">{{ planTitle }}</div>
 
-                            <!-- Base Price -->
                             <div class="flex justify-between w-full px-1 md:px-2 text-xs md:text-sm">
                                 <div class="font-medium text-right mr-2 md:mr-4">قیمت محصول:</div>
                                 <div class="ml-2 md:ml-6">{{ numberFormat(props.basePrice) }} تومان</div>
                             </div>
 
-                            <!-- Subsidy -->
                             <div class="flex justify-between w-full px-1 md:px-2 text-xs md:text-sm">
                                 <div class="font-medium text-right mr-2 md:mr-4">سوبسید شرکت:</div>
                                 <div class="ml-4 md:ml-10">{{ subsidyPercentDisplay }}</div>
                             </div>
 
-                            <!-- Discount -->
                             <div class="flex justify-between w-full px-1 md:px-2 text-xs md:text-sm">
                                 <div class="font-medium text-right mr-2 md:mr-4">تخفیف:</div>
                                 <div class="ml-4 md:ml-10">{{ plan === 'daily' ? '۰٪' : discountPercentText }}</div>
                             </div>
 
-                            <!-- Total Price -->
                             <div class="flex justify-between w-full px-1 md:px-2 text-xs md:text-sm">
                                 <div class="font-medium text-right mr-2 md:mr-4">جمع:</div>
                                 <div class="ml-2 md:ml-6">{{ numberFormat(priceToPay) }} تومان</div>
                             </div>
 
-                            <!-- Payable Amount -->
                             <div class="flex justify-between w-full px-1 md:px-2 mt-3 md:mt-5 text-xs md:text-sm">
                                 <div class="font-medium text-right mr-2 md:mr-4">قابل پرداخت:</div>
                                 <div class="ml-2 md:ml-6">{{ numberFormat(totalPrice) }} تومان</div>
@@ -129,15 +122,16 @@
                         </div>
                     </div>
 
-                    <!-- Continue Button -->
                     <button
-                        class="mt-4 md:mt-5 h-10 md:h-12 bg-gray-200 text-black rounded-lg font-bold hover:bg-orange-300 transition-colors cursor-pointer text-sm md:text-base">
+                        class="mt-4 md:mt-5 h-10 md:h-12 bg-gray-200 text-black rounded-lg font-bold hover:bg-orange-300 transition-colors cursor-pointer text-sm md:text-base"
+                        @click="applySelections">
                         ادامه خرید
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <script setup>
@@ -165,10 +159,9 @@ const open = computed({
 
 const isAtTop = ref(true);
 const isMobile = ref(false);
-
 const isShrunk = computed(() => !isAtTop.value || isMobile.value);
 
-const baseWeekdayLabels = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج']; // Saturday–Friday
+const baseWeekdayLabels = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
 const weekdayLabels = computed(() => {
     const today = new Date();
     const startIdx = (today.getDay() + 1) % 7;
@@ -198,8 +191,14 @@ const countsMap = computed(() => {
     return map;
 });
 
-const shippingDaily = 50000;
-const shippingShared = 5000;
+const existingDatesForMeal = computed(() => {
+    const s = new Set();
+    for (const it of items.value) {
+        if (it.mealId === props.mealId) s.add(it.dateISO);
+    }
+    return s;
+});
+
 const subsidyRate = ref(0);
 
 const plan = ref('daily');
@@ -229,7 +228,7 @@ function generateDaysFromToday() {
     const days = [];
     const today = new Date();
     const start = new Date(today);
-    let cur = start;
+    const cur = start;
 
     while (days.length < 28) {
         const weekdaySatIndex = (cur.getDay() + 1) % 7;
@@ -255,6 +254,14 @@ function generateDaysFromToday() {
     monthDays.value = weeks;
 }
 
+const totalSelectedDaysCount = computed(() => {
+  if (!items.value) return selectedDates.value.length
+  return Array.from(new Set([
+    ...items.value.map(it => it.dateISO),
+    ...selectedDates.value
+  ])).length
+})
+
 function isThursdayOrFriday(day) {
     const weekdaySatIndex = day.weekdaySatIndex;
     return weekdaySatIndex === 5 || weekdaySatIndex === 6;
@@ -273,72 +280,91 @@ function getDayType(day) {
 }
 
 function handleDayClick(day) {
-    const iso = day.fullDate;
-    const dayType = getDayType(day);
+  const iso = day.fullDate
+  const idx = selectedDates.value.indexOf(iso)
 
-    if (dayType === 'today' && todayLocked.value) return;
-    if (dayType === 'tomorrow' && tomorrowLocked.value) return;
+  // Toggle clicked date
+  if (idx === -1) {
+    selectedDates.value.push(iso)
+  } else {
+    selectedDates.value.splice(idx, 1)
+  }
 
-    const idx = selectedDates.value.indexOf(iso);
-    if (idx === -1) selectedDates.value.push(iso);
-    else selectedDates.value.splice(idx, 1);
+  // Sync UI
+  monthDays.value.forEach((week) =>
+    week.forEach((d) => (d.isSelected = selectedDates.value.includes(d.fullDate)))
+  )
 
-    monthDays.value.forEach((week) =>
-        week.forEach((d) => (d.isSelected = selectedDates.value.includes(d.fullDate)))
-    );
+  // Sort chronologically
+  selectedDates.value.sort((a, b) => new Date(a) - new Date(b))
 
-    let hasToday = false, hasTomorrow = false, hasAfterTomorrow = false, todayIso = '';
-    for (const dIso of selectedDates.value) {
-        const t = monthDays.value.flat().find(md => md.fullDate === dIso);
-        if (!t) continue;
-        const tType = getDayType(t);
-        if (tType === 'today') { hasToday = true; todayIso = dIso; }
-        if (tType === 'tomorrow') hasTomorrow = true;
-        if (tType === 'afterTomorrow') hasAfterTomorrow = true;
-    }
-    if (hasTomorrow && hasAfterTomorrow) {
-        todayLocked.value = true;
-        if (hasToday && todayIso) {
-            selectedDates.value = selectedDates.value.filter(d => d !== todayIso);
-        }
-    } else {
-        todayLocked.value = false;
-    }
+  // ---- Today+Tomorrow & Tomorrow+DayAfter Rule ----
+  if (selectedDates.value.length >= 3) {
+    const firstDay = new Date(selectedDates.value[0])
+    const secondDay = new Date(selectedDates.value[1])
+    const today = new Date()
+    const tomorrow = new Date()
+    tomorrow.setDate(today.getDate() + 1)
+    const dayAfter = new Date()
+    dayAfter.setDate(today.getDate() + 2)
 
-    const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
-    const daysFromToday = (d) => {
-        const sd = new Date(d.gDate); sd.setHours(0, 0, 0, 0);
-        return Math.round((sd.getTime() - startOfToday.getTime()) / (24 * 60 * 60 * 1000));
-    };
-    let hasTomorrowSel = false, hasPlus2 = false, hasGte3 = false, tomorrowIso = '';
-    for (const dIso of selectedDates.value) {
-        const t = monthDays.value.flat().find(md => md.fullDate === dIso);
-        if (!t) continue;
-        const delta = daysFromToday(t);
-        if (delta === 1) { hasTomorrowSel = true; tomorrowIso = dIso; }
-        if (delta === 2) hasPlus2 = true;
-        if (delta >= 3) hasGte3 = true;
-    }
-    if (hasPlus2 && hasGte3) {
-        tomorrowLocked.value = true;
-        if (hasTomorrowSel && tomorrowIso) {
-            selectedDates.value = selectedDates.value.filter(d => d !== tomorrowIso);
-        }
-    } else {
-        tomorrowLocked.value = false;
+    const oneDay = 24 * 60 * 60 * 1000
+
+    let removeEarliest = false
+
+    // Check Today + Tomorrow
+    if (firstDay.toDateString() === today.toDateString() &&
+        secondDay - firstDay === oneDay) {
+      removeEarliest = true
     }
 
-    if (selectedDates.value.length === 1) {
-        const onlyIso = selectedDates.value[0];
-        const onlyDay = monthDays.value.flat().find(md => md.fullDate === onlyIso);
-        afterTomorrowMode.value = !!onlyDay && getDayType(onlyDay) === 'afterTomorrow';
-    } else {
-        afterTomorrowMode.value = false;
+    // Check Tomorrow + DayAfter
+    if (firstDay.toDateString() === tomorrow.toDateString() &&
+        secondDay - firstDay === oneDay) {
+      removeEarliest = true
     }
 
-    evaluatePlanAndPricing();
+    if (removeEarliest) {
+      const removedDate = selectedDates.value[0]
+      selectedDates.value.splice(0, 1)
+
+      // Update UI
+      monthDays.value.forEach((week) =>
+        week.forEach((d) => {
+          if (d.fullDate === removedDate) d.isSelected = false
+        })
+      )
+
+      // Remove from cart if exists
+      const existingItem = items.value.find(
+        it => it.mealId === props.mealId && it.dateISO === removedDate
+      )
+      if (existingItem) {
+        cart.removeGroup(props.mealId, removedDate, existingItem.price)
+      }
+    }
+  }
+
+  evaluatePlanAndPricing()
 }
 
+
+
+/**
+ * evaluatePlanAndPricing
+ *
+ * New approach:
+ * - Build a projected cart state that reflects applying the modal's current selections:
+ *   * existing items (items.value)
+ *   * remove any existing item-dates for current meal that the user deselected in this modal
+ *   * add new selections for current meal that are not already in cart
+ * - Count the number of meal–date items in projected cart (each meal+date is a separate line)
+ * - Build a set of unique dates that have >= 1 meal in projected cart (for monthly week coverage)
+ * - Apply thresholds:
+ *    - monthly: projectedItemsCount >= 8 && every week has at least one date selected
+ *    - weekly: projectedItemsCount >= 3
+ *    - otherwise daily
+ */
 function evaluatePlanAndPricing() {
     perDayPrice.value = props.basePrice;
     priceToPay.value = 0;
@@ -346,71 +372,136 @@ function evaluatePlanAndPricing() {
     discountPercentText.value = '';
     subsidyApplied.value = subsidyRate.value > 0;
 
-    if (selectedDates.value.length === 0) {
-        plan.value = 'daily';
-        planTitle.value = 'هیچ روزی انتخاب نشده';
-        return;
+    // --- Build projected cart state (items after applying current modal selections) ---
+    // 1) Map existing items to an array copy
+    const existingItems = items.value.slice(); // shallow copy
+
+    // 2) Get set of dates currently in cart for this meal
+    const existingMealDates = new Set();
+    for (const it of existingItems) {
+        if (it.mealId === props.mealId) existingMealDates.add(it.dateISO);
     }
 
-    // Simplified rule: single-day selection → daily plan
-    if (selectedDates.value.length === 1) {
-        plan.value = 'daily';
-        planTitle.value = 'خرید روزانه';
-        discountPercentText.value = 'بدون تخفیف';
-        subsidyApplied.value = false;
-        const count = selectedDates.value.length;
-        const priceAfterSubsidy = props.basePrice * (1 - (subsidyRate.value || 0));
-        perDayPrice.value = Math.round(priceAfterSubsidy);
-        priceToPay.value = perDayPrice.value;
-        totalPrice.value = perDayPrice.value * count;
-        return;
+    // 3) Determine deselections: dates that are currently in cart for this meal but NOT in selectedDates
+    let deselectedExistingCount = 0;
+    for (const d of existingMealDates) {
+        if (!selectedDates.value.includes(d)) {
+            // user has removed this date for this meal in the modal
+            deselectedExistingCount++;
+        }
     }
 
-    const count = selectedDates.value.length;
+    // 4) Determine additions: selected dates that are not already in the cart for this meal
+    let incrementalAdditions = 0;
+    for (const d of selectedDates.value) {
+        if (!existingMealDates.has(d)) incrementalAdditions++;
+    }
+
+    // 5) Projected total meal–date items after applying changes:
+    //    current cart size minus removed existing items plus newly added items
+    const projectedItemsCount = existingItems.length - deselectedExistingCount + incrementalAdditions;
+
+    // 6) Build projected set of unique dates that will have at least one meal
+    const projectedDatesSet = new Set();
+    // start with all existing item dates
+    for (const it of existingItems) {
+        projectedDatesSet.add(it.dateISO);
+    }
+    // remove dates that belong to existing meal and were deselected
+    for (const d of existingMealDates) {
+        if (!selectedDates.value.includes(d)) {
+            // remove that date occurrence only for that meal: if other meals exist on that date,
+            // projectedDatesSet should remain containing that date. So check if any remaining item (not removed)
+            // would still carry that date — simpler approach: rebuild projectedDatesSet from projected items:
+            // we'll instead rebuild explicitly below.
+        }
+    }
+    // Instead of trying to surgically remove, rebuild projectedDatesSet from projected items:
+    const projectedItems = [];
+    // add all existing items except those that belong to this meal and were deselected
+    for (const it of existingItems) {
+        if (it.mealId === props.mealId) {
+            // keep only if the date is still selected in modal
+            if (selectedDates.value.includes(it.dateISO)) {
+                projectedItems.push(it);
+            }
+        } else {
+            // other meals remain unchanged
+            projectedItems.push(it);
+        }
+    }
+    // add newly selected dates for this meal (that weren't already present)
+    for (const d of selectedDates.value) {
+        if (!existingMealDates.has(d)) {
+            // create a lightweight projected item (mealId + date) so dates get counted for week coverage
+            projectedItems.push({
+                mealId: props.mealId,
+                dateISO: d
+            });
+        }
+    }
+    // now build set of unique dates
+    for (const it of projectedItems) projectedDatesSet.add(it.dateISO);
+
+    // --- Determine weeks coverage using projectedDatesSet ---
     const weeksWithAtLeastOne = new Set();
     monthDays.value.forEach((week, wi) => {
-        const selInWeek = week.filter(d => selectedDates.value.includes(d.fullDate));
+        const selInWeek = week.filter(d => projectedDatesSet.has(d.fullDate));
         if (selInWeek.length >= 1) weeksWithAtLeastOne.add(wi);
     });
 
-    if (count >= 8 && weeksWithAtLeastOne.size === monthDays.value.length) {
-        plan.value = 'monthly';
+    // --- Decide plan using projectedItemsCount and weeks coverage (keeps your original thresholds) ---
+    let computedPlan = 'daily';
+    if (projectedItemsCount >= 8 && weeksWithAtLeastOne.size === monthDays.value.length) {
+        computedPlan = 'monthly';
+    } else if (projectedItemsCount >= 3) {
+        computedPlan = 'weekly';
+    } else {
+        computedPlan = 'daily';
+    }
+
+    // Apply plan UI & discounts
+    plan.value = computedPlan;
+    if (computedPlan === 'monthly') {
         planTitle.value = 'خرید ماهانه';
         discountPercentText.value = '۴۰٪';
         subsidyApplied.value = true;
-    } else if (count >= 3) {
-        plan.value = 'weekly';
+    } else if (computedPlan === 'weekly') {
         planTitle.value = 'خرید هفتگی';
         discountPercentText.value = '۲۰٪';
         subsidyApplied.value = true;
     } else {
-        plan.value = 'daily';
         planTitle.value = 'خرید روزانه';
         discountPercentText.value = 'بدون تخفیف';
         subsidyApplied.value = false;
     }
 
     let discount = 0;
-    if (plan.value === 'weekly') discount = 0.2;
-    if (plan.value === 'monthly') discount = 0.4;
+    if (computedPlan === 'weekly') discount = 0.2;
+    if (computedPlan === 'monthly') discount = 0.4;
 
     const priceAfterSubsidy = props.basePrice * (1 - (subsidyRate.value || 0));
     const priceAfterDiscount = priceAfterSubsidy * (1 - discount);
     perDayPrice.value = Math.round(priceAfterDiscount);
+
+    // Show per-day payable and total for the current selection only (unchanged behavior)
     priceToPay.value = perDayPrice.value;
-    totalPrice.value = perDayPrice.value * count;
+    totalPrice.value = perDayPrice.value * selectedDates.value.length;
 }
 
+/**
+ * dayCountFor(dateISO)
+ * returns number of meal selections on that date in the projected view (cart + current modal)
+ */
 function dayCountFor(dateISO) {
     const n = countsMap.value[dateISO] || 0;
     return n.toLocaleString('fa-IR');
 }
 
 function cellClass(day) {
-    const dayType = getDayType(day);
     if (isThursdayOrFriday(day)) return 'bg-gray-200 text-gray-400 border border-gray-300';
-    if (todayLocked.value && dayType === 'today') return 'bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed';
-    if (tomorrowLocked.value && dayType === 'tomorrow') return 'bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed';
+    if (todayLocked.value && getDayType(day) === 'today') return 'bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed';
+    if (tomorrowLocked.value && getDayType(day) === 'tomorrow') return 'bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed';
 
     if (day.isSelected) {
         switch (plan.value) {
@@ -425,10 +516,7 @@ function cellClass(day) {
 }
 
 const handleScroll = () => (isAtTop.value = window.scrollY < 50);
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768;
-};
+const checkMobile = () => { isMobile.value = window.innerWidth < 768; };
 
 onMounted(async () => {
     generateDaysFromToday();
@@ -439,9 +527,12 @@ onMounted(async () => {
         const { data } = await axios.get('/api/me/subsidy');
         const pct = Number(data?.percentage ?? 0);
         subsidyRate.value = !Number.isNaN(pct) && pct > 0 ? Math.min(Math.max(pct, 0), 100) / 100 : 0;
-    } catch (e) {
+    } catch {
         subsidyRate.value = 0;
     }
+    // clear visual selections initially
+    selectedDates.value = [];
+    monthDays.value.forEach((week) => week.forEach((d) => (d.isSelected = false)));
     evaluatePlanAndPricing();
 });
 onUnmounted(() => {
@@ -450,7 +541,9 @@ onUnmounted(() => {
 });
 
 const backMessageVisible = ref(false);
-function handleBackClick() {
+
+function applySelections() {
+    // Persist selections into cart store (this was your original handleBackClick behaviour)
     if (selectedDates.value.length > 0) {
         cart.addSelections(
             props.mealId,
@@ -461,6 +554,7 @@ function handleBackClick() {
             props.mealQuantity || 1,
         );
     }
+    // reset modal selection UI
     selectedDates.value = [];
     monthDays.value.forEach((week) => week.forEach((d) => (d.isSelected = false)));
     evaluatePlanAndPricing();
@@ -470,6 +564,32 @@ function handleBackClick() {
     open.value = false;
 }
 
+const handleBackClick = () => {
+    if (selectedDates.value.length > 0) {
+        // Use the correct per-day price (after subsidy/discounts)
+        const finalPrice = perDayPrice.value
+
+        // Add all selected dates for this meal to the cart
+        cart.addSelections(
+            props.mealId,
+            props.mealTitle,
+            selectedDates.value,
+            finalPrice,
+            props.mealImage,
+            props.mealQuantity
+        )
+    }
+
+    // Close the calendar
+    open.value = false
+
+    // Show confirmation message
+    backMessageVisible.value = true
+    setTimeout(() => (backMessageVisible.value = false), 4000)
+}
+
+
+
 watch(() => props.mealId, () => {
     selectedDates.value = [];
     monthDays.value.forEach((week) => week.forEach((d) => (d.isSelected = false)));
@@ -477,4 +597,14 @@ watch(() => props.mealId, () => {
 });
 watch(items, () => evaluatePlanAndPricing());
 </script>
-```
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.6s;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
