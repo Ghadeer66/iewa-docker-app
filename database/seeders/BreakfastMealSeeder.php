@@ -6,135 +6,173 @@ use Illuminate\Database\Seeder;
 use App\Models\Meal;
 use App\Models\Type;
 use App\Models\Category;
-use App\Models\Image;
+use App\Models\Image as ImageModel;
 use App\Models\Ingredient;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class BreakfastMealSeeder extends Seeder
 {
     public function run(): void
     {
+        // Prevent memory issues during thumbnail creation
+        @ini_set('memory_limit', '512M');
+
         $defaultImagePath = 'images/default-meals-images/breakfast.jpg';
+
+        // Ensure thumbnails directory exists
+        $thumbDir = public_path('images/thumbnails');
+        if (!File::exists($thumbDir)) {
+            File::makeDirectory($thumbDir, 0755, true);
+        }
 
         $meals = [
             [
-                'title' => 'تست فرانسوی',
-                'slug' => 'french-toast',
-                'calories' => 465,
+                'title' => 'بریتیش',
+                'slug' => 'british',
+                'calories' => 500,
+                'price' => 250000,
                 'nutritional_informations' => [
-                    'کربوهیدرات' => '43 گرم',
-                    'پروتئین' => '26 گرم',
-                    'چربی' => '21 گرم',
+                    'کربوهیدرات' => '58 گرم',
+                    'پروتئین' => '28 گرم',
+                    'چربی' => '18 گرم',
                 ],
-                'ingredients' => ['دو عدد نان تست', 'تخم مرغ', 'کنجد', 'عسل ساشه ای'],
+                'ingredients' => [
+                    'نان تست بهمراه پنیر فتا و گردو',
+                    'لوبیا پخته',
+                    'تخم مرغ آب پز',
+                    'نوشیدنی تخم شربتی'
+                ],
                 'consumable_items' => [
-                    'یک صبحانه قوی و انرژیک که برای مدتها شما را سیر نگه می‌دارد.',
-                    'بدلیل وجود تخم مرغ منبع عالی از پروتئین و ویتامین D و آنتی اکسیدان‌های قوی است.',
-                    'تقویت سلامت مغز، حافظه، چشم‌ها، پوست و مو را فراهم می‌کند.',
+                    'یک میان وعده مقوی و کامل و سبک',
+                    'منبع عالی از پروتئین حیوانی و گیاهی با آمینو اسیدهای ضروری بدن',
+                    'دارای چربیهای سالم از گردو و  زرده تخم مرغ',
+                    'دارای کلسیم',
+                    'تعادل کامل درشت‌مغذی‌ها',
+                    'منبع عالی فیبر و اسیدهای چرب امگا۳',
+                    'منبع ویتامین‌ها و مواد معدنی متنوع',
+                    'ایجاد حس سیری و هضم آهسته تر قندها و آبرسانی ',
+                    'مناسب برای کنترل وزن (در اندازه متعادل)'
                 ],
                 'contraindications' => [
-                    'در رژیم های کم کربوهیدرات و گلوتن فری توصیه نمی‌شود.',
-                    'افراد با شرایط پزشکی خاص (مانند دیابت کنترل نشده یا کلسترول بسیار بالا) باید طبق دستور پزشک خود مصرف کنند.',
+                    'در افراد آلرژی به تخم مرغ',
+                    'عدم تحمل لاکتوز (شیر و پنیر)',
+                    'حساسیت به مغزها (گردو)',
+                    'حساسیت به گلوتن (نان تست)',
+                    'نقرس حاد (به دلیل پورین در لوبیا)',
+                    'بیماری کلیوی پیشرفته (پروتئین بالا)',
+                    'فنیل کتونوری (PKU)',
                 ],
-                'types' => ['energy'],
+                'types' => ['diet'],
                 'categories' => ['breakfast'],
-                'image_path' => null,
+                'image_path' => 'images/meals/breakfast/british.png',
             ],
             [
-                'title' => 'چیاتست',
-                'slug' => 'chia-toast',
-                'calories' => 290,
+                'title' => 'پک پنکیک بار',
+                'slug' => 'pancake-bar-pack',
+                'calories' => 800,
+                'price' => 230000,
                 'nutritional_informations' => [
-                    'کربوهیدرات' => '40 گرم',
-                    'پروتئین' => '11 گرم',
-                    'چربی' => '10 گرم',
+                    'کربوهیدرات' => '95 گرم',
+                    'پروتئین' => '32 گرم',
+                    'چربی' => '33 گرم',
                 ],
-                'ingredients' => ['نان تست سبوس دار', 'پنیرفتا کم چرب', 'خرما', 'گردو دانه چیا'],
+                'ingredients' => [
+                    'دو عدد پنکیک اوتمیل',
+                    'ساشه عسل',
+                    'نوشیدنی کافی میلک',
+                    'یک عدد میکس نوت بار با سس ارده (گردو، بادام‌زمینی، پرک جودوسر، کشمش، خرما، ارده)',
+                ],
                 'consumable_items' => [
-                    'یک صبحانه ایده آل و مقوی است که بدلیل حضور گردو و دانه چیا سرشار از امگا۳ و چربیهای غیراشباع می‌باشد که باعث سلامت قلب و مغز و کاهش التهاب میشود.',
-                    'باعث تعادل بهتر قند خون و جذب ویتامین‌های محلول در چربی میگردد همچنین با بخاطر فیبر بالا در این وعده به تنظیم حرکات روده و پیشگیری از یبوست کمک می‌کند.',
-                    'پنیر  و کنجد هم منبع بسیار خوبی از کلسیم و فسفرهستند',
+                    'انرژی پایدار تا ساعتها',
+                    'مقوی برای مغز و حافظه',
+                    'مناسب ورزشکاران',
+                    'منبع عالی فیبر',
+                    'منبع عالی از امگا۳ و ویتامین E و چربی‌های سالم',
+                    'دارای آهن و کلسیم',
                 ],
                 'contraindications' => [
-                    'افرادیکه مشکلات دیابتی دارند و افراد مستعد به سنگ کلیه اگزالاتی  و آلرژی به دانه های روغنی توصیه نمیشود.',
-                    'در رژیم‌های کم کربوهیدرات  و رژیمهای کتوژنیک و گلوتن فری قابل استفاده نیست'
+                    'افرادی که رژیم گلوتن فری دارند',
+                    'افراد دیابتی',
+                    'افرادی که آلرژی به دانه‌های روغنی دارند',
                 ],
-                'types' => ['light'],
+                'types' => ['diet'],
                 'categories' => ['breakfast'],
-                'image_path' => null,
+                'image_path' => 'images/meals/breakfast/pancake-bar-pack.png',
             ],
             [
-                'title' => 'پینات تست',
-                'slug' => 'peanut-toast',
-                'calories' => 460,
+                'title' => 'کرپ تخم مرغ و سبزیجات',
+                'slug' => 'egg-veggie-crepe',
+                'calories' => 440,
+                'price' => 225000,
                 'nutritional_informations' => [
-                    'کربوهیدرات' => '42 گرم',
-                    'پروتئین' => '16 گرم',
-                    'چربی' => '27 گرم',
+                    'کربوهیدرات' => '56 گرم',
+                    'پروتئین' => '22 گرم',
+                    'چربی' => '14 گرم',
                 ],
-                'ingredients' => ['دو عدد نان تست', 'کره بادام زمینی', 'دانه چیا'],
+                'ingredients' => [
+                    'تخم مرغ',
+                    'فلفل دلمه رنگی',
+                    'بروکلی',
+                    'جعفری',
+                    'هویج',
+                    'کدو',
+                    'نوشیدنی پرتقال',
+                    'پوره سیب زمینی',
+                    'نان تست مزه دار شده',
+                ],
                 'consumable_items' => [
-                    'انرژی را به تدریج در بدن آزاد می‌کند و برای ساعت‌ها شما را سیر و پرانرژی نگه می‌دارد.',
-                    'بدلیل وجود دانه چیا سرشار از فیبر، اسیدهای چرب امگا-۳ و ریزمغذی‌ها است.',
-                    'انتخاب عالی برای روزهای پرمشغله یا قبل از فعالیت ورزشی.',
+                    'دارای ویتامین‌های A، B12، C.',
+                    'مناسب برای سلامت مغز و چشم.',
+                    'سرشار از فیبر و آنتی اکسیدان.',
+                    'تامین انرژی پایدار و منبع خوبی از پتاسیم.',
                 ],
                 'contraindications' => [
-                    'افراد دارای آلرژی به گلوتن و بادام زمینی توصیه نمی‌شود.',
-                    'افراد دارای مشکلات گوارشی خاص مثل IBS یا سوءهاضمه توصیه نمی‌شود.',
-                    'افراد در حال کاهش وزن و رژیم کم کالری با احتیاط مصرف کنند.',
-                    'افراد دارای بیماری کلیوی خاص توصیه نمی‌شود.',
-                ],
-                'types' => ['energy'],
-                'categories' => ['breakfast'],
-                'image_path' => null,
-            ],
-            [
-                'title' => 'چیز تست ارده‌ای',
-                'slug' => 'tahini-cheese-toast',
-                'calories' => 420,
-                'nutritional_informations' => [
-                    'کربوهیدرات' => '55 گرم',
-                    'پروتئین' => '15 گرم',
-                    'چربی' => '16 گرم',
-                ],
-                'ingredients' => ['نان تست سبوس دار', 'پنیر فتا کم چرب', 'ارده', 'موز'],
-                'consumable_items' => [
-                    'نان سبوس‌دار و موز سرشار از فیبر هستند و به بهبود دستگاه گوارش کمک می‌کنند.',
-                    'ارده و پنیر منبع بسیار خوبی از کلسیم هستند.',
-                    'ارده سرشار از اسیدهای چرب غیراشباع و فیتوسترول‌هاست و به حفظ سلامت قلب کمک می‌کند.',
-                ],
-                'contraindications' => [
-                    'افراد دارای حساسیت‌های غذایی، IBS و رژیم‌های گلوتن فری مصرف نکنند.',
-                ],
-                'types' => ['energy'],
-                'categories' => ['breakfast'],
-                'image_path' => null,
-            ],
-            [
-                'title' => 'اگ تست مدیترانه‌ای',
-                'slug' => 'mediterranean-egg-toast',
-                'calories' => 305,
-                'nutritional_informations' => [
-                    'کربوهیدرات' => '35 گرم',
-                    'پروتئین' => '14 گرم',
-                    'چربی' => '12 گرم',
-                ],
-                'ingredients' => ['نان تست', 'تخم مرغ', 'زیتون', 'ریحون', 'پنیر پارمسان'],
-                'consumable_items' => [
-                    'انتخاب مناسب برای کاهش وزن و صبحانه سبک.',
-                    'دارای چربی‌های مفید غیر اشباع و پروتئین باکیفیت برای سیری طولانی‌مدت.',
-                    'سرشار از کلسیم و فسفر.',
-                ],
-                'contraindications' => [
-                    'افراد دارای حساسیت به لبنیات، لاکتوز، تخم مرغ و بیماران سلیاکی مصرف نکنند.',
+                    'افراد دیابتی در مصرف آن احتیاط کنند.',
+                    'در رژیم‌های گلوتن فری به‌واسطه نان تست مصرف نشود.',
                 ],
                 'types' => ['diet'],
                 'categories' => ['breakfast'],
                 'image_path' => null,
             ],
+            [
+                'title' => 'موراکو فروت',
+                'slug' => 'morocco-fruit',
+                'calories' => 500,
+                'price' => 225000,
+                'nutritional_informations' => [
+                    'کربوهیدرات' => '65 گرم',
+                    'پروتئین' => '20 گرم',
+                    'چربی' => '19 گرم',
+                ],
+                'ingredients' => [
+                    'نان تست',
+                    'کره بادام زمینی',
+                    'نوشیدنی کافی میلک',
+                    'سالاد میوه',
+                ],
+                'consumable_items' => [
+                    'تعادل کامل درشت‌مغذی‌ها: پروتئین (تست)، چربی سالم (کره بادام)، کربوهیدرات (میوه و نان).',
+                    'انرژی پایدار تا ساعت‌ها با ترکیب کافئین، فیبر و چربی سالم.',
+                    'افزایش مقاومت در برابر هوس‌های غذایی و ایجاد حس سیری طولانی.',
+                    'تأمین ریزمغذی‌ها و تقویت سیستم ایمنی: ویتامین C (سالاد میوه) + روی (بادام زمینی).',
+                    'بهبود عملکرد مغز با کافئین، امگا۳ و آنتی‌اکسیدان‌ها.',
+                    'سرشار از ویتامین‌ها، آبرسان و شاداب‌کننده پوست.',
+                ],
+                'contraindications' => [
+                    'افراد دارای آلرژی به بادام زمینی.',
+                    'افراد با عدم تحمل لاکتوز.',
+                    'افراد حساس به کافئین.',
+                    'افراد با حساسیت به گلوتن.',
+                    'افراد دارای دیابت کنترل‌نشده یا مشکلات گوارشی.',
+                ],
+                'types' => ['energy'],
+                'categories' => ['breakfast'],
+                'image_path' => 'images/meals/breakfast/morocco-fruit.png',
+            ],
         ];
 
-        // Preload or create types and category
-        $typeModels = collect(['energy', 'diet','light'])
+        $typeModels = collect(['energy', 'diet', 'light'])
             ->mapWithKeys(fn($t) => [$t => Type::firstOrCreate(['title' => $t])]);
         $categoryModels = collect(['breakfast'])
             ->mapWithKeys(fn($c) => [$c => Category::firstOrCreate(['title' => $c])]);
@@ -145,7 +183,7 @@ class BreakfastMealSeeder extends Seeder
                 'slug' => $data['slug'],
                 'description' => 'از مجموعه صبحانه‌های سالم و انرژی زا ایوا.',
                 'calories' => $data['calories'],
-                'price' => 170000,
+                'price' => $data['price'] ?? 170000,
                 'is_vegan' => false,
                 'kcal' => $data['calories'],
                 'nutritional_informations' => $data['nutritional_informations'],
@@ -154,9 +192,10 @@ class BreakfastMealSeeder extends Seeder
             ]);
 
             // Attach ingredients
-            $ingredientIds = collect($data['ingredients'])->map(function ($title) {
-                return Ingredient::firstOrCreate(['title' => $title])->id;
-            });
+            $ingredientIds = collect($data['ingredients'])->map(
+                fn($title) =>
+                Ingredient::firstOrCreate(['title' => $title])->id
+            );
             $meal->ingredients()->sync($ingredientIds);
 
             // Attach category and type
@@ -167,9 +206,39 @@ class BreakfastMealSeeder extends Seeder
                 collect($data['types'])->map(fn($t) => $typeModels[$t]->id)
             );
 
-            // Attach image (default if not provided)
+            // Prepare image and generate thumbnail
             $imagePath = $data['image_path'] ?? $defaultImagePath;
-            $image = Image::firstOrCreate(['url' => $imagePath]);
+            $fullImagePath = public_path($imagePath);
+            $thumbnailUrl = null;
+
+            if (File::exists($fullImagePath)) {
+                $filename = pathinfo($imagePath, PATHINFO_BASENAME);
+                $thumbnailPath = $thumbDir . '/' . $filename;
+
+                if (File::exists($thumbnailPath)) {
+                    $thumbnailUrl = 'images/thumbnails/' . $filename;
+                } else {
+                    $fileSize = File::size($fullImagePath);
+                    if ($fileSize <= 20 * 1024 * 1024) {
+                        try {
+                            Image::read($fullImagePath)
+                                ->cover(600, 400)
+                                ->save($thumbnailPath);
+
+                            $thumbnailUrl = 'images/thumbnails/' . $filename;
+                        } catch (\Throwable $e) {
+                            // Ignore image processing errors
+                        }
+                    }
+                }
+            }
+
+            // Create or update Image model
+            $image = ImageModel::updateOrCreate(
+                ['url' => $imagePath],
+                ['thumbnail_url' => $thumbnailUrl]
+            );
+
             $meal->images()->syncWithoutDetaching([$image->id]);
         }
     }

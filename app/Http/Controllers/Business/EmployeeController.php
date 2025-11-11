@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Business;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -115,7 +116,7 @@ class EmployeeController extends Controller
                         'name' => $name,
                         'email' => $email,
                         'personal_code' => $personalCode,
-                        'phone' => '0'.$phone,
+                        'phone' => '0' . $phone,
                         'password' => Hash::make('password'),
                         'position' => 'employee',
                         'belongs_to' => Auth::id(),
@@ -193,5 +194,44 @@ class EmployeeController extends Controller
         );
 
         return back()->with('message', 'Subsidy saved for user.');
+    }
+
+
+    public function storeMultipleSubsidy(Request $request)
+    {
+        $validated = $request->validate([
+            'client_ids'  => ['required', 'array', 'min:1'],
+            'client_ids.*' => ['integer', 'exists:clients,id'],
+            'max_price'   => ['required', 'integer', 'min:0', 'max:5000000'],
+            'percentage'  => ['required', 'integer', 'min:0', 'max:100'],
+            'starts_at'   => ['nullable', 'date'],
+        ]);
+
+        $timestamp = now();
+        $grantedBy = Auth::id();
+
+        // Compute start and end dates
+        $startsAt = $validated['starts_at']
+            ? Carbon::parse($validated['starts_at'])
+            : Carbon::today();
+
+        $endsAt = (clone $startsAt)->addMonth();
+
+        foreach ($validated['client_ids'] as $clientId) {
+            DB::table('client_subsidies')->updateOrInsert(
+                ['user_id' => $clientId],
+                [
+                    'max_price'   => $validated['max_price'],
+                    'percentage'  => $validated['percentage'],
+                    'starts_at'   => $startsAt,
+                    'ends_at'     => $endsAt,
+                    'granted_by'  => $grantedBy,
+                    'updated_at'  => $timestamp,
+                    'created_at'  => $timestamp,
+                ]
+            );
+        }
+
+        return back()->with('message', 'سوبسید برای کاربران انتخابی با موفقیت ذخیره شد');
     }
 }

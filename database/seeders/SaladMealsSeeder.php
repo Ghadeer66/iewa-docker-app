@@ -10,6 +10,7 @@ use App\Models\Image as ImageModel;
 use App\Models\Ingredient;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class SaladMealsSeeder extends Seeder
 {
@@ -23,14 +24,28 @@ class SaladMealsSeeder extends Seeder
         if (!File::exists($thumbDir)) {
             File::makeDirectory($thumbDir, 0755, true);
         }
+        $saladsDir = public_path('images/meals/salads');
+        $defaultImageRelative = 'images/default-meals-images/salad.jpg';
         $types = [
-            'light', 'diet', 'energy', 'caffeine', 'school',
+            'light',
+            'diet',
+            'energy',
+            'caffeine',
+            'school',
         ];
 
         $categories = [
-            'economic', 'package', 'salad', 'sandwich', 'cake', 'coffee', 'drinks', 'ott-meal', 'breakfast', 'dessert',
+            'economic',
+            'package',
+            'salad',
+            'sandwich',
+            'cake',
+            'coffee',
+            'drinks',
+            'ott-meal',
+            'breakfast',
+            'dessert',
         ];
-        $defaultImagePath = 'images/default-meals-images/salad.jpg';
 
         // ensure types and categories exist
         $typeModels = collect($types)->mapWithKeys(fn($t) => [$t => Type::firstOrCreate(['title' => $t])]);
@@ -55,8 +70,17 @@ class SaladMealsSeeder extends Seeder
                     'حاوی چربی‌های مفید برای کنترل فشار خون و تعادل هورمونی زنان',
                 ],
                 'ingredients' => [
-                    'سینه مرغ گریل', 'پنیر', 'کاهو پیچ', 'کلم قرمز', 'هویج',
-                    'پیازچه', 'جعفری', 'ریحان', 'مغز تخمه آفتابگردان', 'کنجد', 'بروکلی',
+                    'سینه مرغ گریل',
+                    'پنیر',
+                    'کاهو پیچ',
+                    'کلم قرمز',
+                    'هویج',
+                    'پیازچه',
+                    'جعفری',
+                    'ریحان',
+                    'مغز تخمه آفتابگردان',
+                    'کنجد',
+                    'بروکلی',
                 ],
                 'contraindications' => ['مشکلات تیروئیدی', 'شیردهی', 'رژیم کتوژنیک'],
                 'categories' => ['salad'],
@@ -82,8 +106,15 @@ class SaladMealsSeeder extends Seeder
                     'افزایش سطح چربی مفید خون',
                 ],
                 'ingredients' => [
-                    'سینه مرغ', 'کاهو فرانسوی', 'گوجه چری', 'تخم آفتابگردان',
-                    'تخم کتان', 'زیتون', 'کاپاریس', 'پنیر پارمسان', 'چوبک شویدی',
+                    'سینه مرغ',
+                    'کاهو فرانسوی',
+                    'گوجه چری',
+                    'تخم آفتابگردان',
+                    'تخم کتان',
+                    'زیتون',
+                    'کاپاریس',
+                    'پنیر پارمسان',
+                    'چوبک شویدی',
                 ],
                 'contraindications' => ['رژیم کتوژنیک', 'کم کاری تیروئید'],
                 'categories' => ['salad'],
@@ -109,9 +140,18 @@ class SaladMealsSeeder extends Seeder
                     'بهبود یبوست',
                 ],
                 'ingredients' => [
-                    'کاهو فرانسوی', 'هویج', 'بروکلی', 'زیتون سبز و سیاه',
-                    'خیار', 'گوجه چری', 'پنیر فتا', 'کینوا', 'ذرت', 'لوبیا قرمز',
-                    'تخم مرغ', 'تخم آفتابگردان',
+                    'کاهو فرانسوی',
+                    'هویج',
+                    'بروکلی',
+                    'زیتون سبز و سیاه',
+                    'خیار',
+                    'گوجه چری',
+                    'پنیر فتا',
+                    'کینوا',
+                    'ذرت',
+                    'لوبیا قرمز',
+                    'تخم مرغ',
+                    'تخم آفتابگردان',
                 ],
                 'contraindications' => ['سنگ کلیه اگزالاتی', 'رژیم کتوژنیک'],
                 'categories' => ['salad'],
@@ -137,8 +177,15 @@ class SaladMealsSeeder extends Seeder
                     'بهبود بینایی',
                 ],
                 'ingredients' => [
-                    'بیبی اسفناج', 'بروکلی', 'هویج', 'پیاز', 'سیاهدانه',
-                    'تخم آفتابگردان', 'کدو', 'لبو', 'لوبیا',
+                    'بیبی اسفناج',
+                    'بروکلی',
+                    'هویج',
+                    'پیاز',
+                    'سیاهدانه',
+                    'تخم آفتابگردان',
+                    'کدو',
+                    'لبو',
+                    'لوبیا',
                 ],
                 'contraindications' => ['مشکلات تیروئیدی', 'سنگ کلیه', 'حساسیت به دانه‌ها'],
                 'categories' => ['salad'],
@@ -164,8 +211,13 @@ class SaladMealsSeeder extends Seeder
                     'پروتئین بدون چربی',
                 ],
                 'ingredients' => [
-                    'بروکلی', 'مرغ گریل', 'قارچ', 'سیب زمینی تنوری',
-                    'بیبی اسفناج', 'پنیر پارمسان', 'دانه چیا',
+                    'بروکلی',
+                    'مرغ گریل',
+                    'قارچ',
+                    'سیب زمینی تنوری',
+                    'بیبی اسفناج',
+                    'پنیر پارمسان',
+                    'دانه چیا',
                 ],
                 'contraindications' => ['حساسیت غذایی خاص'],
                 'categories' => ['salad'],
@@ -190,8 +242,12 @@ class SaladMealsSeeder extends Seeder
                     'افزایش انرژی و تمرکز',
                 ],
                 'ingredients' => [
-                    'مرغ گریل', 'پاستا', 'کنجد', 'بروکلی',
-                    'فلفل دلمه رنگی', 'پنیر پارمسان',
+                    'مرغ گریل',
+                    'پاستا',
+                    'کنجد',
+                    'بروکلی',
+                    'فلفل دلمه رنگی',
+                    'پنیر پارمسان',
                 ],
                 'contraindications' => ['رژیم گلوتن فری', 'بیماران سلیاکی'],
                 'categories' => ['salad'],
@@ -226,58 +282,88 @@ class SaladMealsSeeder extends Seeder
         ];
 
         foreach ($meals as $data) {
-            $meal = Meal::create(collect($data)->except(['categories', 'types', 'ingredients', 'image_path'])->toArray());
+            $meal = Meal::create(collect($data)->except(['categories', 'types', 'ingredients','image_path'])->toArray());
 
-            // Attach categories
-            $meal->categories()->sync(
-                collect($data['categories'])->map(fn($c) => $categoryModels[$c]->id)
-            );
+            // relations
+            $meal->categories()->sync(collect($data['categories'])->map(fn($c) => $categoryModels[$c]->id));
+            $meal->types()->sync(collect($data['types'])->map(fn($t) => $typeModels[$t]->id));
 
-            // Attach types
-            $meal->types()->sync(
-                collect($data['types'])->map(fn($t) => $typeModels[$t]->id)
-            );
-
-            // Attach ingredients
-            $ingredientIds = collect($data['ingredients'])->map(function ($title) {
-                return Ingredient::firstOrCreate(['title' => $title])->id;
-            });
+            $ingredientIds = collect($data['ingredients'])->map(fn($title) => Ingredient::firstOrCreate(['title' => $title])->id);
             $meal->ingredients()->sync($ingredientIds);
 
-            // Prepare and generate thumbnail if possible
-            $imagePath = $data['image_path'] ?? $defaultImagePath;
-            $thumbnailUrl = null;
+            // --- handle multi-image logic ---
+            $attachedImageIds = [];
+            if (File::exists($saladsDir) && File::isDirectory($saladsDir)) {
+                $allFiles = collect(File::files($saladsDir))
+                    ->filter(fn($f) => preg_match('/\.(png|jpg|jpeg|webp)$/i', $f->getFilename()))
+                    ->values();
 
-            if ($imagePath) {
-                $fullImagePath = public_path($imagePath);
-                if (File::exists($fullImagePath)) {
-                    $filename = pathinfo($imagePath, PATHINFO_BASENAME);
-                    $thumbnailPath = $thumbDir . '/' . $filename;
+                // find matching images for the salad slug
+                $matched = $allFiles->filter(function ($f) use ($data) {
+                    $filename = Str::lower($f->getFilename());
+                    $slug = Str::lower($data['slug']);
+                    return Str::contains($filename, $slug);
+                });
 
-                    if (File::exists($thumbnailPath)) {
-                        $thumbnailUrl = 'images/thumbnails/' . $filename;
-                    } else {
-                        $fileSizeBytes = File::size($fullImagePath);
-                        if ($fileSizeBytes <= 20 * 1024 * 1024) { // 20MB
+                // process each matched image
+                foreach ($matched as $fileInfo) {
+                    $relativePath = 'images/meals/salads/' . $fileInfo->getFilename();
+                    $filename = pathinfo($fileInfo->getFilename(), PATHINFO_BASENAME);
+                    $fullImagePath = public_path($relativePath);
+                    $thumbnailUrl = null;
+
+                    // Generate thumbnail only for "-01" images
+                    if (Str::contains($filename, '-01')) {
+                        $thumbnailPath = $thumbDir . '/' . $filename;
+                        if (!File::exists($thumbnailPath)) {
                             try {
                                 Image::read($fullImagePath)
                                     ->cover(600, 400)
                                     ->save($thumbnailPath);
                                 $thumbnailUrl = 'images/thumbnails/' . $filename;
                             } catch (\Throwable $e) {
-                                // ignore and continue without thumbnail
+                                // silently fail
                             }
+                        } else {
+                            $thumbnailUrl = 'images/thumbnails/' . $filename;
                         }
                     }
+
+                    $image = ImageModel::firstOrCreate(
+                        ['url' => $relativePath],
+                        ['thumbnail_url' => $thumbnailUrl]
+                    );
+                    $attachedImageIds[] = $image->id;
                 }
             }
 
-            // Attach image with optional thumbnail
-            $image = ImageModel::firstOrCreate(
-                ['url' => $imagePath],
-                ['thumbnail_url' => $thumbnailUrl]
-            );
-            $meal->images()->syncWithoutDetaching([$image->id]);
+            if (!empty($attachedImageIds)) {
+                $meal->images()->syncWithoutDetaching($attachedImageIds);
+            } else {
+                // fallback to default image with thumbnail
+                $defaultFullPath = public_path($defaultImageRelative);
+                $defaultThumbUrl = null;
+
+                if (File::exists($defaultFullPath)) {
+                    $defaultFilename = pathinfo($defaultImageRelative, PATHINFO_BASENAME);
+                    $defaultThumbPath = $thumbDir . '/' . $defaultFilename;
+                    if (!File::exists($defaultThumbPath)) {
+                        try {
+                            Image::read($defaultFullPath)
+                                ->cover(600, 400)
+                                ->save($defaultThumbPath);
+                        } catch (\Throwable $e) {
+                        }
+                    }
+                    $defaultThumbUrl = 'images/thumbnails/' . $defaultFilename;
+                }
+
+                $defaultImage = ImageModel::firstOrCreate(
+                    ['url' => $defaultImageRelative],
+                    ['thumbnail_url' => $defaultThumbUrl]
+                );
+                $meal->images()->syncWithoutDetaching([$defaultImage->id]);
+            }
         }
     }
 }

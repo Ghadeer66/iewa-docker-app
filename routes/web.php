@@ -174,6 +174,7 @@ Route::prefix('business')->group(function () {
         Route::get('/dashboard', [BusinessDashboardController::class, 'index'])->name('business.dashboard');
         Route::post('/employees/upload', [EmployeeController::class, 'uploadCsv'])->name('business.employees.upload');
         Route::post('/employees/{user}/subsidy', [EmployeeController::class, 'setSubsidy'])->name('business.employees.subsidy');
+        Route::post('/business/employees/subsidy-multiple', [EmployeeController::class, 'storeMultipleSubsidy']);
         Route::post('/employees/subsidy-by-code', [EmployeeController::class, 'setSubsidyByCode'])->name('business.employees.subsidyByCode');
         // Client management (edit/delete) handled from dashboard
         Route::put('/employees/{user}', [BusinessDashboardController::class, 'updateClient'])->name('business.employees.update');
