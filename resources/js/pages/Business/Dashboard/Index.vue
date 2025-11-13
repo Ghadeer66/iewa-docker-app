@@ -4,23 +4,17 @@
             <!-- Sidebar -->
             <aside class="w-64 bg-white shadow-lg h-screen p-6 border-l border-gray-200 sticky top-0">
                 <nav class="space-y-4">
-                    <Link
-                        href="/business/dashboard"
-                        class="block px-4 py-2 rounded-lg hover:bg-gray-100 bg-indigo-50 text-indigo-700 font-semibold"
-                    >
-                        داشبورد
+                    <Link href="/business/dashboard"
+                        class="block px-4 py-2 rounded-lg hover:bg-gray-100 bg-indigo-50 text-indigo-700 font-semibold">
+                    داشبورد
                     </Link>
-                    <Link
-                        href="/business/employees-management"
-                        class="block px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700 font-medium"
-                    >
-                        مدیریت کاربران
+                    <Link href="/business/employees-management"
+                        class="block px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700 font-medium">
+                    مدیریت کاربران
                     </Link>
-                    <Link
-                        href="/business/wallet"
-                        class="block px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700 font-medium"
-                    >
-                        کیف پول
+                    <Link href="/business/wallet"
+                        class="block px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700 font-medium">
+                    کیف پول
                     </Link>
                 </nav>
             </aside>
@@ -43,32 +37,30 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="bg-white shadow rounded-lg p-6 text-center">
                         <h3 class="text-lg font-medium text-gray-700">تعداد کاربران</h3>
-                        <p class="mt-2 text-3xl font-semibold text-indigo-600">{{ stats.users_count }}</p>
+                        <p class="mt-2 text-3xl font-semibold text-indigo-600">
+                            {{ stats.users_count || 0 }}
+                        </p>
                     </div>
 
                     <div class="bg-white shadow rounded-lg p-6 text-center">
                         <h3 class="text-lg font-medium text-gray-700">موجودی کیف پول</h3>
                         <p class="mt-2 text-3xl font-semibold text-green-600">
-                            {{ stats.wallet_balance }} تومان
+                            {{ stats.wallet_balance ? stats.wallet_balance.toLocaleString() + ' تومان' : '0 تومان' }}
                         </p>
                     </div>
 
                     <div class="bg-white shadow rounded-lg p-6 text-center">
                         <h3 class="text-lg font-medium text-gray-700">تعداد تراکنش‌ها</h3>
-                        <p class="mt-2 text-3xl font-semibold text-blue-600">{{ stats.transactions_count }}</p>
+                        <p class="mt-2 text-3xl font-semibold text-blue-600">
+                            {{ stats.transactions_count || 0 }}
+                        </p>
                     </div>
                 </div>
 
                 <!-- Payments Chart -->
                 <div class="bg-white shadow rounded-lg p-6 mb-8">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">نمودار پرداخت‌ها</h3>
-                    <apexchart
-                        width="100%"
-                        height="300"
-                        type="line"
-                        :options="chartOptions"
-                        :series="series"
-                    />
+                    <apexchart width="100%" height="300" type="line" :options="chartOptions" :series="series" />
                 </div>
             </main>
         </div>

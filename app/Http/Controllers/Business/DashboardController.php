@@ -15,27 +15,24 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Eager-load clients to avoid N+1 queries in the Inertia page.
         $authId = Auth::id();
-        if ($authId) {
-            $user = User::with(['clients' => function ($q) use ($authId) {
-                $q->where('belongs_to', $authId)
-                    ->select('id', 'name', 'personal_code', 'phone', 'position', 'belongs_to');
-            }])->find($authId);
-        } else {
-            $user = null;
-        }
+        $user = User::find($authId);
+        $users_count = User::where('belongs_to',$authId)->count();
+
+        // Calculate wallet stats
+        $wallet = Wallet::where('user_id', $authId)->first();
+        $transactionsCount = WalletTransaction::whereHas('wallet', fn($q) => $q->where('user_id', $authId))->count();
 
         return inertia('Business/Dashboard/Index', [
             'user' => $user,
             'stats' => [
-                'total_orders' => 0, // You can add your business logic here
-                'pending_orders' => 0,
-                'completed_orders' => 0,
-                'revenue' => 0,
-            ]
+                'users_count' => $users_count,
+                'wallet_balance' => $wallet ? $wallet->balance : 0,
+                'transactions_count' => $transactionsCount,
+            ],
         ]);
     }
+
 
     /**
      * Update a client that belongs to the authenticated business.
