@@ -52,8 +52,6 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 // SEO keyword landing pages
 Route::get('/iewa', fn() => inertia('Landing/Iewa'));
 Route::get('/iewato', fn() => inertia('Landing/Iewato'));
-Route::get('/ایوا', fn() => inertia('Landing/EiwaFa'));
-Route::get('/ایواتو', fn() => inertia('Landing/EiwatoFa'));
 
 // Dynamic sitemap.xml
 Route::get('/sitemap.xml', function () {
@@ -93,19 +91,7 @@ Route::get('/sitemap.xml', function () {
             'changefreq' => 'monthly',
             'priority' => '0.6',
             'lastmod' => now()->toAtomString(),
-        ],
-        [
-            'loc' => url('/ایوا'),
-            'changefreq' => 'monthly',
-            'priority' => '0.6',
-            'lastmod' => now()->toAtomString(),
-        ],
-        [
-            'loc' => url('/ایواتو'),
-            'changefreq' => 'monthly',
-            'priority' => '0.6',
-            'lastmod' => now()->toAtomString(),
-        ],
+        ]
     ];
 
     $xml = view('sitemap', ['urls' => $urls])->render();
@@ -172,9 +158,14 @@ Route::prefix('business')->group(function () {
     // Protected
     Route::middleware(['auth', 'role:business'])->group(function () {
         Route::get('/dashboard', [BusinessDashboardController::class, 'index'])->name('business.dashboard');
+        Route::get('/employees-management', [BusinessDashboardController::class, 'manageEmployees'])->name('business.manage.employees');
+        Route::get('/wallet', [BusinessDashboardController::class, 'wallet'])->name('business.wallet');
         Route::post('/employees/upload', [EmployeeController::class, 'uploadCsv'])->name('business.employees.upload');
         Route::post('/employees/{user}/subsidy', [EmployeeController::class, 'setSubsidy'])->name('business.employees.subsidy');
-        Route::post('/business/employees/subsidy-multiple', [EmployeeController::class, 'storeMultipleSubsidy']);
+        Route::post('/employees/subsidy-multiple', [EmployeeController::class, 'storeMultipleSubsidy'])
+            ->name('employees.subsidy-multiple');
+        Route::post('/employees/credit-multiple', [EmployeeController::class, 'storeMultipleCredit'])
+            ->name('employees.credit-multiple');
         Route::post('/employees/subsidy-by-code', [EmployeeController::class, 'setSubsidyByCode'])->name('business.employees.subsidyByCode');
         // Client management (edit/delete) handled from dashboard
         Route::put('/employees/{user}', [BusinessDashboardController::class, 'updateClient'])->name('business.employees.update');

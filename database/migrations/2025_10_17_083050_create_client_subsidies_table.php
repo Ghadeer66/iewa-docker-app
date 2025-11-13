@@ -14,12 +14,8 @@ return new class extends Migration
         Schema::create('client_subsidies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            // Optional: track which business granted it
             $table->foreignId('granted_by')->nullable()->constrained('users')->nullOnDelete();
-
             $table->unsignedInteger('max_price'); // سقف خرید نفر, 0-5,000,000
-            $table->unsignedTinyInteger('percentage'); // 0-100
-
             $table->date('starts_at')->nullable();
             $table->date('ends_at')->nullable();
             $table->timestamps();

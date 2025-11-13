@@ -5,6 +5,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
 import { createPinia } from 'pinia';
+import VueApexCharts from 'vue3-apexcharts'
+
 // We'll add a global watcher (mixin) after mount to react to auth changes
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -19,6 +21,8 @@ createInertiaApp({
         const pinia = createPinia()
         app.use(pinia)
         app.mount(el)
+        app.use(VueApexCharts) // ✅ Register the charts globally
+
 
         // Load server cart for authenticated users after app is mounted
         const userId = props.initialPage?.props?.auth?.user?.id

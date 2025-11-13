@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +20,7 @@ class DashboardController extends Controller
         if ($authId) {
             $user = User::with(['clients' => function ($q) use ($authId) {
                 $q->where('belongs_to', $authId)
-                  ->select('id', 'name', 'personal_code', 'phone', 'position', 'belongs_to');
+                    ->select('id', 'name', 'personal_code', 'phone', 'position', 'belongs_to');
             }])->find($authId);
         } else {
             $user = null;
@@ -73,5 +75,58 @@ class DashboardController extends Controller
         $user->delete();
 
         return back()->with('message', 'کاربر حذف شد');
+    }
+
+    public function manageEmployees()
+    {
+        // Eager-load clients to avoid N+1 queries in the Inertia page.
+        $authId = Auth::id();
+        if ($authId) {
+            $user = User::with(['clients' => function ($q) use ($authId) {
+                $q->where('belongs_to', $authId)
+                    ->select('id', 'name', 'personal_code', 'phone', 'position', 'belongs_to');
+            }])->find($authId);
+        } else {
+            $user = null;
+        }
+
+        return inertia('Business/UsersManagenent/Index', [
+            'user' => $user,
+            'stats' => [
+                'total_orders' => 0, // You can add your business logic here
+                'pending_orders' => 0,
+                'completed_orders' => 0,
+                'revenue' => 0,
+            ]
+        ]);
+    }
+    public function wallet()
+    {
+        $userId = Auth::id();
+        $wallet = Wallet::where('user_id', $userId)->first();
+
+        $transactions = WalletTransaction::with(['wallet.user', 'receiverWallet.user'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($tx) {
+                return [
+                    'id' => $tx->id,
+                    'type' => $tx->type,
+                    'amount' => $tx->amount,
+                    'description' => $tx->description,
+                    'created_at' => $tx->created_at->format('Y-m-d H:i:s'),
+                    'sender' => $tx->wallet->user ? ['name' => $tx->wallet->user->name] : null,
+                    'receiver' => $tx->receiverWallet && $tx->receiverWallet->user
+                        ? ['name' => $tx->receiverWallet->user->name]
+                        : null,
+                ];
+            });
+
+
+
+        return inertia('Business/Wallet/Index', [
+            'wallet' => $wallet,
+            'transactions' => $transactions,
+        ]);
     }
 }

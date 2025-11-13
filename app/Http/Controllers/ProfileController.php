@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -56,8 +58,45 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        return Inertia::render('Profile/Transactions', [
+        // Fetch user wallet (each user has one wallet)
+        $wallet = Wallet::where('user_id', $user->id)->first();
+
+        // If user has no wallet yet, return empty transactions
+        if (!$wallet) {
+            return inertia('Profile/Transactions', [
+                'user' => $user,
+                'wallet' => null,
+                'transactions' => [],
+            ]);
+        }
+
+        // Fetch all related transactions (either from or to this wallet)
+        $transactions = WalletTransaction::with(['wallet.user', 'toWallet.user'])
+            ->where(function ($query) use ($wallet) {
+                $query->where('wallet_id', $wallet->id)
+                    ->orWhere('to_wallet_id', $wallet->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($tx) use ($wallet) {
+                $isOutgoing = $tx->wallet_id === $wallet->id;
+
+                return [
+                    'id' => $tx->id,
+                    'type' => $isOutgoing ? 'withdrawal' : 'deposit',
+                    'amount' => $tx->amount,
+                    'description' => $tx->description,
+                    'created_at' => $tx->created_at->format('Y-m-d H:i:s'),
+                    'counterparty' => $isOutgoing
+                        ? optional($tx->toWallet->user)->name
+                        : optional($tx->wallet->user)->name,
+                ];
+            });
+
+        return inertia('Profile/Transactions', [
             'user' => $user,
+            'wallet' => $wallet,
+            'transactions' => $transactions,
         ]);
     }
 
@@ -65,10 +104,30 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        return Inertia::render('Profile/Wallet', [
-            'user' => $this->getUserData($user, true),
+        $wallet = Wallet::where('user_id', $user->id)->first();
+
+        $transactions = WalletTransaction::with('receiverWallet')
+            ->where('wallet_id', $wallet->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($tx) {
+                return [
+                    'id' => $tx->id,
+                    'type' => $tx->type,
+                    'amount' => $tx->amount,
+                    'description' => $tx->description,
+                    'created_at' => $tx->created_at->format('Y-m-d H:i:s'),
+                    'receiver' => $tx->receiverWallet ? ['name' => $tx->receiverWallet->name] : null,
+                ];
+            });
+
+        return inertia('Profile/Wallet', [
+            'user' => $user,
+            'wallet' => $wallet,
+            'transactions' => $transactions,
         ]);
     }
+
 
     public function comments()
     {

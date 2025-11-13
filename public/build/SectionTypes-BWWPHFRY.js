@@ -1,1 +1,0 @@
-import{_ as t}from"./AdminAppLayout-BcIG-rSY.js";import{f as o,d as s,o as a}from"./app-C-zV1K6N.js";const m=Object.assign({layout:t},{__name:"SectionTypes",setup(n){return(r,e)=>(a(),o("div",null,[...e[0]||(e[0]=[s("h2",{class:"text-xl font-bold mb-4"},"Manage Section Types",-1)])]))}});export{m as default};

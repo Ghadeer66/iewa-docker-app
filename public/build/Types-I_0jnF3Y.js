@@ -1,0 +1,1 @@
+import{_ as s}from"./AdminAppLayout-mt6HfV9w.js";import{f as t,d as a,o}from"./app-DKZoIzNk.js";const p=Object.assign({layout:s},{__name:"Types",setup(n){return(r,e)=>(o(),t("div",null,[...e[0]||(e[0]=[a("h2",{class:"text-xl font-bold mb-4"},"Manage Types",-1)])]))}});export{p as default};
